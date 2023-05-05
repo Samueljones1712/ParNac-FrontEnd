@@ -1,0 +1,18 @@
+<p>login works!</p>
+
+
+<div>
+    <form [formGroup]="loginForm" class="border" (ngSubmit)="onLogin()">
+        <div>
+            <label>Correo</label>
+            <input type="text" id="correo" formControlName="correo">
+        </div>
+        <div>
+            <label>Contrasena</label>
+            <input type="text" id="password" formControlName="password">
+        </div>
+
+        <button type="submit">Login</button>
+
+    </form>
+</div>
