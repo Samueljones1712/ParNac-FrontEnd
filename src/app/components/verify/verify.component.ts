@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms'
 import { LoginConnectionService } from 'src/app/services/login-connection.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-verify',
@@ -28,12 +29,23 @@ export class VerifyComponent implements OnInit {
     var code = this.verifyForm.value.codigo + "";
 
     if (code == localStorage.getItem("code")) {
-      alert("Codigo correcto")
+      this.showMessage();
       this.router.navigate(['index']);
     } else {
-      alert("codigo erroneo")
+      this.errorMessage();
+
     }
 
+  }
+
+  showMessage() {
+    Swal.fire({ text: "Codigo Correcto", icon: 'success' });
+  }
+
+  errorMessage(message = "Codigo Incorrecto") {
+    Swal.fire({
+      text: "Revisa el correo.", icon: 'warning', title: message + ''
+    });
   }
 
 
