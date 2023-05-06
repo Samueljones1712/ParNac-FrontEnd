@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http'
+import Swal from 'sweetalert2'
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +11,19 @@ export class LoginConnectionService {
 
   private token: string = '';
   private url = "http://localhost:4000/";
+  swal: any;
 
   constructor(private Http: HttpClient, private router: Router) { }
 
   login(User: any) {
 
+    this.waitMessage();
+
     return this.Http.post<any[]>(`${this.url}login`, User).subscribe((res: any) => {
 
       if (res.response.status == "ok") {
+
+        this.showMessage(res.response.result.information.correo);
 
         localStorage.setItem('correo', res.response.result.information.correo);
 
@@ -27,10 +34,26 @@ export class LoginConnectionService {
         this.router.navigate(['verify']);
 
       } else {
-
-        alert(res.response.status)
+        console.log(res.response.result.error_msg)
+        this.errorMessage(res.response.result.error_msg)
       }
     });
+  }
+  waitMessage() {
+    Swal.fire({ text: "Espera, confirmando credenciales", icon: 'warning' });
+  }
+
+  showMessage(message = "correo") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Se inicio Sesion Correctamente.',
+      text: 'Revisa el correo electronico!',
+      footer: '<a href="">' + message + '</a>'
+    })
+  }
+
+  errorMessage(message = "No se pudo iniciar sesion") {
+    Swal.fire({ text: message + "", icon: 'error' });
   }
 
   logout() {
