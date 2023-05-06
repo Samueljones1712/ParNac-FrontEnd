@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http'
 
 @Injectable({
@@ -9,7 +10,7 @@ export class LoginConnectionService {
   private token: string = '';
   private url = "http://localhost:4000/";
 
-  constructor(private Http: HttpClient) { }
+  constructor(private Http: HttpClient, private router: Router) { }
 
   login(User: any) {
 
@@ -17,18 +18,17 @@ export class LoginConnectionService {
 
       if (res.response.status == "ok") {
 
-        alert("Correcto");
+        localStorage.setItem('correo', res.response.result.information.correo);
 
-        //segunda verificacion, mostramos en pantalla algo para comparar los tokens
+        localStorage.setItem('contrasena', res.response.result.information.contrasena);
 
-        // this.token = res.response.result.token;
-        // console.log(this.token)
-        // localStorage.setItem('token', this.token);
+        localStorage.setItem('code', res.response.result.code);
+
+        this.router.navigate(['verify']);
 
       } else {
 
-        alert(res.response.result);
-
+        alert(res.response.status)
       }
     });
   }

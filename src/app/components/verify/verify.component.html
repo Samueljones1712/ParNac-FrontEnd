@@ -1,0 +1,15 @@
+<p>verify works!</p>
+
+
+
+<div>
+    <form [formGroup]="verifyForm" class="border" (ngSubmit)="onVerify()">
+        <div>
+            <label>Codigo</label>
+            <input type="text" id="codigo" formControlName="codigo">
+        </div>
+    
+        <button type="submit">Verificar</button>
+
+    </form>
+</div>

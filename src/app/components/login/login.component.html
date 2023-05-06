@@ -1,18 +1,28 @@
-<p>login works!</p>
+<div class="container-principal">
 
-
-<div>
-    <form [formGroup]="loginForm" class="border" (ngSubmit)="onLogin()">
-        <div>
-            <label>Correo</label>
-            <input type="text" id="correo" formControlName="correo">
-        </div>
-        <div>
-            <label>Contrasena</label>
-            <input type="text" id="password" formControlName="password">
+    <div style="width: 50%; ">
+        <div class="container-logo">
+            <img class="img-login-title" src="../../../assets/img/Logo_B.png">
         </div>
 
-        <button type="submit">Login</button>
-
-    </form>
+        <div class="container-form">
+            <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="onLogin()">
+                <div class="text-title-login">Inicio de Sesion</div>
+                <div class="container-input">
+                    <label class="text-input">Correo</label>
+                    <input class="form-input " type="text" id="correo" formControlName="correo">
+                </div>
+                <div class="container-input">
+                    <label class="text-input">Contrasena</label>
+                    <input class="form-input " type="password" id="password" formControlName="password">
+                </div>
+                <div class="container-button">
+                    <button class="btn-login" type="submit">Ingresar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container-img-background" style="background-color: bisque; width: 50%;">
+        <img class="img-background" src="../../../assets/img/login-background.jpg">
+    </div>
 </div>
