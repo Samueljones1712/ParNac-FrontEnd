@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms'
 import { LoginConnectionService } from 'src/app/services/login-connection.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify',
@@ -13,7 +14,7 @@ export class VerifyComponent implements OnInit {
 
   }
 
-  constructor(private LoginConnection: LoginConnectionService) { }
+  constructor(private LoginConnection: LoginConnectionService, private router: Router) { }
 
   verifyForm = new FormGroup({
     codigo: new FormControl("")
@@ -28,6 +29,7 @@ export class VerifyComponent implements OnInit {
 
     if (code == localStorage.getItem("code")) {
       alert("Codigo correcto")
+      this.router.navigate(['index']);
     } else {
       alert("codigo erroneo")
     }

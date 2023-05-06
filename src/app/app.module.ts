@@ -7,13 +7,15 @@ import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 import { LoginConnectionService } from './services/login-connection.service';
-import { VerifyComponent } from './components/verify/verify.component'
+import { VerifyComponent } from './components/verify/verify.component';
+import { IndexComponent } from './components/index/index.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    VerifyComponent
+    VerifyComponent,
+    IndexComponent
   ],
   imports: [
     BrowserModule,
