@@ -7,26 +7,26 @@
 
         <div class="container-form">
             <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="onLogin()">
-                <div class="text-title-login">Inicio de Sesion</div>
+                <div class="text-title-login">Inicio de Sesión</div>
                 <div class="container-input">
                     <label class="text-input">Correo</label>
                     <input class="form-input " type="text" id="correo" formControlName="correo">
 
                 </div>
                 <div class="container-input">
-                    <label class="text-input">Contrasena</label>
+                    <label class="text-input">Contraseña</label>
                     <input class="form-input " type="password" id="password" formControlName="password">
 
 
                 </div>
                 <div class="container-button">
-                    <button class="btn-login" type="submit" [disabled]="!loginForm.valid">Ingresar</button>
+                    <button class="btn-login" type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
 
                 </div>
             </form>
         </div>
     </div>
-    <div class="container-img-background" style="background-color: bisque; width: 50%;">
+    <div class="container-img-background">
         <img class="img-background" src="../../../assets/img/login-background.jpg">
     </div>
 </div>
