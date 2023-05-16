@@ -1,0 +1,28 @@
+<p>register works!</p>
+
+<div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <label for="cedula">Cedula</label>
+        <input type="text" id="cedula" formControlName="cedula" />
+
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" formControlName="nombre" />
+
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" formControlName="apellido" />
+
+        <label for="correo">Correo</label>
+        <input type="text" id="correo" formControlName="correo" />
+
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" formControlName="contrasena" />
+
+        <label for="confirmcontrasena">Confirmar Contraseña</label>
+        <input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}" />
+
+        <button class="" type="submit">Registrar</button>
+
+    </form>
+
+</div>

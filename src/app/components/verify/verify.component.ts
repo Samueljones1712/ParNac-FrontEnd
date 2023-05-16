@@ -28,12 +28,17 @@ export class VerifyComponent implements OnInit {
 
     var code = this.verifyForm.value.codigo + "";
 
-    if (code == localStorage.getItem("code")) {
-      this.showMessage();
-      this.router.navigate(['index']);
+
+    const correo = {
+      "correo": sessionStorage.getItem("correo") || ""
+    }
+
+    if (code == sessionStorage.getItem("code")) {
+      this.LoginConnection.tokenGeneration(correo.correo)
+
+      
     } else {
       this.errorMessage();
-
     }
 
   }

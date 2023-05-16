@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { LoginConnectionService, User } from 'src/app/services/login-connection.service';
+import { LoginConnectionService } from 'src/app/services/login-connection.service';
+import { User } from 'src/app/interface/user';
 
 
 @Component({
@@ -13,20 +15,22 @@ export class LoginComponent implements OnInit {
 
   datos: any[] = [];
 
-  usuario: User = { id: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '' };
+  usuario: User = { id: "", cedula: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '' };
 
-  constructor(private LoginConnection: LoginConnectionService) { }
+  constructor(private LoginConnection: LoginConnectionService, private router: Router) { }
 
   ngOnInit(): void {
 
   }
 
   loginForm = new FormGroup({
-    correo: new FormControl("", [Validators.required]),
+    correo: new FormControl("persona@gmail.com", [Validators.required]),
     password: new FormControl("", [Validators.required])
   });
 
-
+  redirectRegister() {
+    this.router.navigate(['register'])
+  }
 
   onLogin() {
     // Acceder a los valores de los campos

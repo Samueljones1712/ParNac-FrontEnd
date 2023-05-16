@@ -21,9 +21,13 @@
                 </div>
                 <div class="container-button">
                     <button class="btn-login" type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
+                    <button class="btn-login" (click)="redirectRegister()">Registrar</button>
                 </div>
 
+                <div style="font-weight: lighter; display: flex; justify-content:center; margin-top: 2%;">No tienes
+                    cuenta? <a href="" style="margin-left: 5px;">Registrarse</a>
                 </div>
+
             </form>
         </div>
     </div>

@@ -15,6 +15,16 @@ export class LoginConnectionService {
 
   constructor(private Http: HttpClient, private router: Router) { }
 
+  tokenGeneration(correo: string) {
+    const jsonCorreo = { "correo": correo }
+    return this.Http.post<string>(`${this.url}token`, jsonCorreo).subscribe((res: any) => {
+
+      sessionStorage.setItem("token", res.token);
+
+      this.router.navigate(['index']);
+    });
+  }
+
   login(User: any) {
 
     this.waitMessage();
@@ -25,11 +35,11 @@ export class LoginConnectionService {
 
         this.showMessage(res.response.result.information.correo);
 
-        localStorage.setItem('correo', res.response.result.information.correo);
+        sessionStorage.setItem('correo', res.response.result.information.correo);
 
-        localStorage.setItem('contrasena', res.response.result.information.contrasena);
+        sessionStorage.setItem('contrasena', res.response.result.information.contrasena);
 
-        localStorage.setItem('code', res.response.result.code);
+        sessionStorage.setItem('code', res.response.result.code);
 
         this.router.navigate(['verify']);
 
@@ -40,13 +50,13 @@ export class LoginConnectionService {
     });
   }
   waitMessage() {
-    Swal.fire({ text: "Espera, confirmando credenciales", icon: 'warning' });
+    Swal.fire({ text: "Espera, enviando codigo al correo.", icon: 'info' });
   }
 
   showMessage(message = "correo") {
     Swal.fire({
       icon: 'success',
-      title: 'Se inicio Sesion Correctamente.',
+      title: 'Correo enviado correctamente.',
       text: 'Revisa el correo electronico!',
       footer: '<a href="">' + message + '</a>'
     })
@@ -72,18 +82,13 @@ export class LoginConnectionService {
     return this.getToken() !== null;
   }
 
+  register(User: any) {
+
+    return this.Http.post<any[]>(`${this.url}register`, User);
+  }
+
 
 }
 
 
 
-export interface User {
-
-  id: string;
-  nombre: string;
-  apellido: string;
-  correo: string;
-  contrasena: string;
-  token: string;
-  salt: string;
-}
