@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
+    "@swimlane/ngx-datatable": "^20.1.0",
+    "angular-datatables": "^15.0.1",
     "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.7.5",

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import Swal from 'sweetalert2'
 import { Observable } from 'rxjs';
+import { parkNational } from '../interface/parkNational';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,10 @@ export class ParkService {
 
   constructor(private http: HttpClient) { }
 
-  getParkNationals() {
+  getParkNationals(): Observable<parkNational[]> {
     //const token = sessionStorage.getItem('token');
     //const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    return this.http.get<any[]>(`${this.url}`)
+    return this.http.get<parkNational[]>(`${this.url}`)
 
   }
 
