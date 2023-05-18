@@ -7,11 +7,12 @@
 .text-title-login {
     margin-top: 2%;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     font-weight: 400;
     letter-spacing: 1px;
     font-size: x-large;
-    padding-bottom: 1rem;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
 }
 
 .form-input {
@@ -91,7 +92,7 @@
 
 .container-button {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     margin-top: 1rem;
     padding-top: 0.25rem;
     margin-bottom: 1rem;
@@ -113,12 +114,11 @@
     line-height: 1.5;
 
     background: #248f59;
-    border-color: #248f59;
     color: white;
     cursor: pointer;
     font-family: inherit;
     border: 0;
-    border-radius: 6px;
+    /*border-radius: 6px;*/
     display: inherit;
 }
 

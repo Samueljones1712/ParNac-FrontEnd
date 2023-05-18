@@ -1,27 +1,46 @@
-<p>register works!</p>
-
-<div>
-
+<div class="container-img-background">
+    <img class="img-background" src="../../../assets/img/_DSC8447.jpg">
+</div>
+<div class="container-logo">
+    <img class="img-logo" src="../../../assets/img/Logo_B.png">
+</div>
+<div class="container-form">
+    <div class="container-title">
+        <h2 class="h3-title">Crear cuenta</h2>
+    </div>
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-        <label for="cedula">Cedula</label>
-        <input type="text" id="cedula" formControlName="cedula" />
+        <div class="container-input">
+            <label for="cedula">Cédula</label>
+            <input type="text" id="cedula" formControlName="cedula" />
+        </div>
 
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" formControlName="nombre" />
+        <div class="container-input">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" formControlName="nombre" />
+        </div>
 
-        <label for="apellido">Apellido</label>
-        <input type="text" id="apellido" formControlName="apellido" />
+        <div class="container-input">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" formControlName="apellido" />
+        </div>
 
-        <label for="correo">Correo</label>
-        <input type="text" id="correo" formControlName="correo" />
+        <div class="container-input">
+            <label for="correo">Correo</label>
+            <input type="text" id="correo" formControlName="correo" />
+        </div>
 
-        <label for="contrasena">Contraseña</label>
-        <input type="password" id="contrasena" formControlName="contrasena" />
+        <div class="container-input">
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" formControlName="contrasena" />
+        </div>
 
-        <label for="confirmcontrasena">Confirmar Contraseña</label>
-        <input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}" />
-
-        <button class="" type="submit">Registrar</button>
+        <div class="container-input">
+            <label for="confirmcontrasena">Confirmar Contraseña</label>
+            <input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="container-button">
+            <button class="button-submit" type="submit">Registrar</button>
+        </div>
 
     </form>
 
