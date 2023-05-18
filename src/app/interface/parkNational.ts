@@ -1,6 +1,6 @@
 export interface parkNational {
 
-    id: string;
+    Id: string;
     Nombre: string;
     Provincia: string;
     Tarifa_Extranjeros_dolares: string;

@@ -1,6 +1,29 @@
 <p>index works!</p>
 
 <div>
+
+    <button (click)="redirectEntrada()">Ver entradas</button>
+
+    <div>
+        <form [formGroup]="parkForm" (ngSubmit)="agregar()">
+            <input type="hidden" id="id" formControlName="id">
+            <label>Nombre</label>
+            <input type="text" id="Nombre" formControlName="Nombre" />
+            <label>Provincia</label>
+            <input id="Provincia" formControlName="Provincia" />
+            <label>Area de conservacion</label>
+            <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
+            <label>Tarifa Extranjeros (Dolares)</label>
+            <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
+            <label>Tarifa Nacionales (Dolares)</label>
+            <input id="Tarifa_Nacionales_dolares" formControlName="Tarifa_Nacionales_dolares" />
+            <label>Tarifa Nacionales (Colones)</label>
+            <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
+            <button class="btn-login" type="submit" [disabled]="!parkForm.valid">Agregar</button>
+        </form>
+
+    </div>
+
     <table>
         <thead>
             <tr>
@@ -10,6 +33,7 @@
                 <th>Tarifa Extranjeros (Dolares)</th>
                 <th>Tarifa Nacionales (Dolares)</th>
                 <th>Tarifa Nacionales (Colones)</th>
+                <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +44,9 @@
                 <td>{{item.Tarifa_Extranjeros_dolares}}</td>
                 <td>{{item.Tarifa_Nacionales_dolares}}</td>
                 <td>{{item.Tarifa_Nacionales_colones}}</td>
-                <td><button>Editar</button><button>Eliminar</button></td>
+                <td><button (click)="actualizar(item.Id!)">Editar</button>
+                    <button (click)="eliminar(item.Id!)">Eliminar</button>
+                </td>
             </tr>
         </tbody>
     </table>

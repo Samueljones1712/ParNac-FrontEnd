@@ -33,11 +33,11 @@ export class LoginConnectionService {
 
       if (res.response.status == "ok") {
 
-        this.showMessage(res.response.result.information.correo);
+        this.showMessage(res.response.result.information);
 
-        sessionStorage.setItem('correo', res.response.result.information.correo);
+        console.log(res.response.result.information);
 
-        sessionStorage.setItem('contrasena', res.response.result.information.contrasena);
+        sessionStorage.setItem('correo', res.response.result.information);
 
         sessionStorage.setItem('code', res.response.result.code);
 

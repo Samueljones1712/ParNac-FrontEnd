@@ -4,6 +4,7 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { LoginComponent } from './components/login/login.component';
 import { IndexComponent } from './components/index/index.component';
 import { RegisterComponent } from './components/register/register.component';
+import { EntradaComponent } from './components/entrada/entrada.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'index', component: IndexComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'entrada', component: EntradaComponent },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 

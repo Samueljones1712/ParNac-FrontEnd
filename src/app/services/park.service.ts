@@ -11,7 +11,8 @@ import { parkNational } from '../interface/parkNational';
 export class ParkService {
 
   private token: string = '';
-  private url = "http://localhost:4000/ParqueNacional";
+
+  private url = "http://localhost:4000/ParqueNacional/";
   swal: any;
 
   constructor(private http: HttpClient) { }
@@ -21,6 +22,18 @@ export class ParkService {
     //const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
     return this.http.get<parkNational[]>(`${this.url}`)
 
+  }
+
+  addParkNational(parkNational: any) {
+    return this.http.post<any[]>(`${this.url}add`, parkNational)
+  }
+
+  updateParkNational(parkNational: any) {
+    return this.http.put<any[]>(`${this.url}add`, parkNational)
+  }
+
+  eliminarParkNational(Id: any) {
+    return this.http.delete<any[]>(`${this.url}delete/${Id}`)
   }
 
 }

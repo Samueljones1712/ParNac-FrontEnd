@@ -29,6 +29,8 @@ import { AddTokenInterceptor } from './utils/add-token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { EntradaComponent } from './components/entrada/entrada.component';
+
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { ToastrModule } from 'ngx-toastr';
     VerifyComponent,
     IndexComponent,
     RegisterComponent,
+    EntradaComponent,
   ],
   imports: [
     BrowserModule,
