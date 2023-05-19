@@ -8,4 +8,5 @@ export interface User {
     contrasena: string;
     token: string;
     salt: string;
+    Tipo: string;
 }

@@ -1,4 +1,4 @@
-<div class="container-principal">
+<div class="container-principal" *ngIf="!loading">
 
     <div style="width: 50%; ">
         <div class="container-logo">
@@ -31,7 +31,13 @@
             </form>
         </div>
     </div>
+
+
     <div class="container-img-background">
         <img class="img-background" src="../../../assets/img/login-background.jpg">
     </div>
+</div>
+
+<div class="spinner-div" style="margin-top: 25%;">
+    <app-spinner *ngIf="loading"></app-spinner>
 </div>

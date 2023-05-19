@@ -8,7 +8,7 @@
     <div class="container-title">
         <h2 class="h3-title">Crear cuenta</h2>
     </div>
-    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" *ngIf="!loading">
         <div class="container-input">
             <label for="cedula">Cédula</label>
             <input type="text" id="cedula" formControlName="cedula" />
@@ -44,4 +44,8 @@
 
     </form>
 
+</div>
+
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
 </div>

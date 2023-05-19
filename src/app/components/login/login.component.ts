@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { LoginConnectionService } from 'src/app/services/login-connection.service';
 import { User } from 'src/app/interface/user';
+import { ToastrService } from 'ngx-toastr';
+import { AlertService } from 'src/app/utils/alert.service';
 
 
 @Component({
@@ -12,20 +14,22 @@ import { User } from 'src/app/interface/user';
 })
 export class LoginComponent implements OnInit {
 
+  loading: boolean = false;
 
   datos: any[] = [];
 
-  usuario: User = { id: "", cedula: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '' };
+  usuario: User = { id: "", cedula: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '', Tipo: '' };
 
-  constructor(private LoginConnection: LoginConnectionService, private router: Router) { }
+  constructor(private LoginConnection: LoginConnectionService, private router: Router,
+    private toastr: ToastrService, private alert: AlertService) { }
 
   ngOnInit(): void {
 
   }
 
   loginForm = new FormGroup({
-    correo: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required])
+    correo: new FormControl(""),
+    password: new FormControl("")
   });
 
   redirectRegister() {
@@ -35,12 +39,44 @@ export class LoginComponent implements OnInit {
   onLogin() {
     // Acceder a los valores de los campos
 
-    this.usuario.correo = this.loginForm.value.correo + "";
-    this.usuario.contrasena = this.loginForm.value.password + "";
+    if (this.loginForm.value.correo == '' || this.loginForm.value.password == '') {
 
-    this.LoginConnection.login(this.usuario);
+      this.toastr.error('Todos los campos son obligatorios', 'Error');
 
+      return;
 
+    } else {
+
+      this.usuario.correo = this.loginForm.value.correo + "";
+      this.usuario.contrasena = this.loginForm.value.password + "";
+
+      this.loading = true;
+
+      this.alert.waitMessage();
+
+      this.LoginConnection.login(this.usuario).subscribe((res: any) => {
+
+        this.loading = false;
+
+        if (res.response.status == "ok") {
+
+          this.alert.showMessage(res.response.result.information);
+
+          console.log(res.response.result.information);
+
+          sessionStorage.setItem('correo', res.response.result.information);
+
+          sessionStorage.setItem('code', res.response.result.code);
+
+          this.router.navigate(['verify']);
+
+        } else {
+          console.log(res.response.result.error_msg)
+          this.alert.errorMessage(res.response.result.error_msg)
+        }
+      });;
+
+    }
   }
 
 }

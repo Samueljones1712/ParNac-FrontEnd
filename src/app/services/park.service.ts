@@ -33,6 +33,7 @@ export class ParkService {
   }
 
   eliminarParkNational(Id: any) {
+
     return this.http.delete<any[]>(`${this.url}delete/${Id}`)
   }
 

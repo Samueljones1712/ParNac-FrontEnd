@@ -30,6 +30,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
 import { EntradaComponent } from './components/entrada/entrada.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { AlertService } from './utils/alert.service';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+
+/* DataTable */
+import { DataTablesModule } from "angular-datatables";
 
 
 @NgModule({
@@ -40,6 +48,10 @@ import { EntradaComponent } from './components/entrada/entrada.component';
     IndexComponent,
     RegisterComponent,
     EntradaComponent,
+    NavbarComponent,
+    DashboardComponent,
+    SpinnerComponent,
+    UsuariosComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +60,12 @@ import { EntradaComponent } from './components/entrada/entrada.component';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
+    DataTablesModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AddTokenInterceptor, multi: true }, LoginConnectionService, ParkService],
   bootstrap: [AppComponent]
