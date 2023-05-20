@@ -40,9 +40,20 @@ export class RegisterComponent implements OnInit {
 
 
   onRegister() {
+    const email_expresion = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+    const password_expresion = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
 
     console.log(this.registerForm.value.contrasena + " == " + this.confirmPassword)
 
+    if (!email_expresion.test(this.registerForm.value.correo + "")) {
+      this.Toastr.error('Correo electronico invalido', 'error')
+      return
+    }
+
+    if (!password_expresion.test(this.registerForm.value.contrasena + "")) {
+      this.Toastr.error('La contraseña no cumplen con los requisitos', 'error')
+      return
+    }
     if (this.registerForm.value.contrasena + "" == this.confirmPassword + "") {
 
       this.usuario.nombre = this.registerForm.value.nombre + "";
