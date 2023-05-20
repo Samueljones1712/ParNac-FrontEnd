@@ -18,7 +18,7 @@ export class IndexComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  loading: boolean = true;
+  loading: boolean = false;
   resultado: boolean = false;
 
   listParques: parkNational[] = []

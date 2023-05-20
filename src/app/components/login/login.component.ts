@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   datos: any[] = [];
 
-  usuario: User = { id: "", cedula: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '', Tipo: '' };
+  usuario: User = { id: "", nombre: '', apellido: '', correo: "", contrasena: "", salt: '', tipo: "" };
 
   constructor(private LoginConnection: LoginConnectionService, private router: Router,
     private toastr: ToastrService, private alert: AlertService) { }

@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
 
   loading: boolean = false;
   confirmPassword: string = "";
-  usuario: User = { id: "", cedula: "", nombre: '', apellido: '', correo: "", contrasena: "", token: '', salt: '', Tipo: '' };
+  usuario: User = { id: "", nombre: '', apellido: '', correo: "", contrasena: "", salt: '', tipo: "" };
 
   registerForm: FormGroup = new FormGroup({});
 
@@ -45,12 +45,10 @@ export class RegisterComponent implements OnInit {
 
     if (this.registerForm.value.contrasena + "" == this.confirmPassword + "") {
 
-      this.usuario.cedula = this.registerForm.value.cedula + "";
       this.usuario.nombre = this.registerForm.value.nombre + "";
       this.usuario.apellido = this.registerForm.value.apellido + "";
       this.usuario.correo = this.registerForm.value.correo + "";
       this.usuario.contrasena = this.registerForm.value.contrasena + "";
-      this.usuario.Tipo = 'Visitante';
 
       this.loading = true;
 

@@ -24,6 +24,7 @@ export class ParkService {
 
   }
 
+  
   addParkNational(parkNational: any) {
     return this.http.post<any[]>(`${this.url}add`, parkNational)
   }

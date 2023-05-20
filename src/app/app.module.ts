@@ -18,6 +18,8 @@ import { RegisterComponent } from './components/register/register.component'
 import { LoginConnectionService } from './services/login-connection.service';
 import { ParkService } from './services/park.service';
 import { ErrorService } from './services/error.service';
+import { AlertService } from './utils/alert.service';
+import { UserService } from './services/user.service';
 
 //Interface
 import { User } from './interface/user';
@@ -33,7 +35,6 @@ import { EntradaComponent } from './components/entrada/entrada.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { AlertService } from './utils/alert.service';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 /* DataTable */
@@ -67,7 +68,7 @@ import { DataTablesModule } from "angular-datatables";
       preventDuplicates: true,
     }),
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AddTokenInterceptor, multi: true }, LoginConnectionService, ParkService],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AddTokenInterceptor, multi: true }, LoginConnectionService, ParkService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

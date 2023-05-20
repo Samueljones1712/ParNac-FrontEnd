@@ -9,10 +9,12 @@
         <h2 class="h3-title">Crear cuenta</h2>
     </div>
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()" *ngIf="!loading">
-        <div class="container-input">
+        <!--     <div class="container-input">
             <label for="cedula">Cédula</label>
             <input type="text" id="cedula" formControlName="cedula" />
+
         </div>
+        -->
 
         <div class="container-input">
             <label for="nombre">Nombre</label>

@@ -1,1 +1,55 @@
 <p>usuarios works!</p>
+
+<div>
+    <form (ngSubmit)="saveNewPassword()" *ngIf="mostrarFormClave">
+        <div>Cambiar Contraseña</div>
+        <div>
+            <label>{{correo}}</label>
+        </div>
+
+        <div> <label for="contrasena">Nueva Contraseña</label>
+            <input type="password" [(ngModel)]="nuevaContrasena" [ngModelOptions]="{standalone: true}"
+                id="nuevaContrasena">
+        </div>
+        <div>
+            <label for="contrasena">Confirmar nueva Contraseña</label>
+            <input type="password" [(ngModel)]="confirmarNuevaContrasena" [ngModelOptions]="{standalone: true}"
+                id="confirmarNuevaContrasena">
+        </div>
+
+        <div>
+            <button class="btn-login" type="submit">Guardar Contraseña</button>
+        </div>
+    </form>
+</div>
+
+<div>
+    <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Contrasena</th>
+                <th>Tipo</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listUsers">
+                <td>{{item.nombre}}</td>
+                <td>{{item.apellido}}</td>
+                <td>{{item.correo}}</td>
+                <td>{{item.contrasena}}</td>
+                <td>{{item.tipo}}</td>
+                <td><button (click)="loadChangePassword(item.id!)">Cambiar clave</button>
+                    <button (click)="eliminar(item.id!)">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
+</div>
