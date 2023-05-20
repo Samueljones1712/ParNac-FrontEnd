@@ -1,3 +1,4 @@
+
 <div>
     <form (ngSubmit)="editar()" *ngIf="mostrarFormNombre">
         <div>Cambiar Nombre y Apellido</div>
@@ -60,9 +61,10 @@
                 <td>{{item.correo}}</td>
                 <td>{{item.contrasena}}</td>
                 <td>{{item.tipo}}</td>
-                <td><button (click)="loadChangePassword(item.id!)">Cambiar clave</button>
+                <td>
                     <button (click)="loadEditar(item.id!)">Cambiar Nombre</button>
-                    <button (click)="eliminar(item.id!)">Eliminar</button>
+              <button class="button-secondary" (click)="loadChangePassword(item.id!)">Cambiar clave</button>
+                    <button class="button-delete" (click)="eliminar(item.id!)">Eliminar</button>
                 </td>
             </tr>
         </tbody>
