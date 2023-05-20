@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Entrada } from '../interface/entrada';
+import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +15,17 @@ export class EntradaService {
   constructor(private http: HttpClient) { }
 
   getEntrada(): Observable<Entrada[]> {
-    //const token = sessionStorage.getItem('token');
-    //const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    console.log(`${this.url}`);
+
     return this.http.get<Entrada[]>(`${this.url}`)
 
   }
 
   addEntrada(entrada: any) {
-    console.log(`${this.url}add`);
     return this.http.post<any[]>(`${this.url}add`, entrada)
   }
 
   updateEntrada(entrada: any) {
-    return this.http.put<any[]>(`${this.url}add`, entrada)
+    return this.http.put<any[]>(`${this.url}actualizar`, entrada)
   }
 
   eliminarEntrada(Id: any) {

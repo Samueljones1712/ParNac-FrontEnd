@@ -1,22 +1,73 @@
-<p>entrada works!</p>
+<div>
+    <form [formGroup]="entradaForm" (ngSubmit)="agregar()">
+
+        <input type="hidden" id="Id" formControlName="Id">
+        <div>
+            <label for="fecha">Fecha</label>
+            <input type="datetime-local" id="fecha" formControlName="fecha">
+        </div>
+        <div>
+            <label for="fk_cedula">Cedula</label>
+            <input type="text" id="fk_cedula" formControlName="fk_cedula">
+        </div>
+        <div>
+            <label for="fk_idParque">Parque</label>
+            <input list="listaParques" id="fk_idParque" [(ngModel)]="fk_idParque" (change)="savePark($event)">
+            <datalist id="listaParques">
+                <option *ngFor="let c of listParks" [value]="c.Nombre">{{c.Provincia}}</option>
+            </datalist>
+        </div>
+        <div>
+            <label for="tarifa">Tarifa Nacional:{{tarifa}}</label>
+
+        </div>
+        <div>
+            <label for="estado">Estado</label>
+            <select id="estado" formControlName="estado">
+                <option value="Activo" selected="selected">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+            </select>
+        </div>
+        <div>
+            <label for="fechaVencimiento">Fecha Vencimiento</label>
+            <input type="datetime-local" id="fechaVencimiento" formControlName="fechaVencimiento">
+        </div>
+        <div>
+            <button class="btn-login" type="submit" [disabled]="!entradaForm.valid">Guardar</button>
+        </div>
+    </form>
+</div>
 
 
-<table>
-    <thead>
-        <tr>
-            <th>fecha</th>
-            <th>cedula</th>
-            <th>parque</th>
-            <th>Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of listEntrada">
-            <td>{{item.fecha}}</td>
-            <td>{{item.fk_cedula}}</td>
-            <td>{{item.fk_idParque}}</td>
-            <td><button (click)="actualizar(item.fk_cedula!)">Editar</button><button
-                    (click)="eliminar(item.fk_cedula!)">Eliminar</button></td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+        <thead>
+            <tr>
+                <th>fecha</th>
+                <th>cedula</th>
+                <th>idParque</th>
+                <th>tarifa</th>
+                <th>estado</th>
+                <th>fecha vencimiento</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listEntradas">
+                <td>{{item.fecha}}</td>
+                <td>{{item.fk_cedula}}</td>
+                <td>{{item.fk_idParque}}</td>
+                <td>{{item.tarifa}}</td>
+                <td>{{item.estado}}</td>
+                <td>{{item.fechaVencimiento}}</td>
+                <td><button (click)="loadActualizar(item.id!)">Editar</button><button
+                        (click)="eliminar(item.id!)">Eliminar</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
+</div>

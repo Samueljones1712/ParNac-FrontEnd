@@ -1,4 +1,22 @@
-<p>usuarios works!</p>
+<div>
+    <form (ngSubmit)="editar()" *ngIf="mostrarFormNombre">
+        <div>Cambiar Nombre y Apellido</div>
+        <div>
+            <label>{{correo}}</label>
+        </div>
+
+        <div> <label for="nombre">Nombre</label>
+            <input type="text" [(ngModel)]="nombre" [ngModelOptions]="{standalone: true}" id="nombre">
+        </div>
+        <div>
+            <label for="apellido">Apellido</label>
+            <input type="text" [(ngModel)]="apellido" [ngModelOptions]="{standalone: true}" id="apellido">
+        </div>
+        <div>
+            <button type="submit">Guardar Datos</button>
+        </div>
+    </form>
+</div>
 
 <div>
     <form (ngSubmit)="saveNewPassword()" *ngIf="mostrarFormClave">
@@ -43,6 +61,7 @@
                 <td>{{item.contrasena}}</td>
                 <td>{{item.tipo}}</td>
                 <td><button (click)="loadChangePassword(item.id!)">Cambiar clave</button>
+                    <button (click)="loadEditar(item.id!)">Cambiar Nombre</button>
                     <button (click)="eliminar(item.id!)">Eliminar</button>
                 </td>
             </tr>

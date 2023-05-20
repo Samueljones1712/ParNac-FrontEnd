@@ -21,12 +21,12 @@ export class UserService {
   }
 
   editUser(usuario: User) {
-    return this.http.put<any>(`${this.url}/edit`, usuario)
+    return this.http.put<any>(`${this.url}/editar`, usuario)
   }
 
-  deleteUser(Id: any) {
+  deleteUser(usuario: User) {
 
-    return this.http.delete<any[]>(`${this.url}/delete/${Id}`)
+    return this.http.post<any[]>(`${this.url}/delete/`, usuario)
   }
 
 }

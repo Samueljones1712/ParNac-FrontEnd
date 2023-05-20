@@ -99,8 +99,6 @@ export class IndexComponent implements OnInit {
 
       this.parkService.updateParkNational(this.parque).subscribe((res: any) => {
 
-        console.log(res);
-
         if (res.response.status == "ok") {
 
           this.toastr.success('Se edito con exito el Parque Nacional', 'Correcto');
@@ -120,7 +118,7 @@ export class IndexComponent implements OnInit {
 
   actualizar(Id: any) {
 
-    this.parque = this.listParques[Id - 1];
+    this.getUserById(Id);
     //    this.toastr.info("Se esta cargando el Parque Nacional", "Cargando el Parque Nacional...");
     this.toastr.info("Se cargo el Parque Nacional", "Correcto");
     this.loadForm();
@@ -147,6 +145,15 @@ export class IndexComponent implements OnInit {
       this.loading = false
       this.listParques = res;
     })
+  }
+
+  getUserById(Id: any) {
+
+    for (var i = 0; i < this.listParques.length; i++) {
+      if (this.listParques[i].Id == Id) {
+        this.parque = this.listParques[i];
+      }
+    }
   }
 
   cleanParque() {
