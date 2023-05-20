@@ -1,8 +1,8 @@
 <div>
-
-    <button (click)="redirectEntrada()">Ver entradas</button>
-    <button (click)="redirectUsuarios()">Ver Usuarios</button>
-
+    <div class="container-buttons">
+        <button class="button-secondary" (click)="redirectEntrada()">Ver entradas</button>
+        <button class="button-secondary" (click)="redirectUsuarios()">Ver Usuarios</button>
+    </div>
 
     <div>
         <form [formGroup]="parkForm" (ngSubmit)="agregar()">
@@ -25,7 +25,7 @@
             <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
             <label>Tarifa Nacionales (Colones)</label>
             <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
-            <button class="btn-login" type="submit" [disabled]="!parkForm.valid">Agregar</button>
+            <button class="button-secondary" type="submit" [disabled]="!parkForm.valid">Agregar</button>
         </form>
 
     </div>
@@ -48,8 +48,8 @@
                 <td>{{item.Area_de_Conservacion}}</td>
                 <td>{{item.Tarifa_Extranjeros_dolares}}</td>
                 <td>{{item.Tarifa_Nacionales_colones}}</td>
-                <td><button (click)="actualizar(item.Id!)">Editar</button>
-                    <button (click)="eliminar(item.Id!)">Eliminar</button>
+                <td><button class="button-edit" (click)="actualizar(item.Id!)">Editar</button>
+                    <button class="button-delete" (click)="eliminar(item.Id!)">Eliminar</button>
                 </td>
             </tr>
         </tbody>

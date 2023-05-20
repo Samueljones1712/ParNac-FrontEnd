@@ -1,0 +1,12 @@
+table {
+    width: 100%;
+    text-align: center;
+}
+
+table th {
+    background: #fcffb1;
+}
+
+table tr:nth-child(even) {
+    background: #DFDFDF;
+}
