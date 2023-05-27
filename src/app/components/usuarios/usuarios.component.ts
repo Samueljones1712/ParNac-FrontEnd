@@ -29,9 +29,15 @@ export class UsuariosComponent implements OnInit {
 
   nuevaContrasena: string = "";
   confirmarNuevaContrasena: string = "";
+
   correo: string = "";
   id: string = "";
+
+  nombre: string = "";
+  apellido: string = "";
+
   mostrarFormClave: boolean = false;
+  mostrarFormNombre: boolean = false;
 
   constructor(private userService: UserService, private toastr: ToastrService) {
   }
@@ -70,18 +76,50 @@ export class UsuariosComponent implements OnInit {
     this.mostrarFormClave = true;
   }
 
+  getUserById(id: any) {
+    for (var i = 0; i < this.listUsers.length; i++) {
+
+      if (this.listUsers[i].id == id) {
+        this.usuario = this.listUsers[i];
+      }
+    }
+  }
+
   eliminar(id: any) {
 
     this.loading = true;
     this.toastr.info("Eliminando el Usuario", "Eliminando...");
-    this.userService.deleteUser(id).subscribe((res: any) => {
+    this.getUserById(id)
+    this.userService.deleteUser(this.usuario).subscribe((res: any) => {
       this.toastr.success('Se elimino el Usuario', 'Correcto');
+      this.loading = false;
       this.ngOnInit();
     });
 
   }
 
-  saveNewPassword() {
+  loadEditar(id: any) {
+    this.toastr.info("Se cargo la informacion.", "Informacion cargada correctamente.")
+    this.mostrarFormNombre = true;
+    this.getUserById(id);
+    this.id = id;
+    this.correo = this.usuario.correo;
+  }
+
+  editar() {
+    this.mostrarFormNombre = false;
+    this.loading = true;
+    this.toastr.info("Espere", "Guardando....");
+    this.usuario = { id: this.id, nombre: this.nombre, apellido: this.apellido, correo: "", salt: "", contrasena: "", tipo: "" }
+
+    this.userService.editUser(this.usuario).subscribe((res: any) => {
+      this.loading = false;
+
+      this.ngOnInit();
+    });
+
+  }
+  saveNewPassword() {//Validar la nueva contrasena
 
     console.log(this.confirmarNuevaContrasena + "==" + this.nuevaContrasena);
 
