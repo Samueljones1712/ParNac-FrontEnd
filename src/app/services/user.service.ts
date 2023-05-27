@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http'
 import { User } from '../interface/user';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +15,18 @@ export class UserService {
 
   getUser(): Observable<User[]> {
     return this.http.get<User[]>(`${this.url}`)
+  }
+
+  getAdministradores(): Observable<Administrador[]> {
+    return this.http.get<Administrador[]>(`${this.url}/administradores`)
+  }
+
+  getViewAdministradores(): Observable<Administrador[]> {
+    return this.http.get<Administrador[]>(`${this.url}/view_administradores`)
+  }
+
+  getPadron(Id: any): Observable<Padron> {
+    return this.http.get<Padron>(`${this.url}/padron/${Id}`)
   }
 
   changePassword(usuario: User) {
@@ -28,5 +41,22 @@ export class UserService {
 
     return this.http.post<any[]>(`${this.url}/delete/`, usuario)
   }
+
+}
+
+
+export interface Administrador {
+
+  cedula: string;
+  nombre: string;
+  apellido: string;
+
+}
+
+export interface Padron {
+  cedula: string;
+  nombre: string;
+  apellido2: string;
+  apellido1: string;
 
 }

@@ -1,50 +1,62 @@
-<div class="container-img-background">
-    <img class="img-background" src="../../../assets/img/_DSC8447.jpg">
-</div>
-<div class="container-logo">
-    <img class="img-logo" src="../../../assets/img/Logo_B.png">
-</div>
-<div class="container-form">
-    <div class="container-title">
-        <h2 class="h3-title">Crear cuenta</h2>
+<div class="container-principal-register" *ngIf="!loading">
+
+    <div class="container-img-background">
+        <img class="img-background" src="../../../assets/img/_DSC8447.jpg">
     </div>
-    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" *ngIf="!loading">
-        <!--     <div class="container-input">
+    <div class="container-logo">
+        <img class="img-logo" src="../../../assets/img/Logo_B.png">
+    </div>
+    <div class="container-form">
+        <div class="container-title">
+            <h2 class="h3-title">Crear cuenta</h2>
+        </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <!--     <div class="container-input">
             <label for="cedula">Cédula</label>
             <input type="text" id="cedula" formControlName="cedula" />
 
         </div>
         -->
 
-        <div class="container-input">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" formControlName="nombre" />
-        </div>
+            <div class="container-input">
+                <label for="cedula">Identificacion</label>
+                <input type="text" id="cedula" [(ngModel)]="cedula" (change)="cargarData($event)" minlength="7"
+                    maxlength="25" />
+            </div>
 
-        <div class="container-input">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" formControlName="apellido" />
-        </div>
+            <div class="container-input">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" formControlName="nombre" />
+            </div>
 
-        <div class="container-input">
-            <label for="correo">Correo</label>
-            <input type="text" id="correo" formControlName="correo" />
-        </div>
+            <div class="container-input">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" formControlName="apellido" />
+            </div>
 
-        <div class="container-input">
-            <label for="contrasena">Contraseña</label>
-            <input type="password" id="contrasena" formControlName="contrasena" />
-        </div>
+            <div class="container-input">
+                <label for="correo">Correo</label>
+                <input type="text" id="correo" formControlName="correo" />
+            </div>
 
-        <div class="container-input">
-            <label for="confirmcontrasena">Confirmar Contraseña</label>
-            <input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}" />
-        </div>
-        <div class="container-button">
-            <button class="button-submit" type="submit">Registrar</button>
-        </div>
+            <div class="container-input">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" formControlName="contrasena" />
+            </div>
 
-    </form>
+            <div class="container-input">
+                <label for="confirmcontrasena">Confirmar Contraseña</label>
+                <input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}" />
+            </div>
+            <div class="container-button">
+                <button class="button-submit" type="submit">Registrar</button>
+            </div>
+
+        </form>
+
+    </div>
+
+
 
 </div>
 

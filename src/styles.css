@@ -10,6 +10,10 @@ h3 {
 
 }
 
+body {
+    overflow: auto;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -47,4 +51,70 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+/*Index*/
+.button-edit {
+    border: 0;
+    margin: auto;
+    background: #fcffb1;
+    margin-right: 5%;
+    border-radius: 5px;
+}
+
+.button-delete {
+    border: 0;
+    background: #fa7878;
+    border-radius: 5px;
+}
+
+tr {
+    text-align-last: center;
+}
+
+
+
+table th {
+    background: #2eb872;
+    color: white;
+}
+
+
+.button-secondary {
+    border: 0;
+    padding: 0.5%;
+
+    background: #248f59;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    border: 0;
+    border-radius: 5px;
+}
+
+.submit-form {
+    margin-top: 4%;
+
+    align-self: center;
+    width: -webkit-fill-available;
+}
+
+label {
+    margin-top: 1%;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: gainsboro;
+    border-radius: 5px;
+    padding: 2%;
 }

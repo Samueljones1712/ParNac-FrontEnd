@@ -1,43 +1,48 @@
-<div class="container-principal" *ngIf="!loading">
+<div style="overflow: hidden;">
+    <div class="container-principal" *ngIf="!loading">
 
-    <div style="width: 50%; ">
-        <div class="container-logo">
-            <img class="img-login-title" src="../../../assets/img/Logo_B.png">
+        <div style="width: 50%; ">
+            <div class="container-logo">
+                <img class="img-login-title" src="../../../assets/img/Logo_B.png">
+            </div>
+
+            <div class="container-form">
+                <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="onLogin()">
+                    <div class="text-title-login">Inicio de Sesión</div>
+                    <div class="container-input">
+                        <label class="text-input">Correo</label>
+                        <input class="form-input " type="text" id="correo" formControlName="correo">
+
+                    </div>
+                    <div class="container-input">
+                        <label class="text-input">Contraseña</label>
+                        <input class="form-input " type="password" id="password" formControlName="password">
+
+
+                    </div>
+                    <div class="container-button">
+                        <button class="btn-login" type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
+                        <!--<button class="btn-login" (click)="redirectRegister()">Registrar</button>-->
+                    </div>
+
+                    <div style="font-weight: lighter; display: flex; justify-content:center; margin-top: 2%;">¿No tienes
+                        cuenta? <a href="/register" style="margin-left: 5px;">Registrarse</a>
+                    </div>
+
+                </form>
+            </div>
         </div>
 
-        <div class="container-form">
-            <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="onLogin()">
-                <div class="text-title-login">Inicio de Sesión</div>
-                <div class="container-input">
-                    <label class="text-input">Correo</label>
-                    <input class="form-input " type="text" id="correo" formControlName="correo">
 
-                </div>
-                <div class="container-input">
-                    <label class="text-input">Contraseña</label>
-                    <input class="form-input " type="password" id="password" formControlName="password">
-
-
-                </div>
-                <div class="container-button">
-                    <button class="btn-login" type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</button>
-                    <!--<button class="btn-login" (click)="redirectRegister()">Registrar</button>-->
-                </div>
-
-                <div style="font-weight: lighter; display: flex; justify-content:center; margin-top: 2%;">¿No tienes
-                    cuenta? <a href="/register" style="margin-left: 5px;">Registrarse</a>
-                </div>
-
-            </form>
+        <div class="container-img-background">
+            <img class="img-background" src="../../../assets/img/login-background.jpg">
         </div>
     </div>
 
-
-    <div class="container-img-background">
-        <img class="img-background" src="../../../assets/img/login-background.jpg">
+    <div class="spinner-div" style="margin-top: 25%;">
+        <app-spinner *ngIf="loading"></app-spinner>
     </div>
-</div>
 
-<div class="spinner-div" style="margin-top: 25%;">
-    <app-spinner *ngIf="loading"></app-spinner>
+
+
 </div>

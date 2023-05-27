@@ -1,39 +1,60 @@
+
 <div>
     <form [formGroup]="entradaForm" (ngSubmit)="agregar()">
 
+<div class="form-container">
+
+    <form class="form" [formGroup]="entradaForm" (ngSubmit)="agregar()" style="display: flex;
+    align-items: stretch;">
+
+        <div style="display: flex;
+        justify-content: center;">
+            <h5>Guardar Entrada</h5>
+        </div>
+
+
         <input type="hidden" id="Id" formControlName="Id">
-        <div>
-            <label for="fecha">Fecha</label>
+        <!--<div class="container-input">
+            <label for="fecha">Pedido: </label>
             <input type="datetime-local" id="fecha" formControlName="fecha">
+        </div> -->
+        <div class="container-input" *ngIf="!loadingParks">
+            <label for="cedula">Cedula:</label>
+            <input list="listAdmins" id="cedula" [(ngModel)]="cedula" (change)="saveCedula($event)">
+            <datalist id="listAdmins">
+                <option *ngFor="let a of listAdmins" [value]="a.cedula">{{a.nombre}} - {{a.apellido}}</option>
+            </datalist>
         </div>
-        <div>
-            <label for="fk_cedula">Cedula</label>
-            <input type="text" id="fk_cedula" formControlName="fk_cedula">
-        </div>
-        <div>
-            <label for="fk_idParque">Parque</label>
+
+        <div class="container-input" *ngIf="!loadingCedula">
+            <label for="fk_idParque">Parque:</label>
             <input list="listaParques" id="fk_idParque" [(ngModel)]="fk_idParque" (change)="savePark($event)">
             <datalist id="listaParques">
                 <option *ngFor="let c of listParks" [value]="c.Nombre">{{c.Provincia}}</option>
             </datalist>
         </div>
-        <div>
-            <label for="tarifa">Tarifa Nacional:{{tarifa}}</label>
-
+        <div class="container-input">
+            <label>Parque:{{nombreParque}}</label>
         </div>
-        <div>
-            <label for="estado">Estado</label>
+        <div class="container-input">
+            <label>Cedula:{{nombreCedula}}</label>
+        </div>
+        <div class="container-input">
+            <label>Tarifa:{{tarifa}}</label>
+        </div>
+        <div class="container-input">
+            <label for="estado">Estado: </label>
             <select id="estado" formControlName="estado">
-                <option value="Activo" selected="selected">Activo</option>
-                <option value="Inactivo">Inactivo</option>
+                <option value="Activo" selected="selected">Aprobada</option>
+                <option value="Inactivo">Cancelada</option>
             </select>
         </div>
-        <div>
-            <label for="fechaVencimiento">Fecha Vencimiento</label>
-            <input type="datetime-local" id="fechaVencimiento" formControlName="fechaVencimiento">
+        <div class="container-input">
+            <label for="fechaVencimiento">Vencimiento:</label>
+            <input type="date" id="fechaVencimiento" formControlName="fechaVencimiento">
         </div>
-        <div>
-            <button class="btn-login" type="submit" [disabled]="!entradaForm.valid">Guardar</button>
+        <div class="container-submit">
+            <button class="button-secondary submit-form" type="submit" [disabled]="!entradaForm.valid">Guardar</button>
         </div>
     </form>
 </div>
@@ -60,11 +81,13 @@
                 <td>{{item.tarifa}}</td>
                 <td>{{item.estado}}</td>
                 <td>{{item.fechaVencimiento}}</td>
+
                 <td><button class="button-edit" (click)="loadActualizar(item.id!)"><img
                             src="../../../assets/img/edit.svg" width="24px" height="auto"></button>
                     <button class="button-delete" (click)="eliminar(item.id!)"><img
                             src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
                 </td>
+
             </tr>
         </tbody>
     </table>

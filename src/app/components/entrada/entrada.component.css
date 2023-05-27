@@ -3,11 +3,11 @@ table {
     text-align: center;
 }
 
+
 table th {
     background: #2eb872;
     color: white;
 }
-
 table tr:nth-child(even) {
     background: #DFDFDF;
 }
@@ -32,4 +32,21 @@ table tr:nth-child(even) {
 
 .button-delete:hover {
     background: #fe5454;
+  
+.container-submit {}
+
+
+.container-input {
+    display: flex;
+    align-items: center;
+}
+
+input,
+select {
+    margin-left: 2%;
+}
+
+.container-input {
+    margin-top: 5%;
+
 }
