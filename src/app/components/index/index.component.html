@@ -4,8 +4,11 @@
         <button class="button-secondary" (click)="redirectUsuarios()">Ver Usuarios</button>
     </div>
 
-    <div>
-        <form [formGroup]="parkForm" (ngSubmit)="agregar()">
+    <div class="form-container">
+        <form [formGroup]="parkForm" class="form" (ngSubmit)="agregar()">
+            <div style="align-self: center;">
+                <h5>Formulario</h5>
+            </div>
             <input type="hidden" id="Id" formControlName="Id">
             <label>Nombre</label>
             <input type="text" id="Nombre" formControlName="Nombre" />
@@ -25,7 +28,7 @@
             <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
             <label>Tarifa Nacionales (Colones)</label>
             <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
-            <button class="button-secondary" type="submit" [disabled]="!parkForm.valid">Agregar</button>
+            <button class="button-secondary submit-form" type="submit" [disabled]="!parkForm.valid">Agregar</button>
         </form>
 
     </div>
@@ -36,8 +39,8 @@
                 <th>Nombre</th>
                 <th>Provincia</th>
                 <th>Area de conservacion</th>
-                <th>Tarifa Extranjeros (Dolares)</th>
-                <th>Tarifa Nacionales (Colones)</th>
+                <th>Tarifa Extranjeros</th>
+                <th>Tarifa Nacionales</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -46,9 +49,9 @@
                 <td>{{item.Nombre}}</td>
                 <td>{{item.Provincia}}</td>
                 <td>{{item.Area_de_Conservacion}}</td>
-                <td>{{item.Tarifa_Extranjeros_dolares}}</td>
-                <td>{{item.Tarifa_Nacionales_colones}}</td>
-                <td><button class="button-edit" (click)="actualizar(item.Id!)">Editar</button>
+                <td>${{item.Tarifa_Extranjeros_dolares}}</td>
+                <td>₡{{item.Tarifa_Nacionales_colones}}</td>
+                <td style="display: flex;"><button class="button-edit" (click)="actualizar(item.Id!)">Editar</button>
                     <button class="button-delete" (click)="eliminar(item.Id!)">Eliminar</button>
                 </td>
             </tr>

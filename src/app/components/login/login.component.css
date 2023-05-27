@@ -1,8 +1,11 @@
 .loginForm {
     width: 60%;
-    border-radius: 0.5rem;
+    border-radius: 2;
 }
 
+body {
+    overflow: hidden;
+}
 
 .text-title-login {
     margin-top: 2%;
@@ -11,8 +14,7 @@
     font-weight: 400;
     letter-spacing: 1px;
     font-size: x-large;
-    padding-bottom: 3rem;
-    padding-top: 3rem;
+
 }
 
 .form-input {
@@ -30,14 +32,12 @@
 
     display: block;
     width: 100%;
-    padding: .375rem .75rem;
-    font-size: 1rem;
     line-height: 1.5;
     color: #495057;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-    border-radius: .25rem;
+    border-radius: 1%;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .container-input {
-    margin-top: 0.7rem;
+    margin-top: 1%;
     display: flex;
     flex-direction: column;
 }
@@ -67,7 +67,7 @@
 
 .container-principal {
     display: flex;
-    height: 100vh !important;
+
     overflow: hidden;
 }
 
@@ -93,9 +93,9 @@
 
 .container-button {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
-    padding-top: 0.25rem;
+    justify-content: center;
+    margin-top: 1%;
+    padding-top: 1%;
     margin-bottom: 1rem;
 }
 
@@ -114,6 +114,7 @@
     font-weight: 400;
     line-height: 1.5;
 
+    border-radius: 5%;
     background: #248f59;
     color: white;
     cursor: pointer;
@@ -122,6 +123,8 @@
     /*border-radius: 6px;*/
     display: inherit;
 }
+
+
 
 .container-img-background {
     width: 50%;

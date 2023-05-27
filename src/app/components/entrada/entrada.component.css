@@ -3,10 +3,23 @@ table {
     text-align: center;
 }
 
-table th {
-    background: #fcffb1;
-}
-
 table tr:nth-child(even) {
     background: #DFDFDF;
+}
+
+.container-submit {}
+
+
+.container-input {
+    display: flex;
+    align-items: center;
+}
+
+input,
+select {
+    margin-left: 2%;
+}
+
+.container-input {
+    margin-top: 5%;
 }
