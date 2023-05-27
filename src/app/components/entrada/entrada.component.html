@@ -1,4 +1,3 @@
-
 <div>
     <form [formGroup]="entradaForm" (ngSubmit)="agregar()">
 
@@ -61,8 +60,11 @@
                 <td>{{item.tarifa}}</td>
                 <td>{{item.estado}}</td>
                 <td>{{item.fechaVencimiento}}</td>
-                <td><button (click)="loadActualizar(item.id!)">Editar</button><button
-                        (click)="eliminar(item.id!)">Eliminar</button></td>
+                <td><button class="button-edit" (click)="loadActualizar(item.id!)"><img
+                            src="../../../assets/img/edit.svg" width="24px" height="auto"></button>
+                    <button class="button-delete" (click)="eliminar(item.id!)"><img
+                            src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
+                </td>
             </tr>
         </tbody>
     </table>

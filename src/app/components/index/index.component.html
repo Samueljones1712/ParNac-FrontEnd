@@ -48,8 +48,10 @@
                 <td>{{item.Area_de_Conservacion}}</td>
                 <td>{{item.Tarifa_Extranjeros_dolares}}</td>
                 <td>{{item.Tarifa_Nacionales_colones}}</td>
-                <td><button class="button-edit" (click)="actualizar(item.Id!)">Editar</button>
-                    <button class="button-delete" (click)="eliminar(item.Id!)">Eliminar</button>
+                <td><button class="button-edit" (click)="actualizar(item.Id!)"><img src="../../../assets/img/edit.svg"
+                            width="24px" height="auto"></button>
+                    <button class="button-delete" (click)="eliminar(item.Id!)"><img
+                            src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
                 </td>
             </tr>
         </tbody>

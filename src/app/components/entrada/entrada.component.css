@@ -4,9 +4,32 @@ table {
 }
 
 table th {
-    background: #fcffb1;
+    background: #2eb872;
+    color: white;
 }
 
 table tr:nth-child(even) {
     background: #DFDFDF;
+}
+
+.td-buttons {
+    align-content: center;
+}
+
+.button-edit {
+    border: 0;
+    background: #fcffb1;
+}
+
+.button-edit:hover {
+    background: #f6fa78;
+}
+
+.button-delete {
+    border: 0;
+    background: #fa7878;
+}
+
+.button-delete:hover {
+    background: #fe5454;
 }

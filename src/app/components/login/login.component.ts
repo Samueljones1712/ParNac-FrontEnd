@@ -40,9 +40,7 @@ export class LoginComponent implements OnInit {
     // Acceder a los valores de los campos
     const email_expresion = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     const password_expresion = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
-    if () {
 
-    }
     if (this.loginForm.value.correo == '' || this.loginForm.value.password == '') {
 
       this.toastr.error('Todos los campos son obligatorios', 'Error');
