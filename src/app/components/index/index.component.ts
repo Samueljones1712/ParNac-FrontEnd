@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
+import Swal from 'sweetalert2'
 import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms'
@@ -111,14 +111,13 @@ export class IndexComponent implements OnInit {
 
         if (res.response.status == "ok") {
 
-          this.toastr.success('Se guardo con exito el Parque Nacional', 'Correcto');
-
+          this.toastr.success('Se guardó con éxito el Parque Nacional', 'Correcto');
           this.cleanParque();
           this.setParqueWithForm();
           this.ngOnInit();
 
         } else {
-          this.toastr.error(res.response, 'No se guardo el Parque Nacional');
+          this.toastr.error(res.response, 'No se guardó el Parque Nacional');
         }
       });
 
@@ -132,14 +131,14 @@ export class IndexComponent implements OnInit {
 
         if (res.response.status == "ok") {
 
-          this.toastr.success('Se edito con exito el Parque Nacional', 'Correcto');
+          this.toastr.success('Se editó con exito el Parque Nacional', 'Correcto');
 
           this.cleanParque();
           this.setParqueWithForm();
           this.ngOnInit();
 
         } else {
-          this.toastr.error(res.response, 'No se edito el Parque Nacional');
+          this.toastr.error(res.response, 'No se editó el Parque Nacional');
         }
       });
 
@@ -149,21 +148,46 @@ export class IndexComponent implements OnInit {
 
   actualizar(Id: any) {
 
-    this.getUserById(Id);
-    //    this.toastr.info("Se esta cargando el Parque Nacional", "Cargando el Parque Nacional...");
-    this.toastr.info("Se cargo el Parque Nacional", "Correcto");
-    this.loadForm();
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Desea editar este Parque Nacional?',
+      showDenyButton: true,
+      confirmButtonText: 'Quiero editarlo',
+      denyButtonText: 'No quiero editarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.getUserById(Id);
+        //    this.toastr.info("Se esta cargando el Parque Nacional", "Cargando el Parque Nacional...");
+        this.toastr.info("Se cargó el Parque Nacional", "Correcto");
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        this.toastr.info("Se ha cancelado la acción");
+      }
+    })
 
   }
 
   eliminar(Id: any) {
 
-    this.loading = true;
-    this.toastr.info("Eliminando el Parque Nacional", "Eliminando...");
-    this.parkService.eliminarParkNational(Id).subscribe((res: any) => {
-      this.toastr.success('Se elimino el Parque Nacional', 'Correcto');
-      this.ngOnInit();
-    });
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Desea eliminar este Parque Nacional?',
+      showDenyButton: true,
+      confirmButtonText: 'Quiero eliminarlo',
+      denyButtonText: 'No quiero eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true;
+        this.toastr.info("Eliminando el Parque Nacional", "Eliminando...");
+        this.parkService.eliminarParkNational(Id).subscribe((res: any) => {
+          this.toastr.success('Se eliminó el Parque Nacional', 'Correcto');
+          this.ngOnInit();
+        });
+      } else if (result.isDenied) {
+        this.toastr.info("Se ha cancelado la acción");
+      }
+    })
+
 
   }
 

@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
     const email_expresion = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     const password_expresion = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
 
-    if (this.registerForm.value.nombre.length < 3 || this.registerForm.value.nombre.length > 40 || this.registerForm.valid) {
+    if (this.registerForm.value.nombre.length < 3 || this.registerForm.value.nombre.length > 40) {
 
       this.Toastr.error("Nombre invalido", "error");
 
