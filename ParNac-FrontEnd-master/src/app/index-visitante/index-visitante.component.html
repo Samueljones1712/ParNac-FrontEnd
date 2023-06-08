@@ -1,0 +1,32 @@
+<p>index-visitante works!</p>
+
+
+<div class="container-principal">
+
+    <style>
+        .container-parks {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: 10px;
+            justify-items: center;
+        }
+
+        .card {
+            width: 250px;
+        }
+
+        .title {}
+    </style>
+
+    <div class="container-parks">
+        <div class="card" *ngFor="let item of listParques">
+            <h4 class="title">{{item.Nombre}}</h4>
+            <img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'">
+            <p class="text">Provincia: {{item.Provincia}}</p>
+
+            <div></div>
+        </div>
+
+    </div>
+
+</div>

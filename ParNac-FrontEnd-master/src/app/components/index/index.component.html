@@ -1,0 +1,105 @@
+<app-index-visitante></app-index-visitante>
+
+
+
+
+
+
+
+
+<div>
+    <div class="container-buttons">
+        <button class="button-secondary" (click)="redirectEntrada()">Ver entradas</button>
+        <button class="button-secondary" (click)="redirectUsuarios()">Ver Usuarios</button>
+    </div>
+
+    <div class="form-container">
+        <form [formGroup]="parkForm" class="form" (ngSubmit)="agregar()">
+            <div style="align-self: center;">
+                <h5>Formulario</h5>
+            </div>
+            <input type="hidden" id="Id" formControlName="Id">
+            <label>Nombre</label>
+
+            <input type="text" id="Nombre" formControlName="Nombre" />
+            <label>Provincia</label>
+            <select id="Provincia" formControlName="Provincia">
+                <option value="San Jose" selected="selected">San Jose</option>
+                <option value="Alajuela">Alajuela</option>
+                <option value="Cartago">Cartago</option>
+                <option value="Heredia">Heredia</option>
+                <option value="Guanacaste">Guanacaste</option>
+                <option value="Puntarenas">Puntarenas</option>
+                <option value="Limón">Limón</option>
+            </select>
+            <label>Area de conservacion</label>
+            <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
+            <label>Tarifa Extranjeros (Dolares)</label>
+            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
+                Precio incorrecto.
+            </div>
+            <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
+            <label>Tarifa Nacionales (Colones)</label>
+            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Nacionales_colones'].errors">
+                Precio incorrecto.
+            </div>
+            <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
+
+            <label>Numero maximo de visitas</label>
+            <input id="maxVisitantes" type="number" formControlName="maxVisitantes" />
+
+            <div class="errorMessage" *ngIf="parkForm.controls['maxVisitantes'].errors">
+                Numero maximo de visitas incorrecto.
+            </div>
+
+            <label>Horario:</label>
+            <textarea id="horario" formControlName="horario"></textarea>
+
+            <div class="errorMessage" *ngIf="parkForm.controls['horario'].errors">
+                Horario Requerido.
+            </div>
+
+            <!-- <input type="file" (change)="onFileSelected($event)">
+            <button type="button" (click)="uploadImage()">Upload</button> -->
+
+
+            <button class="button-secondary submit-form" type="submit" [disabled]="!parkForm.valid">Agregar</button>
+        </form>
+
+    </div>
+
+    <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Provincia</th>
+                <th>Area de conservacion</th>
+                <th>Tarifa Extranjeros</th>
+                <th>Tarifa Nacionales</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listParques">
+                <td><img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'"></td>
+                <td>{{item.Nombre}}</td>
+                <td>{{item.Provincia}}</td>
+                <td>{{item.Area_de_Conservacion}}</td>
+                <td>{{item.Tarifa_Extranjeros_dolares}}</td>
+                <td>{{item.Tarifa_Nacionales_colones}}</td>
+                <td><!--<button class="button-edit" (click)="addImage(item.Id!)"><img src="../../../assets/img/edit.svg"
+                            width="24px" height="auto"></button>--><button class="button-edit"
+                        (click)="actualizar(item.Id!)"><img src="../../../assets/img/edit.svg" width="24px"
+                            height="auto"></button>
+                    <button class="button-delete" (click)="eliminar(item.Id!)"><img
+                            src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
+</div>
