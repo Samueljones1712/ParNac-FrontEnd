@@ -1,0 +1,23 @@
+<div class="container-form">
+
+    <div class="container-content" style="margin-block-end: 5%;">
+
+        <div class="container-logo">
+            <img class="img-login-title" src="../../../assets/img/Logo_B.png">
+        </div>
+
+        <form [formGroup]="verifyForm" class="form-verify" (ngSubmit)="onVerify()">
+
+            <div class="text-title-verify">Verificación de Correo</div>
+            <div class="container-input">
+                <label class="text-input ">Código</label>
+                <input type="text" class="form-input" id="codigo" formControlName="codigo">
+            </div>
+
+            <div class="container-button">
+                <button class="btn-login" type="submit">Confirmar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
