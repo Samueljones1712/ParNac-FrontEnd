@@ -46,11 +46,11 @@ export class IndexComponent implements OnInit {
 
     this.parkForm = new FormGroup({
       Id: new FormControl(this.parque.Id),
-      Nombre: new FormControl(this.parque.Nombre, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      Nombre: new FormControl(this.parque.Nombre, [Validators.maxLength(50)]),
       Provincia: new FormControl(this.parque.Provincia, [Validators.required]),
-      Tarifa_Extranjeros_dolares: new FormControl(this.parque.Tarifa_Extranjeros_dolares, [Validators.min(1), Validators.max(100)]),
-      Tarifa_Nacionales_colones: new FormControl(this.parque.Tarifa_Nacionales_colones, [Validators.min(400), Validators.max(60000)]),
-      Area_de_Conservacion: new FormControl(this.parque.Area_de_Conservacion, [Validators.required]),
+      Tarifa_Extranjeros_dolares: new FormControl(this.parque.Tarifa_Extranjeros_dolares, [Validators.min(0), Validators.max(100)]),
+      Tarifa_Nacionales_colones: new FormControl(this.parque.Tarifa_Nacionales_colones, [Validators.min(0), Validators.max(60000)]),
+      Area_de_Conservacion: new FormControl(this.parque.Area_de_Conservacion, [Validators.maxLength(50), Validators.required]),
       maxVisitantes: new FormControl(this.parque.maxVisitantes, [Validators.min(0), Validators.max(2000)]),
       horario: new FormControl(this.parque.horario, [Validators.minLength(0), Validators.maxLength(100)])
 

@@ -39,7 +39,8 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 /* DataTable */
 import { DataTablesModule } from "angular-datatables";
-import { IndexVisitanteComponent } from './index-visitante/index-visitante.component';
+import { EntradaVisitanteComponent } from './components/visitante/entrada-visitante/entrada-visitante.component';
+import { IndexVisitanteComponent } from './components/visitante/index-visitante/index-visitante.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { IndexVisitanteComponent } from './index-visitante/index-visitante.compo
     DashboardComponent,
     SpinnerComponent,
     UsuariosComponent,
+    EntradaVisitanteComponent,
     IndexVisitanteComponent,
   ],
   imports: [

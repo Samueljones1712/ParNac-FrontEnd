@@ -1,12 +1,6 @@
 <app-index-visitante></app-index-visitante>
 
 
-
-
-
-
-
-
 <div>
     <div class="container-buttons">
         <button class="button-secondary" (click)="redirectEntrada()">Ver entradas</button>
@@ -20,8 +14,12 @@
             </div>
             <input type="hidden" id="Id" formControlName="Id">
             <label>Nombre</label>
-
             <input type="text" id="Nombre" formControlName="Nombre" />
+
+            <div class="errorMessage" *ngIf="parkForm.controls['Nombre'].errors">
+                Nombre necesario.
+            </div>
+
             <label>Provincia</label>
             <select id="Provincia" formControlName="Provincia">
                 <option value="San Jose" selected="selected">San Jose</option>
@@ -35,10 +33,10 @@
             <label>Area de conservacion</label>
             <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
             <label>Tarifa Extranjeros (Dolares)</label>
-            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
-                Precio incorrecto.
-            </div>
             <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
+            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
+                Tarifa Extranjeros Necesaria.
+            </div>
             <label>Tarifa Nacionales (Colones)</label>
             <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Nacionales_colones'].errors">
                 Precio incorrecto.

@@ -21,21 +21,8 @@ export class EntradaComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   loading: boolean = false;
-  loadingParks: boolean = false;
-  // loadingCedula: boolean = false;
 
-  listEntradas: Entrada[] = []
-  listAdmins: Administrador[] = [];
-
-  // id: string = "";
-  // fk_idParque: String = "";
-  // nombreParque: String = "";
-  // nombreCedula: String = "";
-  // cedula: String = "";
-  // tarifa: String = "";
-  // valueDelete: string = "";
-
-  listParks: parkNational[] = [];
+  listEntradas: Entrada[] = [];
 
   entradaForm: FormGroup = new FormGroup({});
 
@@ -56,8 +43,8 @@ export class EntradaComponent implements OnInit {
   ngOnInit(): void {
 
 
-    this.loadForm();
-    this.loadParkes();
+    // this.loadForm();
+    // this.loadParkes();
     this.getEntrada();
 
     this.dtOptions = {
@@ -181,87 +168,68 @@ export class EntradaComponent implements OnInit {
   //   }
   // }
 
-  loadParkes(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.loadingParks = true;
-      this.parkService.getParkNationals().subscribe(
-        (res: parkNational[]) => {
-          this.listParks = res;
-          this.loadingParks = false;
-          resolve(); // Resuelve la promesa cuando la petición se completa
-        },
-        (error) => {
-          this.loadingParks = false;
-          reject(error); // Rechaza la promesa si hay algún error en la petición
-        }
-      );
-    });
-  }
+  // loadParkes(): Promise<void> {
+  //   return new Promise<void>((resolve, reject) => {
+  //     this.loadingParks = true;
+  //     this.parkService.getParkNationals().subscribe(
+  //       (res: parkNational[]) => {
+  //         this.listParks = res;
+  //         this.loadingParks = false;
+  //         resolve(); // Resuelve la promesa cuando la petición se completa
+  //       },
+  //       (error) => {
+  //         this.loadingParks = false;
+  //         reject(error); // Rechaza la promesa si hay algún error en la petición
+  //       }
+  //     );
+  //   });
+  // }
 
-  getEntradaById(id: any) {
-    for (var i = 0; i < this.listEntradas.length; i++) {
-      if (this.listEntradas[i].id == id) {
-        this.entrada = this.listEntradas[i];
-      }
-    }
-  }
+  // getEntradaById(id: any) {
+  //   for (var i = 0; i < this.listEntradas.length; i++) {
+  //     if (this.listEntradas[i].id == id) {
+  //       this.entrada = this.listEntradas[i];
+  //     }
+  //   }
+  // }
 
-  loadActualizar(Id: any) {
+  // loadActualizar(Id: any) {
 
-    this.getEntradaById(Id);
+  //   this.getEntradaById(Id);
 
-    this.loadForm();
+  //   this.loadForm();
 
-    this.toastr.info("Se cargo la informacion", "Correcto.");
+  //   this.toastr.info("Se cargo la informacion", "Correcto.");
 
-  }
-
-
+  // }
 
 
 
-  eliminar(Id: any) {
 
-    this.getEntradaById(Id);
 
-    if (this.entrada.estado != "Cancelada") {
+  // eliminar(Id: any) {
 
-      this.loading = true;
+  //   this.getEntradaById(Id);
 
-      this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
-        this.ngOnInit();
-      });
-    } else {
+  //   if (this.entrada.estado != "Cancelada") {
 
-      this.toastr.error("Entrada ya cancelada.", "Error.");
+  //     this.loading = true;
 
-    }
-  }
+  //     this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
+  //       this.ngOnInit();
+  //     });
+  //   } else {
+
+  //     this.toastr.error("Entrada ya cancelada.", "Error.");
+
+  //   }
+  // }
 
   getEntrada() {
     this.loading = true;
     this.entradaService.getEntrada().subscribe((res: Entrada[]) => {
 
       this.listEntradas = res;
-
-      this.loadParkes().then(() => {
-
-        for (var i = 0; i < this.listEntradas.length; i++) {
-          for (var j = 0; j < this.listParks.length; j++) {
-
-            if (this.listEntradas[i].fk_idParque == this.listParks[j].Id + "") {
-              this.listEntradas[i].parqueNombre = this.listParks[j].Nombre;
-            }
-          }
-        }
-
-        // this.loadCedula().then(() => {
-
-        // })
-
-
-        this.loading = false;
-      });
 
     });
 
