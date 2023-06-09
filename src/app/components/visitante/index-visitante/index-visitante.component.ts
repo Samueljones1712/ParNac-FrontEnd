@@ -22,6 +22,8 @@ export class IndexVisitanteComponent implements OnInit {
   listParks: parkNational[] = [];
   loading: boolean = false;
 
+  //TENGO QUE HACERLE UN BUSCAR POR NOMBRE, ACTIVO EL LOADING Y DE LA LISTA ELIMINO UNOS.
+
 
   constructor(private parkService: ParkService, private router: Router, private toastr: ToastrService, private http: HttpClient) { }
 
@@ -39,6 +41,13 @@ export class IndexVisitanteComponent implements OnInit {
       this.loading = false
       this.listParks = res;
     })
+  }
+
+  reservation(Id: any) {
+
+
+    this.router.navigate(['/entrada-visitante', Id]);
+
   }
 
 }

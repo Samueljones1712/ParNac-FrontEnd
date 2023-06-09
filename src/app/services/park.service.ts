@@ -24,6 +24,15 @@ export class ParkService {
 
   }
 
+  getParkNational(Id: any): Observable<parkNational> {
+    //const token = sessionStorage.getItem('token');
+    //const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+
+
+    return this.http.get<parkNational>(`${this.url}${Id}`)
+
+  }
+
   sendImg(formData: FormData) {
     return this.http.post('http://localhost:4000/api/upload', formData)
   }

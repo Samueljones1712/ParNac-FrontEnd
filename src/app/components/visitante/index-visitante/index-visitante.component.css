@@ -1,0 +1,33 @@
+.button-reservation {
+    width: 95%;
+}
+
+.iconButton {
+    width: 25px;
+    height: 25px;
+}
+
+.container-button-reservation {
+    display: flex;
+    justify-content: center;
+    margin-block-end: 5px;
+}
+
+.container-parks {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
+    justify-items: center;
+
+    margin-top: 10px;
+}
+
+.card {
+    width: 250px;
+    height: 285px;
+}
+
+.imgTable {
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+}

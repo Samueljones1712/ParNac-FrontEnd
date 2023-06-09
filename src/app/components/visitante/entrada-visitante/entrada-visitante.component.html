@@ -1,1 +1,83 @@
-<p>entrada-visitante works!</p>
+<style>
+    .container-form {
+        display: flex;
+        justify-content: center;
+    }
+
+    .formEntrada {
+        background-color: antiquewhite;
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .informationPark {
+        display: flex;
+
+        flex-direction: column;
+    }
+</style>
+
+<div>
+
+    <div class="informationPark" *ngIf="!loading">
+
+        <label>{{park.Nombre}}</label>
+        <label>{{ park.Area_de_Conservacion }}</label>
+        <label>Provincia: {{ park.Provincia }}</label>
+        <label>Tarifa para Nacionales (colones): {{ park.Tarifa_Nacionales_colones }}</label>
+        <label>Tarifa para Extranjeros (dólares): {{ park.Tarifa_Extranjeros_dolares }}</label>
+        <label>Cantidad máxima de visitantes: {{ park.maxVisitantes }}</label>
+        <label>Horario: {{ park.horario }}</label>
+
+    </div>
+
+    <div class="container-form" *ngIf="!loading">
+
+        <form [formGroup]="entradaForm" class="formEntrada" (ngSubmit)="agregar()">
+
+            <div>
+                <label style="margin-right: 3px;">Fecha Entrada: </label>
+                <input type="date" [min]="minDate" id="fechaVencimiento" formControlName="fechaVencimiento" />
+            </div>
+
+            <div>
+                <label style="margin-right: 3px;">Grupo/Hora:</label>
+                <select formControlName="grupo" id="grupo">
+                    <option selected>Grupo 01: Entrada 08:00 am</option>
+                    <option>Grupo 02: Entrada 09:00 am</option>
+                    <option>Grupo 03: Entrada 10:00 am</option>
+                    <option>Grupo 04: Entrada 11:00 am</option>
+                    <option>Grupo 05: Entrada 12:00 am</option>
+                    <option>Grupo 06: Entrada 01:00 pm</option>
+                    <option>Grupo 07: Entrada 02:00 pm</option>
+                    <option>Grupo 08: Entrada 03:00 pm</option>
+                    <option>Grupo 09: Entrada 04:00 pm</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Cantidad de Nacionales</label>
+                <input type="number" formControlName="CantNacionales" id="CantNacionales" min="0" max="100">
+            </div>
+
+            <div>
+                <label>Cantidad de Extranjeros</label>
+                <input type="number" formControlName="CantExtranjeros" id="CantExtranjeros" min="0" max="100">
+            </div>
+
+            <div>
+                <button class="button-secondary submit-form" type="submit"
+                    [disabled]="!entradaForm.valid">Agregar</button>
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
+</div>

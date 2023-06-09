@@ -1,36 +1,7 @@
 <div class="container-principal">
 
     <style>
-        .container-parks {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            grid-gap: 10px;
-            justify-items: center;
-        }
-
-        .card {
-            width: 250px;
-            height: 285px;
-        }
-
-        .imgTable {
-            height: -webkit-fill-available;
-            width: -webkit-fill-available;
-        }
-
         .title {}
-
-        .button-reservation {
-            width: 95%;
-        }
-
-        .iconButton {}
-
-        .container-button-reservation {
-            display: flex;
-            justify-content: center;
-            margin-block-end: 5px;
-        }
     </style>
 
     <div class="container-parks">
@@ -39,7 +10,7 @@
             <img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'">
             <p class="text">Provincia: {{item.Provincia}}</p>
             <div class="container-button-reservation">
-                <button class="button-reservation" onclick=""><img class="iconButton"
+                <button class="button-reservation" (click)="reservation(item.Id)"><img class="iconButton"
                         src="../../../../assets/img/iconReservation.png" /></button>
             </div>
         </div>

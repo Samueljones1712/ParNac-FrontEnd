@@ -26,17 +26,17 @@ export class EntradaComponent implements OnInit {
 
   entradaForm: FormGroup = new FormGroup({});
 
-  entrada: Entrada = {
-    fecha: "",
-    fk_idParque: "",
-    fk_cedula: "",
-    estado: "",
-    id: "",
-    fechaVencimiento: "",
-    tarifa: "",
-    parqueNombre: "",
-    nombreUsuario: ""
-  }
+  // entrada: Entrada = {
+  //   fecha: "",
+  //   fk_idParque: "",
+  //   fk_cedula: "",
+  //   estado: "",
+  //   id: "",
+  //   fechaVencimiento: "",
+  //   tarifa: "",
+  //   parqueNombre: "",
+  //   nombreUsuario: ""
+  // }
 
 
 
@@ -94,14 +94,14 @@ export class EntradaComponent implements OnInit {
 
   // }
 
-  loadForm() {
-    this.entradaForm = new FormGroup({
-      id: new FormControl(this.entrada.id),
-      //   fecha: new FormControl(this.entrada.fecha, [Validators.required]),
-      // estado: new FormControl(this.entrada.estado, [Validators.required]),
-      fechaVencimiento: new FormControl(this.entrada.fechaVencimiento, [Validators.required])
-    });
-  }
+  // loadForm() {
+  //   this.entradaForm = new FormGroup({
+  //     id: new FormControl(this.entrada.id),
+  //     //   fecha: new FormControl(this.entrada.fecha, [Validators.required]),
+  //     // estado: new FormControl(this.entrada.estado, [Validators.required]),
+  //     fechaVencimiento: new FormControl(this.entrada.fechaVencimiento, [Validators.required])
+  //   });
+  // }
 
   // loadCedula(): Promise<void> {
   //   return new Promise<void>((resolve, reject) => {
@@ -235,21 +235,21 @@ export class EntradaComponent implements OnInit {
 
   }
 
-  cleanEntrada() {
-    this.entrada = {
-      fecha: "",
-      fk_idParque: "",
-      fk_cedula: "",
-      estado: "",
-      id: "",
-      fechaVencimiento: "",
-      tarifa: "",
-      parqueNombre: "",
-      nombreUsuario: ""
-    }
+  // cleanEntrada() {
+  //   this.entrada = {
+  //     fecha: "",
+  //     fk_idParque: "",
+  //     fk_cedula: "",
+  //     estado: "",
+  //     id: "",
+  //     fechaVencimiento: "",
+  //     tarifa: "",
+  //     parqueNombre: "",
+  //     nombreUsuario: ""
+  //   }
 
-    this.loadForm();
-  }
+  //   this.loadForm();
+  // }
 
   // setEntradaWithForm() {
   //   if (this.fk_idParque + "" != "") {

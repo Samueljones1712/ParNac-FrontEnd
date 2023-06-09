@@ -6,6 +6,7 @@ import { IndexComponent } from './components/index/index.component';
 import { RegisterComponent } from './components/register/register.component';
 import { EntradaComponent } from './components/entrada/entrada.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { EntradaVisitanteComponent } from './components/visitante/entrada-visitante/entrada-visitante.component';
 
 
 const routes: Routes = [
@@ -15,8 +16,10 @@ const routes: Routes = [
   { path: 'index', component: IndexComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'entrada', component: EntradaComponent },
+  { path: 'entrada-visitante/:Id', component: EntradaVisitanteComponent },
   { path: 'usuarios', component: UsuariosComponent },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
+
 ];
 
 @NgModule({
