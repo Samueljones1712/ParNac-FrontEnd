@@ -5,7 +5,9 @@ import { Entrada } from 'src/app/interface/entrada';
 import { EntradaService } from 'src/app/services/entrada.service';
 import { ParkService } from 'src/app/services/park.service';
 import { parkNational } from 'src/app/interface/parkNational';
-
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/interface/user';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-entrada-visitante',
@@ -18,6 +20,26 @@ export class EntradaVisitanteComponent implements OnInit {
   minDate: string;
   loading: boolean = true;
 
+  entrada: Entrada = {
+    CantExtranjeros: 0,
+    CantNacionales: 0,
+    cedula: "",
+    fechaVencimiento: "",
+    grupo: "",
+    id: 0,
+    IdParque: ""
+  }
+
+  usuario: User = {
+    apellido: "",
+    contrasena: "",
+    correo: "",
+    id: "",
+    identificacion: "",
+    nombre: "",
+    salt: "",
+    tipo: ""
+  }
 
   park: parkNational = {
     Area_de_Conservacion: "",
@@ -37,18 +59,8 @@ export class EntradaVisitanteComponent implements OnInit {
     fechaVencimiento: new FormControl("", [Validators.required]),
   });
 
-  entrada: Entrada = {
-    CantExtranjeros: 0,
-    CantNacionales: 0,
-    cedula: "",
-    grupo: "",
-    id: 0,
-    IdParque: "",
-    fechaVencimiento: ""
-  }
 
-
-  constructor(private route: ActivatedRoute, private parkService: ParkService) {
+  constructor(private route: ActivatedRoute, private parkService: ParkService, private userService: UserService, private entradaService: EntradaService) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -59,21 +71,77 @@ export class EntradaVisitanteComponent implements OnInit {
   ngOnInit() {
 
     this.Id = this.route.snapshot.paramMap.get('Id') ?? '';
+    this.loadInformation();
 
-    this.getParkNational();
+
 
   }
 
-  getParkNational() {
 
-    this.parkService.getParkNational(this.Id).subscribe((res: any) => {
+  loadInformation() {
+    this.getParkNational().then(() => {
+      this.getUser().then(() => {
 
-      this.park = res[0];
+        this.loading = false;
 
-      this.loading = false;
-
+      });
     });
+  }
 
+  getEntrada() {
+
+
+    this.entrada.CantExtranjeros = this.entradaForm.value.CantExtranjeros;
+    this.entrada.CantNacionales = this.entradaForm.value.CantNacionales;
+    this.entrada.grupo = this.entradaForm.value.grupo;
+    this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";
+    this.entrada.IdParque = this.park.Id + "";
+    this.entrada.cedula = this.usuario.identificacion;
+    
+    console.log(this.entrada);
+
+    this.saveEntrada();
+
+
+  }
+
+  saveEntrada(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+        console.log(res);
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  getUser(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.userService.getUserByCorreo(sessionStorage.getItem('correo')).subscribe((res: any) => {
+        this.usuario = res[0];
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  getParkNational(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.parkService.getParkNational(this.Id).subscribe((res: any) => {
+        this.park = res[0];
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
   }
 
   private formatDate(date: Date): string {
@@ -87,10 +155,12 @@ export class EntradaVisitanteComponent implements OnInit {
 
     //SweetAlert y preguntar si esta seguro que no se puede editar, 
     //debo validar que minimo lleve uno de alguno de los dos y debo calcular el subtotal y el iva(13%)
-    
+
 
 
     alert("agrego");
+
+    this.getEntrada();
 
   }
 

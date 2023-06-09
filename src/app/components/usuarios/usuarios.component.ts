@@ -43,7 +43,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUser();
+    this.getUsers();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -56,9 +56,9 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-  getUser() {
+  getUsers() {
     this.loading = true;
-    this.userService.getUser().subscribe((res: User[]) => {
+    this.userService.getUsers().subscribe((res: User[]) => {
 
       this.loading = false
       this.listUsers = res;

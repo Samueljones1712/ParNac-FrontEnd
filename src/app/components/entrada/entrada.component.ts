@@ -20,32 +20,13 @@ export class EntradaComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  loading: boolean = false;
+  loading: boolean = true;
 
   listEntradas: Entrada[] = [];
 
-  entradaForm: FormGroup = new FormGroup({});
-
-  // entrada: Entrada = {
-  //   fecha: "",
-  //   fk_idParque: "",
-  //   fk_cedula: "",
-  //   estado: "",
-  //   id: "",
-  //   fechaVencimiento: "",
-  //   tarifa: "",
-  //   parqueNombre: "",
-  //   nombreUsuario: ""
-  // }
-
-
-
   ngOnInit(): void {
 
-
-    // this.loadForm();
-    // this.loadParkes();
-    this.getEntrada();
+    this.getEntradas();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -61,6 +42,23 @@ export class EntradaComponent implements OnInit {
   constructor(private entradaService: EntradaService, private router: Router,
     private toastr: ToastrService, private parkService: ParkService, private userService: UserService) { }
 
+
+  getEntradas(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.entradaService.getEntradas().subscribe(
+        (res: Entrada[]) => {
+          this.listEntradas = res;
+          console.log(this.listEntradas);
+          this.loading = false;
+          resolve();
+        },
+        (error) => {
+          this.loading = false;
+          reject(error);
+        });
+    })
+  }
   // savePark(e: any): void {
   //   let name = e.target.value;
 
@@ -225,15 +223,7 @@ export class EntradaComponent implements OnInit {
   //   }
   // }
 
-  getEntrada() {
-    this.loading = true;
-    this.entradaService.getEntrada().subscribe((res: Entrada[]) => {
 
-      this.listEntradas = res;
-
-    });
-
-  }
 
   // cleanEntrada() {
   //   this.entrada = {

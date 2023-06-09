@@ -45,7 +45,6 @@ export class IndexVisitanteComponent implements OnInit {
 
   reservation(Id: any) {
 
-
     this.router.navigate(['/entrada-visitante', Id]);
 
   }

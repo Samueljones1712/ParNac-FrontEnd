@@ -13,9 +13,15 @@ export class UserService {
   private url = "http://localhost:4000/user";
   constructor(private http: HttpClient) { }
 
-  getUser(): Observable<User[]> {
+  getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.url}`)
   }
+
+  getUserByCorreo(correo: any): Observable<User> {
+    return this.http.get<User>(`${this.url}/${correo}`)
+  }
+
+  // /user/: id
 
   getAdministradores(): Observable<Administrador[]> {
     return this.http.get<Administrador[]>(`${this.url}/administradores`)

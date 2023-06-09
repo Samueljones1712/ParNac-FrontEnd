@@ -14,13 +14,13 @@ export class EntradaService {
 
   constructor(private http: HttpClient) { }
 
-  getEntrada(): Observable<Entrada[]> {
+  getEntradas(): Observable<Entrada[]> {
 
     return this.http.get<Entrada[]>(`${this.url}`)
 
   }
 
-  addEntrada(entrada: any) {
+  addEntrada(entrada: Entrada) {
     return this.http.post<any[]>(`${this.url}add`, entrada)
   }
 
