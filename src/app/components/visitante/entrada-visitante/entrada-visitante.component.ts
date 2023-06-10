@@ -101,46 +101,45 @@ export class EntradaVisitanteComponent implements OnInit {
 
   getEntrada() {
 
-    if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
+    if (this.entradaForm.value.fechaVencimiento != "") {
 
-      Swal.fire({
-        icon: 'warning',
-        title: '¿Desea reservar en este Parque Nacional?',
-        showDenyButton: true,
-        confirmButtonText: 'Si',
-        denyButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
+      if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
 
-          this.loadEntradaWithForm();
-          this.saveEntrada().then((resolve) => {
-            this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
-            setTimeout(() => {
-              location.reload();
-            }, 5000);
-          }, (error) => {
-            this.Toastr.error("No se pudo reservar la entrada.", "Error.");
-          });
+        Swal.fire({
+          icon: 'warning',
+          title: '¿Desea reservar en este Parque Nacional?',
+          showDenyButton: true,
+          confirmButtonText: 'Si',
+          denyButtonText: 'No'
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            this.loadEntradaWithForm();
+            this.saveEntrada().then((resolve) => {
+              this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+              setTimeout(() => {
+                location.reload();
+              }, 5000);
+            }, (error) => {
+              this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+            });
 
 
 
-        } else if (result.isDenied) {
-          this.Toastr.info("Se ha cancelado la acción");
-        }
-      })
+          } else if (result.isDenied) {
+            this.Toastr.info("Se ha cancelado la acción");
+          }
+        })
 
+      } else {
+        this.Toastr.info("Seleccione la cantidad de Personas.");
+        return;
+
+      }
     } else {
-      this.Toastr.info("Seleccione la cantidad de Personas.");
+      this.Toastr.info("Seleccione una fecha.");
       return;
-
     }
-
-
-
-    console.log(this.entrada);
-
-
-
 
   }
 
@@ -204,9 +203,6 @@ export class EntradaVisitanteComponent implements OnInit {
   }
 
   agregar() {
-
-    //SweetAlert y preguntar si esta seguro que no se puede editar, 
-    //debo validar que minimo lleve uno de alguno de los dos y debo calcular el subtotal y el iva(13%
 
     this.getEntrada()
   }

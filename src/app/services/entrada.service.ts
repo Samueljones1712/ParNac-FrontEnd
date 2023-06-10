@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Entrada } from '../interface/entrada';
 import { Router } from '@angular/router';
-
+import { view_entrada } from 'src/app/interface/view_entradas';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,9 @@ export class EntradaService {
 
   constructor(private http: HttpClient) { }
 
-  getEntradas(): Observable<Entrada[]> {
+  getEntradas(): Observable<view_entrada[]> {
 
-    return this.http.get<Entrada[]>(`${this.url}`)
+    return this.http.get<view_entrada[]>(`${this.url}`)
 
   }
 
@@ -24,7 +24,7 @@ export class EntradaService {
     return this.http.post<any[]>(`${this.url}add`, entrada)
   }
 
-  updateEntrada(entrada: any) {
+  updateEntrada(entrada: Entrada) {
     return this.http.put<any[]>(`${this.url}actualizar`, entrada)
   }
 
