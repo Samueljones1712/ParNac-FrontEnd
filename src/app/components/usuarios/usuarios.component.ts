@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-
+import Swal from 'sweetalert2'
 
 import { User } from 'src/app/interface/user';
 import { UserService } from 'src/app/services/user.service';
@@ -86,24 +86,50 @@ export class UsuariosComponent implements OnInit {
   }
 
   eliminar(id: any) {
+    
+    Swal.fire({
+      icon:'warning',
+      title:'¿Desea eliminar este usuario?',
+      showDenyButton:true,
+      confirmButtonText:'Quiero eliminarlo',
+      denyButtonText:'No quiero eliminarlo'
+    }).then((result)=>{
+      if(result.isConfirmed){
+        this.loading = true;
+        this.toastr.info("Eliminando el Usuario", "Eliminando...");
+        this.getUserById(id)
+        this.userService.deleteUser(this.usuario).subscribe((res: any) => {
+          this.toastr.success('Se eliminó el Usuario', 'Correcto');
+          this.loading = false;
+          this.ngOnInit();
+        });
+      } else if(result.isDenied){
+        this.toastr.info("Se ha cancelado la acción");
+      }
+    })
 
-    this.loading = true;
-    this.toastr.info("Eliminando el Usuario", "Eliminando...");
-    this.getUserById(id)
-    this.userService.deleteUser(this.usuario).subscribe((res: any) => {
-      this.toastr.success('Se elimino el Usuario', 'Correcto');
-      this.loading = false;
-      this.ngOnInit();
-    });
 
   }
 
   loadEditar(id: any) {
-    this.toastr.info("Se cargo la informacion.", "Informacion cargada correctamente.")
-    this.mostrarFormNombre = true;
-    this.getUserById(id);
-    this.id = id;
-    this.correo = this.usuario.correo;
+    Swal.fire({
+      icon:'warning',
+      title:'¿Desea editar este usuario?',
+      showDenyButton:true,
+      confirmButtonText:'Quiero editarlo',
+      denyButtonText:'No quiero editarlo'
+    }).then((result)=>{
+      if(result.isConfirmed){
+        this.toastr.info("Se cargó la informacion.", "Informacion cargada correctamente.")
+        this.mostrarFormNombre = true;
+        this.getUserById(id);
+        this.id = id;
+        this.correo = this.usuario.correo;
+      } else if(result.isDenied){
+        this.toastr.info("Se ha cancelado la acción");
+      }
+    })
+
   }
 
   editar() {

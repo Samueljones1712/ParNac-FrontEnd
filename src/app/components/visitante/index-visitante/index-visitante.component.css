@@ -1,10 +1,18 @@
 .button-reservation {
     width: 95%;
+    background: #248f59;
+    border: 0;
+    border-radius: 5px;
+}
+
+.button-reservation:hover {
+    background: #074e2b;
 }
 
 .iconButton {
     width: 25px;
     height: 25px;
+    filter: invert(1);
 }
 
 .container-button-reservation {
@@ -15,7 +23,7 @@
 
 .container-parks {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;
     justify-items: center;
 
@@ -23,11 +31,20 @@
 }
 
 .card {
-    width: 250px;
-    height: 285px;
+    width: 270px;
+    height: 350px;
+    padding: 2%;
+    padding-bottom: 4%;
+    box-shadow: 2px 0 10px 0.5px rgba(0, 0, 0, 0.434);
+    text-align: center;
+}
+.card:hover {
+    transform: scale(1.015);
+    transition: .10s all;
 }
 
 .imgTable {
     height: -webkit-fill-available;
     width: -webkit-fill-available;
+    border-radius: 5px;
 }
