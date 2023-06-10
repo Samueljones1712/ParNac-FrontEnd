@@ -1,10 +1,15 @@
 export interface Entrada {
 
-    cedula: string;
-    IdParque: string;
+    fecha: string;
+    fk_idUsuario: string;
+    fk_idParque: string;
+    estado: string;
+    id: number;
+    fechaVencimiento: string;
     CantExtranjeros: number;
     CantNacionales: number;
-    fechaVencimiento: string;
-    id: number;
-    grupo: string;
+    tarifaNacionales: number;
+    tarifaExtranjeros: number;
+
+    hora: string;
 }

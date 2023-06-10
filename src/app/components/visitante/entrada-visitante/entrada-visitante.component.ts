@@ -8,6 +8,8 @@ import { parkNational } from 'src/app/interface/parkNational';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interface/user';
 import { error } from 'jquery';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-entrada-visitante',
@@ -19,15 +21,27 @@ export class EntradaVisitanteComponent implements OnInit {
   Id: string = "";
   minDate: string;
   loading: boolean = true;
+  subtotalN: number = 0;
+  totalN: number = 0;
+  ivaN: number = 13;
+
+  subtotalE: number = 0;
+  totalE: number = 0;
+  ivaE: number = 13;
+  ivaPorcentaje: number = 13;
 
   entrada: Entrada = {
+    fecha: "",
+    fk_idUsuario: "",
+    fk_idParque: "",
+    estado: "",
+    id: 0,
+    fechaVencimiento: "",
     CantExtranjeros: 0,
     CantNacionales: 0,
-    cedula: "",
-    fechaVencimiento: "",
-    grupo: "",
-    id: 0,
-    IdParque: ""
+    tarifaNacionales: 0,
+    tarifaExtranjeros: 0,
+    hora: ""
   }
 
   usuario: User = {
@@ -55,12 +69,12 @@ export class EntradaVisitanteComponent implements OnInit {
   entradaForm: FormGroup = new FormGroup({
     CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(100)]),
     CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(100)]),
-    grupo: new FormControl("", [Validators.required]),
+    grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl("", [Validators.required]),
   });
 
 
-  constructor(private route: ActivatedRoute, private parkService: ParkService, private userService: UserService, private entradaService: EntradaService) {
+  constructor(private route: ActivatedRoute, private parkService: ParkService, private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -73,10 +87,7 @@ export class EntradaVisitanteComponent implements OnInit {
     this.Id = this.route.snapshot.paramMap.get('Id') ?? '';
     this.loadInformation();
 
-
-
   }
-
 
   loadInformation() {
     this.getParkNational().then(() => {
@@ -90,27 +101,68 @@ export class EntradaVisitanteComponent implements OnInit {
 
   getEntrada() {
 
+    if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
 
-    this.entrada.CantExtranjeros = this.entradaForm.value.CantExtranjeros;
-    this.entrada.CantNacionales = this.entradaForm.value.CantNacionales;
-    this.entrada.grupo = this.entradaForm.value.grupo;
-    this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";
-    this.entrada.IdParque = this.park.Id + "";
-    this.entrada.cedula = this.usuario.identificacion;
-    
+      Swal.fire({
+        icon: 'warning',
+        title: '¿Desea reservar en este Parque Nacional?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          this.loadEntradaWithForm();
+          this.saveEntrada().then((resolve) => {
+            this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+            setTimeout(() => {
+              location.reload();
+            }, 5000);
+          }, (error) => {
+            this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+          });
+
+
+
+        } else if (result.isDenied) {
+          this.Toastr.info("Se ha cancelado la acción");
+        }
+      })
+
+    } else {
+      this.Toastr.info("Seleccione la cantidad de Personas.");
+      return;
+
+    }
+
+
+
     console.log(this.entrada);
 
-    this.saveEntrada();
+
 
 
   }
 
+  loadEntradaWithForm() {
+    this.entrada.hora = this.entradaForm.value.grupo;
+    this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";
+    this.entrada.fk_idParque = this.park.Id + "";
+    this.entrada.fk_idUsuario = this.usuario.id;
+    this.entrada.fecha = this.minDate;
+    this.entrada.estado = "Activo";
+    this.entrada.tarifaExtranjeros = this.totalE;
+    this.entrada.tarifaNacionales = this.totalN;
+  }
+
   saveEntrada(): Promise<void> {
+
+    this.loading = true;
 
     return new Promise<void>((resolve, reject) => {
 
       this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
-        console.log(res);
+
         resolve();
       }, (error) => {
         reject(error);
@@ -154,13 +206,35 @@ export class EntradaVisitanteComponent implements OnInit {
   agregar() {
 
     //SweetAlert y preguntar si esta seguro que no se puede editar, 
-    //debo validar que minimo lleve uno de alguno de los dos y debo calcular el subtotal y el iva(13%)
+    //debo validar que minimo lleve uno de alguno de los dos y debo calcular el subtotal y el iva(13%
 
+    this.getEntrada()
+  }
+  cargarTotalExtranjero(e: any): void {
 
+    this.entrada.CantExtranjeros = e.target.value;
 
-    alert("agrego");
+    this.subtotalE = (this.entrada.CantExtranjeros * this.park.Tarifa_Extranjeros_dolares);
 
-    this.getEntrada();
+    this.ivaE = ((this.subtotalE * this.ivaPorcentaje) / 100);
+
+    this.totalE = this.subtotalE + this.ivaE;
+
+    this.totalE = parseFloat(this.totalE.toFixed(2));
+
+  }
+
+  cargarTotalNacional(e: any): void {
+
+    this.entrada.CantNacionales = e.target.value;
+
+    this.subtotalN = (this.entrada.CantNacionales * this.park.Tarifa_Nacionales_colones);
+
+    this.ivaN = ((this.subtotalN * this.ivaPorcentaje) / 100);
+
+    this.totalN = this.subtotalN + this.ivaN;
+
+    this.totalN = parseFloat(this.totalN.toFixed(2));
 
   }
 
