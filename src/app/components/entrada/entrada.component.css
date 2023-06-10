@@ -35,20 +35,51 @@ table tr:nth-child(even) {
     background: #fe5454;
 }
 
+.button-secondary {
+    width: 20%;
+}
+
 .container-submit {}
 
 
 .container-input {
+    margin-top: 1%;
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
+    text-align: justify;
+    flex-direction: column;
 }
 
 input,
-select {
+select,
+label {
     margin-left: 2%;
 }
 
-.container-input {
-    margin-top: 5%;
+.container-base {
+    display: flex;
+    margin-top: 2%;
+}
 
+.container-table {
+    width: 60%;
+    margin-right:1%;
+}
+
+.container-form {
+    display: inline-block;
+    width: 40%;
+    text-align: center;
+    padding: 3%;
+}
+
+.container-selects {
+    display: flex;
+    justify-content: space-between;
+    padding: 2%;
+
+}
+
+.label-title {
+    margin-top: 4%;
 }

@@ -6,8 +6,8 @@
 
     <div class="container-parks">
         <div class="card" *ngFor="let item of listParks">
-            <h4 class="title">{{item.Nombre}}</h4>
             <img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'">
+            <h4 class="title">{{item.Nombre}}</h4>
             <p class="text">Provincia: {{item.Provincia}}</p>
             <div class="container-button-reservation">
                 <button class="button-reservation" (click)="reservation(item.Id)"><img class="iconButton"

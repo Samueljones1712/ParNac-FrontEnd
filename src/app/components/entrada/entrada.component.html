@@ -55,39 +55,80 @@
     </form>
 </div> -->
 
+<div class="container-base">
+    <div class="container-form">
+        <form>
+            <h3>Ingresar Entrada</h3>
+            <div class="container-input">
+                <label for="usuarios">Usuario</label>
+                <select id="usuarios" name="usuarios">
+                    <option *ngFor=""></option>
+                </select>
+            </div>
+            <div class="container-input">
+                <label for="parques">Parque</label>
+                <select id="parques" name="parques">
+                    <option  *ngFor=""></option>
+                </select>
+            </div>
+            <div class="container-input">
+                <label>Fecha</label>
+                <input type="date" name="fecha">
+            </div>
+            <label class="label-title">Número de personas</label>
+            <div class="container-selects">
+                <div class="container-input">
+                    <label>Nacionales</label>
+                    <input type="number" name="cantNacionales">
+                </div>
+                <div class="container-input">
+                    <label>Extranjeros</label>
+                    <input type="number" name="cantExtranjeros">
+                </div>
+            </div>
+            <div class="container-input">
+                <label>Grupo/Hora</label>
+                <select name="grupoHora">
+                    <option></option>
+                </select>
+            </div>
+            <button class="button-secondary submit-form" type="submit">Agregar</button>
+        </form>
+    </div>
+    <div class="container-table">
+        <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+            <thead>
+                <tr>
+                    <th>Fecha creación</th>
+                    <th>Identificacion</th>
+                    <th>Parque</th>
+                    <th>Tarifa</th>
+                    <th>Estado</th>
+                    <th>Reservación</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listEntradas">
+                    <!-- <td>{{item.fecha}}</td>
+                    <td>{{item.fk_cedula}}</td>
+                    <td>{{item.parqueNombre}}</td>
+                    <td>{{item.tarifa}}</td>
+                    <td>{{item.estado}}</td>
+                    <td>{{item.fechaVencimiento}}</td> -->
 
-<div>
-    <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
-        <thead>
-            <tr>
-                <th>Fecha creacion</th>
-                <th>Identificacion</th>
-                <th>Parque</th>
-                <th>Tarifa</th>
-                <th>estado</th>
-                <th>Reservacion</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of listEntradas">
-                <!-- <td>{{item.fecha}}</td>
-                <td>{{item.fk_cedula}}</td>
-                <td>{{item.parqueNombre}}</td>
-                <td>{{item.tarifa}}</td>
-                <td>{{item.estado}}</td>
-                <td>{{item.fechaVencimiento}}</td> -->
+                    <!-- <td><button class="button-edit" (click)="loadActualizar(item.id!)"><img
+                                src="../../../assets/img/edit.svg" width="24px" height="auto"></button>
+                        <button class="button-delete" (click)="eliminar(item.id!)"><img
+                                src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
+                    </td> -->
 
-                <!-- <td><button class="button-edit" (click)="loadActualizar(item.id!)"><img
-                            src="../../../assets/img/edit.svg" width="24px" height="auto"></button>
-                    <button class="button-delete" (click)="eliminar(item.id!)"><img
-                            src="../../../assets/img/trash-can.svg" width="24px" height="auto"></button>
-                </td> -->
-
-            </tr>
-        </tbody>
-    </table>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 
 <div class="spinner-div" style="margin-top: 5%;">
