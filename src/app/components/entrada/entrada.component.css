@@ -38,6 +38,9 @@ table tr:nth-child(even) {
 .button-secondary {
     width: 20%;
 }
+.button-secondary:hover{
+    background: #074e2b;
+}
 
 .container-submit {}
 

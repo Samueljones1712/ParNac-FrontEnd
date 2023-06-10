@@ -5,6 +5,10 @@
     border-radius: 5px;
 }
 
+.button-reservation:hover {
+    background: #074e2b;
+}
+
 .iconButton {
     width: 25px;
     height: 25px;
@@ -31,8 +35,12 @@
     height: 350px;
     padding: 2%;
     padding-bottom: 4%;
-    box-shadow: 5px 0 0 1px rgba(#000, .05), 0 20px 50px;
+    box-shadow: 2px 0 10px 0.5px rgba(0, 0, 0, 0.434);
     text-align: center;
+}
+.card:hover {
+    transform: scale(1.015);
+    transition: .10s all;
 }
 
 .imgTable {
