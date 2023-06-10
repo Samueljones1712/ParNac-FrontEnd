@@ -1,53 +1,14 @@
-<style>
-    .container-form {
-        display: flex;
-        justify-content: center;
-    }
-
-    .formEntrada {
-        background-color: antiquewhite;
-        display: flex;
-        flex-direction: column;
-    }
-
-
-    .informationPark {
-        display: flex;
-
-        flex-direction: column;
-    }
-
-    .total {
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-    }
-</style>
-
-<div>
-
-    <div class="informationPark" *ngIf="!loading">
-
-        <label>{{park.Nombre}}</label>
-        <label>{{ park.Area_de_Conservacion }}</label>
-        <label>Provincia: {{ park.Provincia }}</label>
-        <label>Tarifa para Nacionales (colones): {{ park.Tarifa_Nacionales_colones }}</label>
-        <label>Tarifa para Extranjeros (dólares): {{ park.Tarifa_Extranjeros_dolares }}</label>
-        <label>Cantidad máxima de visitantes: {{ park.maxVisitantes }}</label>
-        <label>Horario: {{ park.horario }}</label>
-
-    </div>
-
+<div class="container-base">
     <div class="container-form" *ngIf="!loading">
-
+        <h2>Compra de Entrada</h2>
         <form [formGroup]="entradaForm" class="formEntrada" (ngSubmit)="agregar()">
 
-            <div>
-                <label for="fechaVencimiento" style="margin-right: 3px;">Fecha Entrada: </label>
+            <div class="container-input">
+                <label for="fechaVencimiento">Fecha Entrada: </label>
                 <input type="date" [min]="minDate" id="fechaVencimiento" formControlName="fechaVencimiento" />
             </div>
 
-            <div>
+            <div class="container-input">
                 <label for="grupo" style="margin-right: 3px;">Grupo/Hora:</label>
                 <select formControlName="grupo" id="grupo">
                     <option selected="true">Grupo 01: Entrada 08:00 am</option>
@@ -61,14 +22,15 @@
                     <option>Grupo 09: Entrada 04:00 pm</option>
                 </select>
             </div>
-
             <div>
+
+            </div>
+            <div class="container-input">
                 <label for="CantNacionales">Cantidad de Nacionales</label>
                 <input type="number" (change)="cargarTotalNacional($event)" formControlName="CantNacionales"
                     id="CantNacionales" min="0" max="100">
             </div>
-
-            <div>
+            <div class="container-input">
                 <label for="CantExtranjeros">Cantidad de Extranjeros</label>
                 <input type="number" (change)="cargarTotalExtranjero($event)" formControlName="CantExtranjeros"
                     id="CantExtranjeros" min="0" max="100">
@@ -105,14 +67,26 @@
             </div>
 
 
-            <div>
+            <div class="container-input">
                 <button class="button-secondary submit-form" type="submit"
-                    [disabled]="!entradaForm.valid">Agregar</button>
+                    [disabled]="!entradaForm.valid">Comprar</button>
             </div>
 
         </form>
     </div>
-
+    <div class="informationPark" *ngIf="!loading">
+        <div class="container-image">
+            <label class="label-primaryTitle">{{park.Nombre}}</label>
+            <label class="label-secondaryTitle">{{ park.Area_de_Conservacion }}</label>
+        </div>
+        <div class="container-generalInfo">
+            <label>Provincia: {{ park.Provincia }}</label>
+            <label>Tarifa para Nacionales: ₡{{ park.Tarifa_Nacionales_colones }}</label>
+            <label>Tarifa para Extranjeros: ${{ park.Tarifa_Extranjeros_dolares }}</label>
+            <label>Cantidad máxima de visitantes: {{ park.maxVisitantes }}</label>
+            <label>Horario: {{ park.horario }}</label>
+        </div>
+    </div>
 
 </div>
 
