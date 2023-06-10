@@ -62,8 +62,8 @@
             <div class="container-input">
                 <label for="usuarios">Usuario</label>
 
-                <input list="listUsuario" id="fk_idUsuario" [(ngModel)]="fk_idUsuario" (change)="selectUser($event)"
-                    [ngModelOptions]="{standalone: true}">
+                <input list="listUsuario" [disabled]="isReadOnly" id="fk_idUsuario" [(ngModel)]="fk_idUsuario"
+                    (change)="selectUser($event)" [ngModelOptions]="{standalone: true}">
                 <datalist id="listUsuario">
                     <option *ngFor="let c of listUsuario" [value]="c.correo">{{c.identificacion}}</option>
                 </datalist>
@@ -82,6 +82,9 @@
             <div class="container-input">
                 <label>Fecha</label>
                 <input [min]="minDate" formControlName="fechaVencimiento" type="date" name="fecha">
+                <div class="errorMessage" *ngIf="entradaForm.controls['fechaVencimiento'].errors">
+                    Fecha Incorrecta.
+                </div>
             </div>
             <label class="label-title">Número de personas</label>
             <div class="container-selects">
@@ -94,6 +97,7 @@
                 <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
                     Cantidad de Nacionales Incorrecta.
                 </div>
+
                 <div class="container-input">
                     <label>Extranjeros</label>
                     <input type="number" min="0" max="100" (change)="cargarTotalExtranjero($event)"

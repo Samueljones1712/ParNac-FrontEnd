@@ -12,6 +12,8 @@ import { view_entrada } from 'src/app/interface/view_entradas';
 
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2'
+import { ControlInternoService } from 'src/app/services/control-interno.service';
+import { RegistroActividad } from 'src/app/interface/RegistroActividad';
 
 @Component({
   selector: 'app-entrada',
@@ -20,6 +22,12 @@ import Swal from 'sweetalert2'
 })
 export class EntradaComponent implements OnInit {
 
+  registro: RegistroActividad = {
+    detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
+  }
+
+
+
   minDate: string = "";
   idEntrada: number = 0;
 
@@ -27,6 +35,7 @@ export class EntradaComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   loading: boolean = true;
+  isReadOnly: boolean = false;
 
   listEntradas: view_entrada[] = [];
   listParques: parkNational[] = [];
@@ -66,8 +75,8 @@ export class EntradaComponent implements OnInit {
   ivaPorcentaje: number = 13;
 
   entradaForm: FormGroup = new FormGroup({
-    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(100)]),
-    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
+    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl(this.minDate, [Validators.required]),
   });
@@ -97,7 +106,8 @@ export class EntradaComponent implements OnInit {
   }
 
   constructor(private entradaService: EntradaService, private router: Router,
-    private toastr: ToastrService, private parkService: ParkService, private userService: UserService, private Toastr: ToastrService) {
+    private Toastr: ToastrService, private parkService: ParkService, private userService: UserService,
+    private controlService: ControlInternoService) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -199,7 +209,7 @@ export class EntradaComponent implements OnInit {
 
     this.parque = this.listParques.filter(parque => parque.Nombre === nombre)[0];
 
-    this.toastr.success("Has seleccionado el Parque: " + nombre, "Correcto");
+    this.Toastr.success("Has seleccionado el Parque: " + nombre, "Correcto");
   }
 
   selectUser(e: any): void {
@@ -209,7 +219,7 @@ export class EntradaComponent implements OnInit {
 
     this.usuario = this.listUsuario.filter(usuario => usuario.correo === correo)[0];
 
-    this.toastr.success("Has seleccionado el Usuario: " + correo, "Correcto");
+    this.Toastr.success("Has seleccionado el Usuario: " + correo, "Correcto");
   }
 
 
@@ -302,6 +312,7 @@ export class EntradaComponent implements OnInit {
         this.loadEntradaWithForm();
         this.saveEntrada().then((resolve) => {
           this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+          this.createEntradaRegistro("Inserto en la tabla Entrada");
           setTimeout(() => {
             location.reload();
           }, 5000);
@@ -332,6 +343,8 @@ export class EntradaComponent implements OnInit {
         this.loadEntradaWithForm();
         this.updateEntrada().then((resolve) => {
           this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
+          this.createEntradaRegistro("Actualizo en la tabla Entrada");
+
           this.idEntrada = 0;
 
           setTimeout(() => {
@@ -394,7 +407,9 @@ export class EntradaComponent implements OnInit {
         if (result.isConfirmed) {
 
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
-            this.toastr.success("Se desactivo la entrada.", "Correcto");
+            this.Toastr.success("Se desactivo la entrada.", "Correcto");
+
+            this.createEntradaRegistro("Desactivo la tabla Entrada");
 
             setTimeout(() => {
               location.reload();
@@ -409,7 +424,7 @@ export class EntradaComponent implements OnInit {
       });
 
     } else {
-      this.toastr.error("La entrada ya esta desactivada.", "Error");
+      this.Toastr.error("La entrada ya esta desactivada.", "Error");
     }
 
 
@@ -419,6 +434,8 @@ export class EntradaComponent implements OnInit {
   loadActualizar(id: any) {
 
     this.idEntrada = id;
+
+    this.isReadOnly = true;
 
     this.entradaView = this.listEntradas.filter(entrada => entrada.id === id)[0];
 
@@ -443,6 +460,22 @@ export class EntradaComponent implements OnInit {
 
     this.usuario = this.listUsuario.filter(usuario => usuario.correo === this.entradaView.correo)[0];
     this.parque = this.listParques.filter(parque => parque.Nombre === this.entradaView.Nombre)[0];
+
+  }
+
+  createEntradaRegistro(tipo: string) {
+
+    this.registro = {
+      detalle: tipo, fechaHora: this.minDate + "",
+      id: 0,
+      ipAddress: sessionStorage.getItem("IP") + "",
+      pk_idUsuario: parseInt(this.usuario.id)
+    }
+
+    this.controlService.addRegistro(this.registro).subscribe((res: any) => {
+      console.log("Se guardo el Registro.");
+    })
+
 
   }
 

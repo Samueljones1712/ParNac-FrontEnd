@@ -11,6 +11,9 @@ import { error } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2'
 
+import { RegistroActividad } from 'src/app/interface/RegistroActividad';
+import { ControlInternoService } from 'src/app/services/control-interno.service';
+
 @Component({
   selector: 'app-entrada-visitante',
   templateUrl: './entrada-visitante.component.html',
@@ -18,8 +21,15 @@ import Swal from 'sweetalert2'
 })
 export class EntradaVisitanteComponent implements OnInit {
 
+  minDate: string = "";
   Id: string = "";
-  minDate: string;
+
+  registro: RegistroActividad = {
+    detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
+  }
+
+
+
   loading: boolean = true;
   subtotalN: number = 0;
   totalN: number = 0;
@@ -67,14 +77,15 @@ export class EntradaVisitanteComponent implements OnInit {
   }
 
   entradaForm: FormGroup = new FormGroup({
-    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(100)]),
-    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(this.park.maxVisitantes)]),
+    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(this.park.maxVisitantes)]),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl("", [Validators.required]),
   });
 
 
-  constructor(private route: ActivatedRoute, private parkService: ParkService, private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService) {
+  constructor(private route: ActivatedRoute, private parkService: ParkService,
+    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -162,6 +173,9 @@ export class EntradaVisitanteComponent implements OnInit {
 
       this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
 
+        console.log(res);
+        this.createEntradaRegistro("Inserto en la tabla Entrada");
+
         resolve();
       }, (error) => {
         reject(error);
@@ -220,6 +234,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
   }
 
+
   cargarTotalNacional(e: any): void {
 
     this.entrada.CantNacionales = e.target.value;
@@ -234,4 +249,22 @@ export class EntradaVisitanteComponent implements OnInit {
 
   }
 
+  createEntradaRegistro(tipo: string) {
+
+    this.registro = {
+      detalle: tipo, fechaHora: this.minDate + "",
+      id: 0,
+      ipAddress: sessionStorage.getItem("IP") + "",
+      pk_idUsuario: parseInt(this.usuario.id)
+    }
+
+    this.controlService.addRegistro(this.registro).subscribe((res: any) => {
+      console.log("Se guardo el Registro.");
+    })
+
+
+  }
+
 }
+
+
