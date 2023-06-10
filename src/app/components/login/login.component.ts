@@ -5,6 +5,8 @@ import { LoginConnectionService } from 'src/app/services/login-connection.servic
 import { User } from 'src/app/interface/user';
 import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/utils/alert.service';
+import { IpServiceService } from 'src/app/services/ip-service.service';
+
 
 
 @Component({
@@ -16,14 +18,22 @@ export class LoginComponent implements OnInit {
 
   loading: boolean = false;
 
+  publicIpAddress: string = "";
+
   datos: any[] = [];
 
   usuario: User = { id: "", nombre: '', apellido: '', correo: "", contrasena: "", salt: '', tipo: "", identificacion: "" };
 
   constructor(private LoginConnection: LoginConnectionService, private router: Router,
-    private toastr: ToastrService, private alert: AlertService) { }
+    private toastr: ToastrService, private alert: AlertService, private ipService: IpServiceService) { }
 
   ngOnInit(): void {
+
+    this.ipService.getPublicIpAddress().then(ip => {
+      this.publicIpAddress = ip;
+      console.log('Dirección IP pública:', ip);
+      sessionStorage.setItem("IP", this.publicIpAddress);
+    });
 
   }
 

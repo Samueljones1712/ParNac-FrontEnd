@@ -16,6 +16,12 @@
 
         flex-direction: column;
     }
+
+    .total {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 
 <div>
@@ -37,12 +43,12 @@
         <form [formGroup]="entradaForm" class="formEntrada" (ngSubmit)="agregar()">
 
             <div>
-                <label style="margin-right: 3px;">Fecha Entrada: </label>
+                <label for="fechaVencimiento" style="margin-right: 3px;">Fecha Entrada: </label>
                 <input type="date" [min]="minDate" id="fechaVencimiento" formControlName="fechaVencimiento" />
             </div>
 
             <div>
-                <label style="margin-right: 3px;">Grupo/Hora:</label>
+                <label for="grupo" style="margin-right: 3px;">Grupo/Hora:</label>
                 <select formControlName="grupo" id="grupo">
                     <option selected="true">Grupo 01: Entrada 08:00 am</option>
                     <option>Grupo 02: Entrada 09:00 am</option>
@@ -57,14 +63,47 @@
             </div>
 
             <div>
-                <label>Cantidad de Nacionales</label>
-                <input type="number" formControlName="CantNacionales" id="CantNacionales" min="0" max="100">
+                <label for="CantNacionales">Cantidad de Nacionales</label>
+                <input type="number" (change)="cargarTotalNacional($event)" formControlName="CantNacionales"
+                    id="CantNacionales" min="0" max="100">
             </div>
 
             <div>
-                <label>Cantidad de Extranjeros</label>
-                <input type="number" formControlName="CantExtranjeros" id="CantExtranjeros" min="0" max="100">
+                <label for="CantExtranjeros">Cantidad de Extranjeros</label>
+                <input type="number" (change)="cargarTotalExtranjero($event)" formControlName="CantExtranjeros"
+                    id="CantExtranjeros" min="0" max="100">
             </div>
+            <div class="total">
+                <div class="totalNacional">
+                    <H6>Nacionales (Colones)</H6>
+                    <div>
+                        <label for="">Subtotal:{{subtotalN}}</label>
+                    </div>
+
+                    <!-- <div>
+                        <label for="">IVA ({{ivaPorcentaje}}%): {{ivaN}}</label>
+                    </div> -->
+                    <div>
+                        <label for="">Total:{{totalN}}</label>
+                    </div>
+
+                </div>
+                <div class="totalExtranjero">
+                    <H6>Extranjeros (Dolares)</H6>
+                    <div>
+                        <label for="">Subtotal:{{subtotalE}}</label>
+                    </div>
+
+                    <!-- <div>
+                        <label for="">IVA ({{ivaPorcentaje}}%): {{ivaE}}</label>
+                    </div> -->
+                    <div>
+                        <label for="">Total:{{totalE}}</label>
+                    </div>
+
+                </div>
+            </div>
+
 
             <div>
                 <button class="button-secondary submit-form" type="submit"
