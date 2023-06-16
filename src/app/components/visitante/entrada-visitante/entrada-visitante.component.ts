@@ -77,8 +77,8 @@ export class EntradaVisitanteComponent implements OnInit {
   }
 
   entradaForm: FormGroup = new FormGroup({
-    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(this.park.maxVisitantes)]),
-    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(this.park.maxVisitantes)]),
+    CantExtranjeros: new FormControl(0, []),
+    CantNacionales: new FormControl(0, []),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl("", [Validators.required]),
   });

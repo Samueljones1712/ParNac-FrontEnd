@@ -22,6 +22,10 @@ export class IndexVisitanteComponent implements OnInit {
   listParks: parkNational[] = [];
   loading: boolean = false;
 
+  parksPerPage: number = 12;
+  currentPage: number = 1;
+  displayParks: parkNational[] = [];
+
   //TENGO QUE HACERLE UN BUSCAR POR NOMBRE, ACTIVO EL LOADING Y DE LA LISTA ELIMINO UNOS.
 
 
@@ -40,6 +44,7 @@ export class IndexVisitanteComponent implements OnInit {
 
       this.loading = false
       this.listParks = res;
+      this.updateParks();
     })
   }
 
@@ -48,5 +53,24 @@ export class IndexVisitanteComponent implements OnInit {
     this.router.navigate(['/entrada-visitante', Id]);
 
   }
-
+  updateParks() {
+    const startIndex = (this.currentPage - 1) * this.parksPerPage;
+    const endIndex = startIndex + this.parksPerPage;
+    this.displayParks = this.listParks.slice(startIndex, endIndex);
+  }
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updateParks();
+    }
+  }
+  nextPage() {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.updateParks();
+    }
+  }
+  totalPages() {
+    return Math.ceil(this.listParks.length / this.parksPerPage);
+  }
 }

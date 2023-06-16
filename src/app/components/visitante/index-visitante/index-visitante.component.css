@@ -23,11 +23,20 @@
 
 .container-parks {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
     justify-items: center;
+    width: 80%;
+    margin: auto;
+    margin-top: 3%;
+}
 
-    margin-top: 10px;
+.container-principal {}
+
+.container-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
 }
 
 .card {
@@ -38,6 +47,7 @@
     box-shadow: 2px 0 10px 0.5px rgba(0, 0, 0, 0.434);
     text-align: center;
 }
+
 .card:hover {
     transform: scale(1.015);
     transition: .10s all;

@@ -5,7 +5,7 @@
     </style>
 
     <div class="container-parks">
-        <div class="card" *ngFor="let item of listParks">
+        <div class="card" *ngFor="let item of displayParks">
             <img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'">
             <h4 class="title">{{item.Nombre}}</h4>
             <p class="text">Provincia: {{item.Provincia}}</p>
@@ -14,7 +14,11 @@
                         src="../../../../assets/img/iconReservation.png" /></button>
             </div>
         </div>
-
+    </div>
+    <div class="container-pagination">
+        <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+        <span>Página {{ currentPage }} de {{ totalPages() }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Siguiente</button>
     </div>
 
 </div>
