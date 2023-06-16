@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +15,7 @@ import { parkNational } from 'src/app/interface/parkNational';
 })
 export class IndexVisitanteComponent implements OnInit {
 
+  @ViewChild('containerParks', { static: false }) containerParks!: ElementRef;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -62,15 +63,22 @@ export class IndexVisitanteComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updateParks();
+      this.scrollToTop();
     }
   }
   nextPage() {
     if (this.currentPage < this.totalPages()) {
       this.currentPage++;
       this.updateParks();
+      this.scrollToTop();
     }
   }
   totalPages() {
     return Math.ceil(this.listParks.length / this.parksPerPage);
+  }
+  scrollToTop(){
+    if(this.containerParks && this.containerParks.nativeElement){
+      this.containerParks.nativeElement.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }

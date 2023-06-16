@@ -31,7 +31,9 @@
     margin-top: 3%;
 }
 
-.container-principal {}
+.container-principal {
+    margin-bottom: 2%;
+}
 
 .container-pagination {
     display: flex;
@@ -57,4 +59,21 @@
     height: -webkit-fill-available;
     width: -webkit-fill-available;
     border-radius: 5px;
+}
+.button-secondary {
+    border: 0;
+    padding: 0.5%;
+
+    background: #248f59;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    border: 0;
+}
+.button-secondary:hover{
+    background: #074e2b;
+}
+.span-page{
+    margin-left: 1%;
+    margin-right: 1%;
 }
