@@ -38,7 +38,8 @@ table tr:nth-child(even) {
 .button-secondary {
     width: 20%;
 }
-.button-secondary:hover{
+
+.button-secondary:hover {
     background: #074e2b;
 }
 
@@ -66,12 +67,12 @@ label {
 
 .container-table {
     width: 60%;
-    margin-right:1%;
+    margin-right: 1%;
 }
 
 .container-form {
     display: inline-block;
-    width: 40%;
+    width: 30%;
     text-align: center;
     padding: 3%;
 }

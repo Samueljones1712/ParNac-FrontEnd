@@ -11,6 +11,9 @@ import { error } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2'
 
+import { RegistroActividad } from 'src/app/interface/RegistroActividad';
+import { ControlInternoService } from 'src/app/services/control-interno.service';
+
 @Component({
   selector: 'app-entrada-visitante',
   templateUrl: './entrada-visitante.component.html',
@@ -18,8 +21,15 @@ import Swal from 'sweetalert2'
 })
 export class EntradaVisitanteComponent implements OnInit {
 
+  minDate: string = "";
   Id: string = "";
-  minDate: string;
+
+  registro: RegistroActividad = {
+    detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
+  }
+
+
+
   loading: boolean = true;
   subtotalN: number = 0;
   totalN: number = 0;
@@ -67,14 +77,15 @@ export class EntradaVisitanteComponent implements OnInit {
   }
 
   entradaForm: FormGroup = new FormGroup({
-    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(100)]),
-    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    CantExtranjeros: new FormControl(0, []),
+    CantNacionales: new FormControl(0, []),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl("", [Validators.required]),
   });
 
 
-  constructor(private route: ActivatedRoute, private parkService: ParkService, private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService) {
+  constructor(private route: ActivatedRoute, private parkService: ParkService,
+    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -101,46 +112,45 @@ export class EntradaVisitanteComponent implements OnInit {
 
   getEntrada() {
 
-    if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
+    if (this.entradaForm.value.fechaVencimiento != "") {
 
-      Swal.fire({
-        icon: 'warning',
-        title: '¿Desea reservar en este Parque Nacional?',
-        showDenyButton: true,
-        confirmButtonText: 'Si',
-        denyButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
+      if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
 
-          this.loadEntradaWithForm();
-          this.saveEntrada().then((resolve) => {
-            this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
-            setTimeout(() => {
-              location.reload();
-            }, 5000);
-          }, (error) => {
-            this.Toastr.error("No se pudo reservar la entrada.", "Error.");
-          });
+        Swal.fire({
+          icon: 'warning',
+          title: '¿Desea reservar en este Parque Nacional?',
+          showDenyButton: true,
+          confirmButtonText: 'Si',
+          denyButtonText: 'No'
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            this.loadEntradaWithForm();
+            this.saveEntrada().then((resolve) => {
+              this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+              setTimeout(() => {
+                location.reload();
+              }, 5000);
+            }, (error) => {
+              this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+            });
 
 
 
-        } else if (result.isDenied) {
-          this.Toastr.info("Se ha cancelado la acción");
-        }
-      })
+          } else if (result.isDenied) {
+            this.Toastr.info("Se ha cancelado la acción");
+          }
+        })
 
+      } else {
+        this.Toastr.info("Seleccione la cantidad de Personas.");
+        return;
+
+      }
     } else {
-      this.Toastr.info("Seleccione la cantidad de Personas.");
+      this.Toastr.info("Seleccione una fecha.");
       return;
-
     }
-
-
-
-    console.log(this.entrada);
-
-
-
 
   }
 
@@ -162,6 +172,9 @@ export class EntradaVisitanteComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
 
       this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+
+        console.log(res);
+        this.createEntradaRegistro("Inserto en la tabla Entrada");
 
         resolve();
       }, (error) => {
@@ -205,9 +218,6 @@ export class EntradaVisitanteComponent implements OnInit {
 
   agregar() {
 
-    //SweetAlert y preguntar si esta seguro que no se puede editar, 
-    //debo validar que minimo lleve uno de alguno de los dos y debo calcular el subtotal y el iva(13%
-
     this.getEntrada()
   }
   cargarTotalExtranjero(e: any): void {
@@ -224,6 +234,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
   }
 
+
   cargarTotalNacional(e: any): void {
 
     this.entrada.CantNacionales = e.target.value;
@@ -238,4 +249,22 @@ export class EntradaVisitanteComponent implements OnInit {
 
   }
 
+  createEntradaRegistro(tipo: string) {
+
+    this.registro = {
+      detalle: tipo, fechaHora: this.minDate + "",
+      id: 0,
+      ipAddress: sessionStorage.getItem("IP") + "",
+      pk_idUsuario: parseInt(this.usuario.id)
+    }
+
+    this.controlService.addRegistro(this.registro).subscribe((res: any) => {
+      console.log("Se guardo el Registro.");
+    })
+
+
+  }
+
 }
+
+

@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+
 import { Entrada } from 'src/app/interface/entrada';
 import { EntradaService } from 'src/app/services/entrada.service';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ToastrService } from 'ngx-toastr';
 import { ParkService } from 'src/app/services/park.service';
 import { parkNational } from 'src/app/interface/parkNational';
 import { Administrador, UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interface/user';
+import { view_entrada } from 'src/app/interface/view_entradas';
+
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2'
+import { ControlInternoService } from 'src/app/services/control-interno.service';
+import { RegistroActividad } from 'src/app/interface/RegistroActividad';
 
 @Component({
   selector: 'app-entrada',
@@ -17,16 +23,81 @@ import { User } from 'src/app/interface/user';
 })
 export class EntradaComponent implements OnInit {
 
+  @ViewChild('myInput', { static: false }) myInput!: ElementRef;
+
+  registro: RegistroActividad = {
+    detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
+  }
+
+
+
+  minDate: string = "";
+  idEntrada: number = 0;
+
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
   loading: boolean = true;
+  isReadOnly: boolean = false;
+  userSelected: boolean = false;
+  parkSelected: boolean = false;
 
-  listEntradas: Entrada[] = [];
+  listEntradas: view_entrada[] = [];
+  listParques: parkNational[] = [];
+  listUsuario: User[] = [];
+
+  entradas: Entrada[] = [];
+
+  fk_idParque: string = "";
+  fk_idUsuario: string = "";
+
+  usuario: User = {
+    id: "", nombre: "", apellido: "", contrasena: "", correo: "", salt: "", tipo: "", identificacion: ""
+  }
+
+  entrada: Entrada = {
+    fecha: "", fk_idUsuario: "", fk_idParque: "", estado: "", id: 0, fechaVencimiento: "", CantExtranjeros: 0,
+    CantNacionales: 0, tarifaNacionales: 0, tarifaExtranjeros: 0, hora: ""
+  }
+
+  entradaView: view_entrada = {
+    cantidadExtranjeros: 0, cantidadNacionales: 0, correo: "", estado: "", fecha: "", fechaVencimiento: "",
+    fk_idParque: "", fk_idUsuario: "", hora: "", id: 0, Nombre: "", totalExtranjeros: 0, totalNacionales: 0
+  }
+
+  parque: parkNational = {
+    Area_de_Conservacion: "", horario: "", Id: 0, maxVisitantes: 0, Nombre: "", Provincia: "", Tarifa_Extranjeros_dolares: 0, Tarifa_Nacionales_colones: 0, imagen: ""
+  }
+
+
+  subtotalN: number = 0;
+  totalN: number = 0;
+  ivaN: number = 13;
+
+  subtotalE: number = 0;
+  totalE: number = 0;
+  ivaE: number = 13;
+  ivaPorcentaje: number = 13;
+
+  entradaForm: FormGroup = new FormGroup({
+    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
+    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
+    grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
+    fechaVencimiento: new FormControl(this.minDate, [Validators.required]),
+  });
+
 
   ngOnInit(): void {
 
-    this.getEntradas();
+    this.getEntradas().then((resolve) => {
+      this.getParques().then((resolve) => {
+        this.getUsuarios().then((resolve) => {
+          this.loading = false;
+        });
+      });
+    });
+
+
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -40,16 +111,58 @@ export class EntradaComponent implements OnInit {
   }
 
   constructor(private entradaService: EntradaService, private router: Router,
-    private toastr: ToastrService, private parkService: ParkService, private userService: UserService) { }
+    private Toastr: ToastrService, private parkService: ParkService, private userService: UserService,
+    private controlService: ControlInternoService) {
+
+    const today = new Date();
+    this.minDate = this.formatDate(today);
+
+  }
 
 
-  getEntradas(): Promise<void> {
+  getParques(): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
-      this.entradaService.getEntradas().subscribe(
-        (res: Entrada[]) => {
-          this.listEntradas = res;
-          console.log(this.listEntradas);
+      this.parkService.getParkNationals().subscribe(
+        (res: parkNational[]) => {
+          this.listParques = res;
+
+          // console.log(this.listParques);
+          resolve();
+        },
+        (error) => {
+
+          reject(error);
+        });
+    })
+  }
+
+  getUsuarios(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.userService.getUsers().subscribe(
+        (res: User[]) => {
+          this.listUsuario = res;
+
+          // console.log(this.listUsuario);
+          resolve();
+        },
+        (error) => {
+
+          reject(error);
+        });
+    })
+  }
+
+
+
+  getParque(Id: any): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.parkService.getParkNational(Id).subscribe(
+        (res: parkNational) => {
+          this.parque = res;
+          // console.log(this.parque);
           this.loading = false;
           resolve();
         },
@@ -59,203 +172,366 @@ export class EntradaComponent implements OnInit {
         });
     })
   }
-  // savePark(e: any): void {
-  //   let name = e.target.value;
-
-  //   let list = this.listParks.filter(x => x.Nombre === name)[0];
-
-  //   //this.toastr.success("Has seleccionado el Parque:" + list.Nombre, "Correcto");
-
-  //   this.tarifa = list.Tarifa_Nacionales_colones;
-
-  //   this.nombreParque = list.Nombre;
-
-  //   this.fk_idParque = list.Id;
-
-  //   this.loadingParks = false;
-
-  //   this.loadCedula();
-  // }
-
-  // saveCedula(a: any): void {
-  //   let name = a.target.value;
-
-  //   this.cedula = name;
-
-  //   let list = this.listAdmins.filter(x => x.cedula === name)[0];
-  //   this.nombreCedula = list.nombre + " " + list.apellido;
-  //   //this.toastr.success("Has seleccionado la cedula:" + this.cedula, "Correcto");
-
-  //   this.loadingCedula = false;
-
-  //   this.loadingParks = true;
-
-  // }
-
-  // loadForm() {
-  //   this.entradaForm = new FormGroup({
-  //     id: new FormControl(this.entrada.id),
-  //     //   fecha: new FormControl(this.entrada.fecha, [Validators.required]),
-  //     // estado: new FormControl(this.entrada.estado, [Validators.required]),
-  //     fechaVencimiento: new FormControl(this.entrada.fechaVencimiento, [Validators.required])
-  //   });
-  // }
-
-  // loadCedula(): Promise<void> {
-  //   return new Promise<void>((resolve, reject) => {
-  //     this.loadingCedula = true;
-  //     this.userService.getViewAdministradores().subscribe(
-  //       (res: Administrador[]) => {
-  //         this.listAdmins = res;
-  //         this.loadingCedula = false;
-  //         console.log(this.listAdmins);
-  //         resolve(); // Resuelve la promesa cuando la petición se completa
-  //       },
-  //       (error) => {
-  //         this.loadingCedula = false;
-  //         reject(error); // Rechaza la promesa si hay algún error en la petición
-  //       }
-  //     );
-  //   });
-  // }
 
 
+  getEntrada(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.entradaService.getEntradas().subscribe(
+        (res: view_entrada[]) => {
+          this.listEntradas = res;
+          // console.log(this.listEntradas);
+          this.loading = false;
+          resolve();
+        },
+        (error) => {
+          this.loading = false;
+          reject(error);
+        });
+    })
+  }
+
+  getEntradas(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.entradaService.getEntradas().subscribe(
+        (res: view_entrada[]) => {
+          this.listEntradas = res;
+          // console.log(this.listEntradas);
+
+          resolve();
+        },
+        (error) => {
+
+          reject(error);
+        });
+    })
+  }
+  selectPark(e: any): void {
+    let nombre = e.target.value;
+
+    this.parque = this.listParques.filter(parque => parque.Nombre === nombre)[0];
+
+    this.Toastr.success("Has seleccionado el Parque: " + nombre, "Correcto");
+
+    this.parkSelected = true;
+  }
+
+  selectUser(e: any): void {
+    let correo = e.target.value;
+
+    this.usuario = this.listUsuario.filter(usuario => usuario.correo === correo)[0];
+
+    this.Toastr.success("Has seleccionado el Usuario: " + correo, "Correcto");
+    this.userSelected = true;
+
+  }
 
 
-  // agregar() {
+  cargarTotalExtranjero(e: any): void {
 
-  //   console.log(this.entradaForm.value.id);
+    this.entrada.CantExtranjeros = e.target.value;
 
-  //   this.toastr.info("Espera", "Guardando...");
+    this.subtotalE = (this.entrada.CantExtranjeros * this.parque.Tarifa_Extranjeros_dolares);
 
-  //   if (this.entradaForm.value.id == "") {
+    this.ivaE = ((this.subtotalE * this.ivaPorcentaje) / 100);
 
-  //     this.setEntradaWithForm();
+    this.totalE = this.subtotalE + this.ivaE;
 
-  //     this.loading = true;
+    this.totalE = parseFloat(this.totalE.toFixed(2));
 
-  //     this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
-  //       console.log(res.response.status);
-  //       this.loading = false;
+  }
 
-  //       if (res.response.status == "ok") {
-  //         this.toastr.success("Se guardo la entrada", "Correcto.");
-  //         this.ngOnInit();
-  //         this.nombreCedula = "";
-  //         this.nombreParque = "";
-  //         this.cedula = "";
-  //         this.fk_idParque = "";
-  //       } else {
-  //         this.toastr.error("Error al guardar la entrada", "Error.");
-  //       }
+  cargarTotalNacional(e: any): void {
 
-  //     });
+    this.entrada.CantNacionales = e.target.value;
 
-  //     this.cleanEntrada();
+    this.subtotalN = (this.entrada.CantNacionales * this.parque.Tarifa_Nacionales_colones);
 
-  //   } else {
+    this.ivaN = ((this.subtotalN * this.ivaPorcentaje) / 100);
 
-  //     this.setEntradaWithForm();
+    this.totalN = this.subtotalN + this.ivaN;
 
-  //     this.entradaService.updateEntrada(this.entrada).subscribe((res: any) => {
+    this.totalN = parseFloat(this.totalN.toFixed(2));
+
+  }
 
 
-  //     });
+  loadEntradaWithForm() {
+    if (this.idEntrada != 0) {//Es un update
+      this.entrada.id = this.idEntrada;
+    }
 
-  //     this.cleanEntrada();
-  //   }
-  // }
+    this.entrada.hora = this.entradaForm.value.grupo;
+    this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";
+    this.entrada.fk_idParque = this.parque.Id + "";
+    this.entrada.fk_idUsuario = this.usuario.id;
+    this.entrada.fecha = this.minDate;
+    this.entrada.estado = "Activo";
+    this.entrada.tarifaExtranjeros = this.totalE;
+    this.entrada.tarifaNacionales = this.totalN;
 
-  // loadParkes(): Promise<void> {
-  //   return new Promise<void>((resolve, reject) => {
-  //     this.loadingParks = true;
-  //     this.parkService.getParkNationals().subscribe(
-  //       (res: parkNational[]) => {
-  //         this.listParks = res;
-  //         this.loadingParks = false;
-  //         resolve(); // Resuelve la promesa cuando la petición se completa
-  //       },
-  //       (error) => {
-  //         this.loadingParks = false;
-  //         reject(error); // Rechaza la promesa si hay algún error en la petición
-  //       }
-  //     );
-  //   });
-  // }
-
-  // getEntradaById(id: any) {
-  //   for (var i = 0; i < this.listEntradas.length; i++) {
-  //     if (this.listEntradas[i].id == id) {
-  //       this.entrada = this.listEntradas[i];
-  //     }
-  //   }
-  // }
-
-  // loadActualizar(Id: any) {
-
-  //   this.getEntradaById(Id);
-
-  //   this.loadForm();
-
-  //   this.toastr.info("Se cargo la informacion", "Correcto.");
-
-  // }
+  }
 
 
 
+  updateEntrada(): Promise<void> {
+
+    this.loading = true;
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.entradaService.updateEntrada(this.entrada).subscribe((res: any) => {
+
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
 
 
-  // eliminar(Id: any) {
+  saveEntrada(): Promise<void> {
 
-  //   this.getEntradaById(Id);
+    this.loading = true;
 
-  //   if (this.entrada.estado != "Cancelada") {
+    return new Promise<void>((resolve, reject) => {
 
-  //     this.loading = true;
+      this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
 
-  //     this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
-  //       this.ngOnInit();
-  //     });
-  //   } else {
+        resolve();
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
 
-  //     this.toastr.error("Entrada ya cancelada.", "Error.");
+  agregar() {
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Desea reservar en este Parque Nacional?',
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-  //   }
-  // }
+
+
+        this.loadEntradaWithForm();
+        this.saveEntrada().then((resolve) => {
+          this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+          this.createEntradaRegistro("Inserto en la tabla Entrada");
+          setTimeout(() => {
+            location.reload();
+          }, 5000);
+        }, (error) => {
+          this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+        });
 
 
 
-  // cleanEntrada() {
-  //   this.entrada = {
-  //     fecha: "",
-  //     fk_idParque: "",
-  //     fk_cedula: "",
-  //     estado: "",
-  //     id: "",
-  //     fechaVencimiento: "",
-  //     tarifa: "",
-  //     parqueNombre: "",
-  //     nombreUsuario: ""
-  //   }
+      } else if (result.isDenied) {
+        this.Toastr.info("Se ha cancelado la acción");
+      }
+    });
 
-  //   this.loadForm();
-  // }
+  }
 
-  // setEntradaWithForm() {
-  //   if (this.fk_idParque + "" != "") {
-  //     this.entrada.fecha = this.entradaForm.value.fecha + "";
-  //     this.entrada.fk_idParque = this.fk_idParque + "";
-  //     this.entrada.fk_cedula = this.cedula + "";
-  //     this.entrada.estado = this.entradaForm.value.estado + "";
-  //     this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";
-  //     this.entrada.tarifa = this.tarifa + "";
-  //     this.entrada.nombreUsuario = "";
-  //     this.entrada.parqueNombre = "";
-  //   } else {
+  actualizarEntrada() {
 
-  //     this.toastr.error("Asegurese de seleccionar el Parque Nacional", "Incompleto");
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Desea actualizar la reservacion de este Parque Nacional?',
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-  //   }
 
-  // }
+
+        this.loadEntradaWithForm();
+        this.updateEntrada().then((resolve) => {
+          this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
+          this.createEntradaRegistro("Actualizo en la tabla Entrada");
+
+          this.idEntrada = 0;
+
+          setTimeout(() => {
+            location.reload();
+          }, 5000);
+        }, (error) => {
+          this.idEntrada = 0;
+          this.Toastr.error("No se pudo actualizar la entrada.", "Error.");
+        });
+
+      } else if (result.isDenied) {
+        this.idEntrada = 0;
+        this.Toastr.info("Se ha cancelado la acción");
+      }
+    });
+
+
+  }
+
+  addEntrada() {
+
+    console.log(this.entradaForm.value.fk_idUsuario);
+
+    if (this.parkSelected == true) {
+
+      if (this.userSelected == true) {
+
+        if (this.entradaForm.value.fechaVencimiento != "") {
+
+          if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
+
+            if (this.idEntrada == 0) {//si es 0 es null
+              this.agregar();
+
+            } else {
+              this.actualizarEntrada();
+            }
+
+          } else {
+            this.Toastr.info("Seleccione la cantidad de Personas.");
+            return;
+
+          }
+        } else {
+          this.Toastr.info("Seleccione una fecha.");
+          return;
+        }
+
+      } else {
+        this.Toastr.info("Seleccione un usuario.");
+        return;
+      }
+    } else {
+      this.Toastr.info("Seleccione un parque.");
+      return;
+    }
+
+  }
+
+  eliminar(Id: any) {
+
+    this.entradaView = this.listEntradas.filter(entrada => entrada.id === Id)[0];
+
+    if (this.entradaView.estado == "Aprobada") {
+
+
+      Swal.fire({
+        icon: 'warning',
+        title: '¿Desea actualizar la reservacion de este Parque Nacional?',
+        showDenyButton: true,
+        confirmButtonText: 'Si',
+        denyButtonText: 'No'
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+
+          this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
+            this.Toastr.success("Se desactivo la entrada.", "Correcto");
+
+            this.createEntradaRegistro("Desactivo la tabla Entrada");
+
+            setTimeout(() => {
+              location.reload();
+            }, 3000);
+
+          });
+
+        } else if (result.isDenied) {
+
+          this.Toastr.info("Se ha cancelado la acción");
+        }
+      });
+
+    } else {
+      this.Toastr.error("La entrada ya esta desactivada.", "Error");
+    }
+
+
+
+  }
+
+  loadActualizar(id: any) {
+
+    this.idEntrada = id;
+
+    this.isReadOnly = true;
+
+    this.entradaView = this.listEntradas.filter(entrada => entrada.id === id)[0];
+
+    console.log(this.entradaView);
+
+    this.entrada.CantNacionales = this.entradaView.cantidadNacionales;
+    this.entrada.CantExtranjeros = this.entradaView.cantidadExtranjeros;
+
+    this.entradaForm = new FormGroup({
+      CantExtranjeros: new FormControl(this.entradaView.cantidadExtranjeros, [Validators.min(0), Validators.max(100)]),
+      CantNacionales: new FormControl(this.entradaView.cantidadNacionales, [Validators.min(0), Validators.max(100)]),
+      grupo: new FormControl(this.entradaView.hora, [Validators.required]),
+      fechaVencimiento: new FormControl(this.minDate, [Validators.required])
+    });
+
+    this.fk_idUsuario = this.entradaView.correo;
+    this.fk_idParque = this.entradaView.Nombre;
+
+    this.totalN = this.entradaView.totalNacionales;
+    this.totalE = this.entradaView.totalExtranjeros;
+
+
+    this.usuario = this.listUsuario.filter(usuario => usuario.correo === this.entradaView.correo)[0];
+    this.parque = this.listParques.filter(parque => parque.Nombre === this.entradaView.Nombre)[0];
+
+  }
+
+  createEntradaRegistro(tipo: string) {
+
+    this.registro = {
+      detalle: tipo, fechaHora: this.minDate + "",
+      id: 0,
+      ipAddress: sessionStorage.getItem("IP") + "",
+      pk_idUsuario: parseInt(this.usuario.id)
+    }
+
+    this.controlService.addRegistro(this.registro).subscribe((res: any) => {
+      console.log("Se guardo el Registro.");
+    })
+
+  }
+
+  validateNumber(event: any) {
+    const input = event.target;
+    const value = input.value;
+    if (value && +value < 0) {
+      input.value = Math.abs(+value); // Convierte el número negativo en su valor absoluto
+    }
+  }
+
+  validateID() {
+    const inputElement: HTMLInputElement | null = document.querySelector('#fk_idUsuario');
+
+    if (inputElement) {
+      const inputValue: string = inputElement.value;
+      // Resto del código de validación
+
+      for (let index = 0; index < this.listParques.length; index++) {
+        if (this.listParques[index].Nombre == inputValue) {
+          this.userSelected = true;
+        }
+      }
+    }
+  }
+
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
 }

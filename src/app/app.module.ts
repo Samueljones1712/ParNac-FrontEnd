@@ -20,6 +20,7 @@ import { ParkService } from './services/park.service';
 import { ErrorService } from './services/error.service';
 import { AlertService } from './utils/alert.service';
 import { UserService } from './services/user.service';
+import { ControlInternoService } from './services/control-interno.service';
 
 //Interface
 import { User } from './interface/user';
@@ -72,7 +73,7 @@ import { IndexVisitanteComponent } from './components/visitante/index-visitante/
       preventDuplicates: true,
     }),
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AddTokenInterceptor, multi: true }, LoginConnectionService, ParkService, UserService],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AddTokenInterceptor, multi: true }, LoginConnectionService, ParkService, UserService, ControlInternoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

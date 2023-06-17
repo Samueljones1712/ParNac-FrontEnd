@@ -1,11 +1,14 @@
+<app-navbar-admin></app-navbar-admin>
 <div class="container-principal">
 
     <style>
         .title {}
     </style>
 
-    <div class="container-parks">
-        <div class="card" *ngFor="let item of listParks">
+    <input type="text" [(ngModel)]="searchTerm" (keyup)="handleSearch()" placeholder="Buscar parque...">
+
+    <div class="container-parks" #containerParks>
+        <div class="card" *ngFor="let item of displayParks">
             <img class="imgTable" [src]="'../../../assets/img/parquesNacionales/' + item.Nombre+'.jpg'">
             <h4 class="title">{{item.Nombre}}</h4>
             <p class="text">Provincia: {{item.Provincia}}</p>
@@ -14,7 +17,12 @@
                         src="../../../../assets/img/iconReservation.png" /></button>
             </div>
         </div>
-
+    </div>
+    <div class="container-pagination">
+        <button class="button-secondary" (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+        <span class="span-page">Página {{ currentPage }} de {{ totalPages() }}</span>
+        <button class="button-secondary" (click)="nextPage()"
+            [disabled]="currentPage === totalPages()">Siguiente</button>
     </div>
 
 </div>

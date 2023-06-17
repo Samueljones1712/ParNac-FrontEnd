@@ -1,3 +1,4 @@
+<app-navbar-admin></app-navbar-admin>
 <div class="container-base">
     <div class="container-form" *ngIf="!loading">
         <h2>Compra de Entrada</h2>
@@ -29,11 +30,18 @@
                 <label for="CantNacionales">Cantidad de Nacionales</label>
                 <input type="number" (change)="cargarTotalNacional($event)" formControlName="CantNacionales"
                     id="CantNacionales" min="0" max="100">
+                <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
+                    La cantidad de Nacionales supera el limite.
+                </div>
             </div>
             <div class="container-input">
                 <label for="CantExtranjeros">Cantidad de Extranjeros</label>
                 <input type="number" (change)="cargarTotalExtranjero($event)" formControlName="CantExtranjeros"
                     id="CantExtranjeros" min="0" max="100">
+
+                <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
+                    La cantidad de Extranjeros supera el limite.
+                </div>
             </div>
             <div class="total">
                 <div class="totalNacional">
@@ -78,6 +86,9 @@
         <div class="container-image">
             <label class="label-primaryTitle">{{park.Nombre}}</label>
             <label class="label-secondaryTitle">{{ park.Area_de_Conservacion }}</label>
+
+            <img style="height: inherit;">
+
         </div>
         <div class="container-generalInfo">
             <label>Provincia: {{ park.Provincia }}</label>

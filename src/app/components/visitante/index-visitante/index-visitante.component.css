@@ -23,11 +23,22 @@
 
 .container-parks {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
     justify-items: center;
+    width: 80%;
+    margin: auto;
+    margin-top: 3%;
+}
 
-    margin-top: 10px;
+.container-principal {
+    margin-bottom: 2%;
+}
+
+.container-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
 }
 
 .card {
@@ -38,6 +49,7 @@
     box-shadow: 2px 0 10px 0.5px rgba(0, 0, 0, 0.434);
     text-align: center;
 }
+
 .card:hover {
     transform: scale(1.015);
     transition: .10s all;
@@ -47,4 +59,21 @@
     height: -webkit-fill-available;
     width: -webkit-fill-available;
     border-radius: 5px;
+}
+.button-secondary {
+    border: 0;
+    padding: 0.5%;
+
+    background: #248f59;
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    border: 0;
+}
+.button-secondary:hover{
+    background: #074e2b;
+}
+.span-page{
+    margin-left: 1%;
+    margin-right: 1%;
 }
