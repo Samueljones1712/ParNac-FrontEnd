@@ -132,12 +132,7 @@ export class EntradaComponent implements OnInit {
       }
     }
 
-    // if (this.datatableElement) {
-    //   this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    //     dtInstance.destroy();
-    //     this.datatableElement.dtTrigger.next(argumentValue);
-    //   });
-    // }
+
   }
 
   constructor(private entradaService: EntradaService, private router: Router,
@@ -159,13 +154,23 @@ export class EntradaComponent implements OnInit {
       const endDateFormatted = this.filterEndDate.slice(0, 10);
 
       this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+
         dtInstance.columns().search('').draw();
+
+        console.log(startDateFormatted + " - " + endDateFormatted);
 
         // Aplicar el filtro de búsqueda en la tabla
         dtInstance.columns(0) // Columna de "Fecha creación"
           .search(startDateFormatted + ' - ' + endDateFormatted, true, false)
           .draw();
+
+
+        // dtInstance
+        //   .columns(5) // Índice de la columna de la segunda fecha
+        //   .search(endDate, true, false)
+        //   .draw();
       });
+
     }
   }
 
