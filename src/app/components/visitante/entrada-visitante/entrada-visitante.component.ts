@@ -28,7 +28,7 @@ export class EntradaVisitanteComponent implements OnInit {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
-
+  cantidadActual=0;
 
   loading: boolean = true;
   subtotalN: number = 0;
@@ -169,17 +169,34 @@ export class EntradaVisitanteComponent implements OnInit {
 
     this.loading = true;
 
+
     return new Promise<void>((resolve, reject) => {
+      this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
+        this.park = res[0];
+      })
+      var cantidadMax = this.park.maxVisitantes;
 
-      this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+         this.cantidadActual = res[0];
+      })
+   
+      
+      var total=parseInt(this.entrada.CantExtranjeros+"")+parseInt(this.entrada.CantNacionales+"");
 
-        console.log(res);
-        this.createEntradaRegistro("Inserto en la tabla Entrada");
 
-        resolve();
-      }, (error) => {
-        reject(error);
-      });
+      console.log((cantidadMax-this.cantidadActual));
+      console.log(total);
+      if((total)<(cantidadMax-this.cantidadActual)){
+        this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+          alert("asd");
+          console.log(res);
+          this.createEntradaRegistro("Inserto en la tabla Entrada");
+  
+          resolve();
+        }, (error) => {
+          reject(error);
+        });
+      }
     });
   }
 
