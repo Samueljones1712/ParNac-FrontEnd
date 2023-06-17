@@ -21,6 +21,7 @@
     width: 60%;
     margin-right: 1%;
     flex-direction: column;
+    border: 2px solid black;
 }
 
 .total {
@@ -48,6 +49,7 @@ label {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     height: 380px;
 }
 
@@ -58,10 +60,20 @@ label {
 
 .label-primaryTitle {
     font-size: larger;
+    size: 32px;
+    position: absolute;
+    font-weight: bolder;
+    color: black;
+    top: 10px;
 }
-
+.image-park:hover{
+    /*filter: brightness(0.5);*/
+    position: absolute;
+}
 .label-secondaryTitle {
     font-size: medium;
+    position: absolute;
+    top: 30px;
 }
 
 .button-secondary {
@@ -70,4 +82,10 @@ label {
 
 .button-secondary:hover {
     background: #074e2b;
+}
+.image-park{
+    width: 908px;
+
+    /*max-height: 100%;
+    max-width: 100%;*/
 }
