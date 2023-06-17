@@ -1,7 +1,8 @@
 <app-navbar-admin></app-navbar-admin>
 <div class="container-base" *ngIf="!loading">
     <div class="container-form">
-        <form [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
+
+        <form class="entradaForm" [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
             <h2>Ingresar Entrada</h2>
             <div class="container-input">
                 <label for="usuarios">Usuario</label>
@@ -112,7 +113,7 @@
             </div>
         </div>
 
-        <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+        <table class="table-entrada" datatable [dtOptions]="dtOptions" *ngIf="!loading">
             <thead>
                 <tr>
                     <th>Fecha creación</th>
@@ -135,7 +136,7 @@
                     <td>{{item.Nombre}}</td>
                     <td>{{item.totalNacionales}}</td>
                     <td>{{item.totalExtranjeros}}</td>
-                    <td>{{item.estado}}</td>
+                    <td >{{item.estado}}</td>
                     <td>{{item.fechaVencimiento}}</td>
                     <td>{{item.hora}}</td>
                     <td>{{item.cantidadNacionales}}</td>
