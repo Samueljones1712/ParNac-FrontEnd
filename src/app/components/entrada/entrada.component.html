@@ -151,6 +151,13 @@
         </form>
     </div>
     <div class="container-table">
+        <div>
+            <input type="date" class="form-control" placeholder="Fecha inicio" [(ngModel)]="filterStartDate"
+                (ngModelChange)="applyDateRangeFilter()" />
+            <input type="date" class="form-control" placeholder="Fecha fin" [(ngModel)]="filterEndDate"
+                (ngModelChange)="applyDateRangeFilter()">
+        </div>
+
         <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
             <thead>
                 <tr>

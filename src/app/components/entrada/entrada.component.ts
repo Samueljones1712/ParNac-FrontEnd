@@ -17,6 +17,13 @@ import { ControlInternoService } from 'src/app/services/control-interno.service'
 import { RegistroActividad } from 'src/app/interface/RegistroActividad';
 import { isNullOrUndefined } from '@swimlane/ngx-datatable';
 
+//filtros
+import * as moment from 'moment';
+import 'moment/locale/es';
+import { DataTableDirective } from 'angular-datatables';
+
+import { formatDate } from '@angular/common';
+
 @Component({
   selector: 'app-entrada',
   templateUrl: './entrada.component.html',
@@ -25,6 +32,9 @@ import { isNullOrUndefined } from '@swimlane/ngx-datatable';
 export class EntradaComponent implements OnInit {
 
   @ViewChild('myInput', { static: false }) myInput!: ElementRef;
+
+  @ViewChild(DataTableDirective, { static: false })
+  datatableElement!: DataTableDirective;
 
   registro: RegistroActividad = {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
@@ -37,6 +47,8 @@ export class EntradaComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  filterStartDate: string = '';
+  filterEndDate: string = '';
 
   loading: boolean = true;
   isReadOnly: boolean = false;
@@ -119,6 +131,13 @@ export class EntradaComponent implements OnInit {
         url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
       }
     }
+
+    // if (this.datatableElement) {
+    //   this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    //     dtInstance.destroy();
+    //     this.datatableElement.dtTrigger.next(argumentValue);
+    //   });
+    // }
   }
 
   constructor(private entradaService: EntradaService, private router: Router,
@@ -130,6 +149,38 @@ export class EntradaComponent implements OnInit {
 
   }
 
+  /*Filtro */
+
+  applyDateRangeFilter(): void {
+
+    if (this.filterStartDate && this.filterEndDate) {
+      // Convertir las cadenas de fecha en objetos Date
+      const startDateFormatted = this.filterStartDate.slice(0, 10);
+      const endDateFormatted = this.filterEndDate.slice(0, 10);
+
+      this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.columns().search('').draw();
+
+        // Aplicar el filtro de búsqueda en la tabla
+        dtInstance.columns(0) // Columna de "Fecha creación"
+          .search(startDateFormatted + ' - ' + endDateFormatted, true, false)
+          .draw();
+      });
+    }
+  }
+
+  clearDateRangeFilter(): void {
+    this.filterStartDate = '';
+    this.filterEndDate = '';
+
+    // Restablece los filtros de la tabla
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Elimina el filtro existente y vuelve a cargar los datos originales
+      dtInstance.search('').draw();
+    });
+  }
+
+  /*Fin del filtro*/
 
   getParques(): Promise<void> {
 
