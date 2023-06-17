@@ -5,9 +5,13 @@
     padding: 3%;
 }
 
+
+
 .container-base {
     display: flex;
     margin-top: 2%;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .formEntrada {
@@ -50,7 +54,6 @@ label {
     flex-direction: column;
     align-items: center;
     position: relative;
-    height: 380px;
 }
 
 .container-generalInfo {
@@ -66,10 +69,7 @@ label {
     color: black;
     top: 10px;
 }
-.image-park:hover{
-    /*filter: brightness(0.5);*/
-    position: absolute;
-}
+
 .label-secondaryTitle {
     font-size: medium;
     position: absolute;
@@ -83,8 +83,10 @@ label {
 .button-secondary:hover {
     background: #074e2b;
 }
-.image-park{
-    width: 908px;
+
+.image-park {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
 
     /*max-height: 100%;
     max-width: 100%;*/
