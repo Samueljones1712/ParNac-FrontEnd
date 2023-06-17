@@ -1,11 +1,9 @@
 <app-navbar-admin></app-navbar-admin>
 <div class="container-principal">
 
-    <style>
-        .title {}
-    </style>
-
-    <input type="text" [(ngModel)]="searchTerm" (keyup)="handleSearch()" placeholder="Buscar parque...">
+    <div class="searchPark">
+        <input type="text" [(ngModel)]="searchTerm" (keyup)="handleSearch()" placeholder="Buscar parque...">
+    </div>
 
     <div class="container-parks" #containerParks>
         <div class="card" *ngFor="let item of displayParks">
