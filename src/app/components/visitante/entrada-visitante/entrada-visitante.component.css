@@ -66,10 +66,6 @@ label {
     color: black;
     top: 10px;
 }
-.image-park:hover{
-    /*filter: brightness(0.5);*/
-    position: absolute;
-}
 .label-secondaryTitle {
     font-size: medium;
     position: absolute;
