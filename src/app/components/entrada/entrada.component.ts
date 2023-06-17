@@ -15,6 +15,14 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2'
 import { ControlInternoService } from 'src/app/services/control-interno.service';
 import { RegistroActividad } from 'src/app/interface/RegistroActividad';
+import { isNullOrUndefined } from '@swimlane/ngx-datatable';
+
+//filtros
+import * as moment from 'moment';
+import 'moment/locale/es';
+import { DataTableDirective } from 'angular-datatables';
+
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-entrada',
@@ -25,17 +33,22 @@ export class EntradaComponent implements OnInit {
 
   @ViewChild('myInput', { static: false }) myInput!: ElementRef;
 
+  @ViewChild(DataTableDirective, { static: false })
+  datatableElement!: DataTableDirective;
+
   registro: RegistroActividad = {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
-
+  myID: number = (parseInt(sessionStorage.getItem("myID") + ""));
 
   minDate: string = "";
   idEntrada: number = 0;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  filterStartDate: string = '';
+  filterEndDate: string = '';
 
   loading: boolean = true;
   isReadOnly: boolean = false;
@@ -50,7 +63,9 @@ export class EntradaComponent implements OnInit {
 
   fk_idParque: string = "";
   fk_idUsuario: string = "";
-
+  myUser: User = {
+    id: "", nombre: "", apellido: "", contrasena: "", correo: "", salt: "", tipo: "", identificacion: ""
+  }
   usuario: User = {
     id: "", nombre: "", apellido: "", contrasena: "", correo: "", salt: "", tipo: "", identificacion: ""
   }
@@ -80,24 +95,30 @@ export class EntradaComponent implements OnInit {
   ivaPorcentaje: number = 13;
 
   entradaForm: FormGroup = new FormGroup({
-    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
-    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(this.parque.maxVisitantes)]),
+    CantExtranjeros: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    CantNacionales: new FormControl(0, [Validators.min(0), Validators.max(100)]),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl(this.minDate, [Validators.required]),
   });
 
 
   ngOnInit(): void {
-
+    console.log(sessionStorage.getItem("IP") + "");
     this.getEntradas().then((resolve) => {
       this.getParques().then((resolve) => {
         this.getUsuarios().then((resolve) => {
-          this.loading = false;
+
+          if (isNaN(this.myID)) {
+            this.getMyUser().then((resolve) => {
+              this.loading = false;
+
+            })
+          } else {
+            this.loading = false;
+          }
         });
       });
     });
-
-
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -108,6 +129,8 @@ export class EntradaComponent implements OnInit {
         url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
       }
     }
+
+
   }
 
   constructor(private entradaService: EntradaService, private router: Router,
@@ -119,6 +142,26 @@ export class EntradaComponent implements OnInit {
 
   }
 
+  /*Filtro */
+
+  applyDateRangeFilter() {
+
+    if (this.filterStartDate != "" && this.filterEndDate != "") {
+      console.log(this.filterStartDate + " - " + this.filterEndDate);
+
+      const fechas = [this.filterStartDate, this.filterEndDate];
+
+      this.entradaService.getEntradaByDate(fechas).subscribe((res: view_entrada[]) => {
+        this.listEntradas = res;
+      })
+    }
+  }
+
+  graficar() {
+
+  }
+
+  /*Fin del filtro*/
 
   getParques(): Promise<void> {
 
@@ -147,6 +190,25 @@ export class EntradaComponent implements OnInit {
           // console.log(this.listUsuario);
           resolve();
         },
+        (error) => {
+
+          reject(error);
+        });
+    })
+  }
+
+
+  getMyUser(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.userService.getUserByCorreo(sessionStorage.getItem('correo') + '').subscribe((res: any) => {
+
+        sessionStorage.setItem('myID', res[0].id);
+
+        sessionStorage.setItem('myName', res[0].nombre + " " + res[0].apellido);
+        // console.log(this.listUsuario);
+        resolve();
+      },
         (error) => {
 
           reject(error);
@@ -354,7 +416,7 @@ export class EntradaComponent implements OnInit {
         this.loadEntradaWithForm();
         this.updateEntrada().then((resolve) => {
           this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
-          this.createEntradaRegistro("Actualizo en la tabla Entrada");
+          this.createEntradaRegistro("Actualizo en la tabla Entrada " + this.idEntrada);
 
           this.idEntrada = 0;
 
@@ -435,7 +497,7 @@ export class EntradaComponent implements OnInit {
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
             this.Toastr.success("Se desactivo la entrada.", "Correcto");
 
-            this.createEntradaRegistro("Desactivo la tabla Entrada");
+            this.createEntradaRegistro("Desactivo en la tabla Entrada " + Id);
 
             setTimeout(() => {
               location.reload();
@@ -463,9 +525,10 @@ export class EntradaComponent implements OnInit {
 
     this.isReadOnly = true;
 
-    this.entradaView = this.listEntradas.filter(entrada => entrada.id === id)[0];
+    this.parkSelected = true;
+    this.userSelected = true;
 
-    console.log(this.entradaView);
+    this.entradaView = this.listEntradas.filter(entrada => entrada.id === id)[0];
 
     this.entrada.CantNacionales = this.entradaView.cantidadNacionales;
     this.entrada.CantExtranjeros = this.entradaView.cantidadExtranjeros;
@@ -495,7 +558,7 @@ export class EntradaComponent implements OnInit {
       detalle: tipo, fechaHora: this.minDate + "",
       id: 0,
       ipAddress: sessionStorage.getItem("IP") + "",
-      pk_idUsuario: parseInt(this.usuario.id)
+      pk_idUsuario: this.myID
     }
 
     this.controlService.addRegistro(this.registro).subscribe((res: any) => {

@@ -290,6 +290,14 @@ export class EntradaVisitanteComponent implements OnInit {
 
   }
 
+  validateNumber(event: any) {
+    const input = event.target;
+    const value = input.value;
+    if (value && +value < 0) {
+      input.value = Math.abs(+value); // Convierte el número negativo en su valor absoluto
+    }
+  }
+
 }
 
 

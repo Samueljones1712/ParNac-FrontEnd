@@ -6,7 +6,7 @@ import { User } from 'src/app/interface/user';
 import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/utils/alert.service';
 import { IpServiceService } from 'src/app/services/ip-service.service';
-
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   usuario: User = { id: "", nombre: '', apellido: '', correo: "", contrasena: "", salt: '', tipo: "", identificacion: "" };
 
   constructor(private LoginConnection: LoginConnectionService, private router: Router,
-    private toastr: ToastrService, private alert: AlertService, private ipService: IpServiceService) { }
+    private toastr: ToastrService, private alert: AlertService, private ipService: IpServiceService, private userService: UserService) { }
 
   ngOnInit(): void {
 
@@ -74,11 +74,12 @@ export class LoginComponent implements OnInit {
 
           this.alert.showMessage(res.response.result.information);
 
-          console.log(res.response.result.information);
+          // console.log(res.response.result.information);
 
           sessionStorage.setItem('correo', res.response.result.information);
 
           sessionStorage.setItem('code', res.response.result.code);
+
 
           this.router.navigate(['verify']);
 
@@ -89,6 +90,25 @@ export class LoginComponent implements OnInit {
       });;
 
     }
+  }
+
+
+  getMyUser(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.userService.getUserByCorreo(sessionStorage.getItem('correo') + '').subscribe((res: any) => {
+
+        sessionStorage.setItem('myID', res[0].id);
+
+        sessionStorage.setItem('myName', res[0].nombre + " " + res[0].apellido);
+        // console.log(this.listUsuario);
+        resolve();
+      },
+        (error) => {
+
+          reject(error);
+        });
+    })
   }
 
 }

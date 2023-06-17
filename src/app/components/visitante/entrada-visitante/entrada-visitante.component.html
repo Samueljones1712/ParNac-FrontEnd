@@ -28,16 +28,16 @@
             </div>
             <div class="container-input">
                 <label for="CantNacionales">Cantidad de Nacionales</label>
-                <input type="number" (change)="cargarTotalNacional($event)" formControlName="CantNacionales"
-                    id="CantNacionales" min="0" max="100">
+                <input type="number" (change)="cargarTotalNacional($event)" (input)="validateNumber($event)"
+                    formControlName="CantNacionales" id="CantNacionales" min="0" max="100">
                 <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
                     La cantidad de Nacionales supera el limite.
                 </div>
             </div>
             <div class="container-input">
                 <label for="CantExtranjeros">Cantidad de Extranjeros</label>
-                <input type="number" (change)="cargarTotalExtranjero($event)" formControlName="CantExtranjeros"
-                    id="CantExtranjeros" min="0" max="100">
+                <input type="number" (change)="cargarTotalExtranjero($event)" (input)="validateNumber($event)"
+                    formControlName="CantExtranjeros" id="CantExtranjeros" min="0" max="100">
 
                 <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
                     La cantidad de Extranjeros supera el limite.

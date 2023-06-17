@@ -20,6 +20,10 @@ export class EntradaService {
 
   }
 
+  getEntradaByDate(fechas: string[]) {
+    return this.http.post<view_entrada[]>(`${this.url}getByDate`, fechas);
+  }
+
   addEntrada(entrada: Entrada) {
     return this.http.post<any[]>(`${this.url}add`, entrada)
   }

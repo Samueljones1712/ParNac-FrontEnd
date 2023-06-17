@@ -59,6 +59,7 @@
     width: -webkit-fill-available;
     border-radius: 5px;
 }
+
 .button-secondary {
     border: 0;
     padding: 0.5%;
@@ -69,10 +70,24 @@
     font-family: inherit;
     border: 0;
 }
-.button-secondary:hover{
+
+.button-secondary:hover {
     background: #074e2b;
 }
-.span-page{
+
+.span-page {
     margin-left: 1%;
     margin-right: 1%;
+}
+
+.searchPark {
+
+    margin-top: 2%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
 }
