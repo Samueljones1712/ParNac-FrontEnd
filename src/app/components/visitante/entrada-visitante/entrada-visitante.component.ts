@@ -10,6 +10,7 @@ import { User } from 'src/app/interface/user';
 import { error } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
 
 import { RegistroActividad } from 'src/app/interface/RegistroActividad';
 import { ControlInternoService } from 'src/app/services/control-interno.service';
@@ -85,7 +86,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private parkService: ParkService,
-    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService) {
+    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService, private router:Router) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -120,14 +121,14 @@ export class EntradaVisitanteComponent implements OnInit {
           icon: 'warning',
           title: '¿Desea reservar en este Parque Nacional?',
           showDenyButton: true,
-          confirmButtonText: 'Si',
+          confirmButtonText: 'Sí',
           denyButtonText: 'No'
         }).then((result) => {
           if (result.isConfirmed) {
 
             this.loadEntradaWithForm();
             this.saveEntrada().then((resolve) => {
-              this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+              this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
               setTimeout(() => {
                 location.reload();
               }, 5000);
@@ -188,7 +189,6 @@ export class EntradaVisitanteComponent implements OnInit {
       console.log(total);
       if((total)<(cantidadMax-this.cantidadActual)){
         this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
-          alert("asd");
           console.log(res);
           this.createEntradaRegistro("Inserto en la tabla Entrada");
   
@@ -196,8 +196,16 @@ export class EntradaVisitanteComponent implements OnInit {
         }, (error) => {
           reject(error);
         });
+      }else{
+        Swal.fire({
+          icon:"error",
+          title:"La cantidad de entradas excede el máximo diario",
+          text:"Cantidad de entradas disponibles: "+(cantidadMax-this.cantidadActual)
+        })
       }
+      this.router.navigate(['index-visitante']);
     });
+    
   }
 
   getUser(): Promise<void> {
