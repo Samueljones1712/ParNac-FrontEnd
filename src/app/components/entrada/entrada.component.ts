@@ -120,8 +120,6 @@ export class EntradaComponent implements OnInit {
       });
     });
 
-
-
     this.dtOptions = {
       pagingType: 'full_numbers',
       searching: true,
@@ -146,43 +144,21 @@ export class EntradaComponent implements OnInit {
 
   /*Filtro */
 
-  applyDateRangeFilter(): void {
+  applyDateRangeFilter() {
 
-    if (this.filterStartDate && this.filterEndDate) {
-      // Convertir las cadenas de fecha en objetos Date
-      const startDateFormatted = this.filterStartDate.slice(0, 10);
-      const endDateFormatted = this.filterEndDate.slice(0, 10);
+    if (this.filterStartDate != "" && this.filterEndDate != "") {
+      console.log(this.filterStartDate + " - " + this.filterEndDate);
 
-      this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      const fechas = [this.filterStartDate, this.filterEndDate];
 
-        dtInstance.columns().search('').draw();
-
-        console.log(startDateFormatted + " - " + endDateFormatted);
-
-        // Aplicar el filtro de búsqueda en la tabla
-        dtInstance.columns(0) // Columna de "Fecha creación"
-          .search(startDateFormatted + ' - ' + endDateFormatted, true, false)
-          .draw();
-
-
-        // dtInstance
-        //   .columns(5) // Índice de la columna de la segunda fecha
-        //   .search(endDate, true, false)
-        //   .draw();
-      });
-
+      this.entradaService.getEntradaByDate(fechas).subscribe((res: view_entrada[]) => {
+        this.listEntradas = res;
+      })
     }
   }
 
-  clearDateRangeFilter(): void {
-    this.filterStartDate = '';
-    this.filterEndDate = '';
+  graficar() {
 
-    // Restablece los filtros de la tabla
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Elimina el filtro existente y vuelve a cargar los datos originales
-      dtInstance.search('').draw();
-    });
   }
 
   /*Fin del filtro*/
@@ -521,7 +497,7 @@ export class EntradaComponent implements OnInit {
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
             this.Toastr.success("Se desactivo la entrada.", "Correcto");
 
-            this.createEntradaRegistro("Desactivo la tabla Entrada " + Id);
+            this.createEntradaRegistro("Desactivo en la tabla Entrada " + Id);
 
             setTimeout(() => {
               location.reload();
