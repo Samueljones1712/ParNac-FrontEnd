@@ -30,7 +30,7 @@ export class EntradaComponent implements OnInit {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
-  myID: number = (parseInt(sessionStorage.getItem("myID") + "") + 0);
+  myID: number = (parseInt(sessionStorage.getItem("myID") + ""));
 
   minDate: string = "";
   idEntrada: number = 0;
@@ -526,7 +526,7 @@ export class EntradaComponent implements OnInit {
       detalle: tipo, fechaHora: this.minDate + "",
       id: 0,
       ipAddress: sessionStorage.getItem("IP") + "",
-      pk_idUsuario: parseInt(this.usuario.id)
+      pk_idUsuario: this.myID
     }
 
     this.controlService.addRegistro(this.registro).subscribe((res: any) => {

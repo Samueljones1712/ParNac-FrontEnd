@@ -41,39 +41,40 @@
         </div>
     </form>
 </div>
-
-<div>
-    <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
-        <thead>
-            <tr>
-                <th>Identificacion</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Contrasena</th>
-                <th>Tipo</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of listUsers">
-                <td>{{item.identificacion}}</td>
-                <td>{{item.nombre}}</td>
-                <td>{{item.apellido}}</td>
-                <td>{{item.correo}}</td>
-                <td>{{item.contrasena}}</td>
-                <td>{{item.tipo}}</td>
-                <td class="td-buttons">
-                    <button class="button-edit" (click)="loadEditar(item.id!)"><img src="../../../assets/img/edit.svg"
-                            width="16px" height="auto">Nombre</button>
-                    <button class="button-edit" (click)="loadChangePassword(item.id!)"><img
-                            src="../../../assets/img/edit.svg" width="16px" height="auto">Contraseña</button>
-                    <button class="button-delete" (click)="eliminar(item.id!)"><img
-                            src="../../../assets/img/trash-can.svg" width="16px" height="auto"></button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container-form">
+    <div style="width: 90%;">
+        <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+            <thead>
+                <tr>
+                    <th>Identificacion</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Contrasena</th>
+                    <th>Tipo</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listUsers">
+                    <td>{{item.identificacion}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.apellido}}</td>
+                    <td>{{item.correo}}</td>
+                    <td>{{item.contrasena}}</td>
+                    <td>{{item.tipo}}</td>
+                    <td class="td-buttons">
+                        <button class="button-edit" (click)="loadEditar(item.id!)"><img
+                                src="../../../assets/img/edit.svg" width="16px" height="auto">Nombre</button>
+                        <button class="button-edit" (click)="loadChangePassword(item.id!)"><img
+                                src="../../../assets/img/edit.svg" width="16px" height="auto">Contraseña</button>
+                        <button class="button-delete" (click)="eliminar(item.id!)"><img
+                                src="../../../assets/img/trash-can.svg" width="16px" height="auto"></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="spinner-div" style="margin-top: 5%;">

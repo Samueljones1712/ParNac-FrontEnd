@@ -1,0 +1,10 @@
+.container-table {
+    width: 70%;
+
+}
+
+.container-general {
+    display: flex;
+    justify-content: center;
+    margin-top: 1%;
+}

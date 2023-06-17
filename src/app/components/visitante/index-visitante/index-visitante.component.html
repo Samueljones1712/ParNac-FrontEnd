@@ -2,7 +2,10 @@
 <div class="container-principal">
 
     <div class="searchPark">
-        <input type="text" [(ngModel)]="searchTerm" (keyup)="handleSearch()" placeholder="Buscar parque...">
+        <div>
+            <input type="text" [(ngModel)]="searchTerm" (keyup)="handleSearch()" placeholder="Buscar parque..."><span
+                class="search-icon"><img src="../../../../assets/img/iconSearch.png" class="icon"></span>
+        </div>
     </div>
 
     <div class="container-parks" #containerParks>

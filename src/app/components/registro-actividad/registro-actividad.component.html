@@ -1,0 +1,29 @@
+<app-navbar-admin></app-navbar-admin>
+<div class="container-general">
+
+    <div class="container-table">
+        <table datatable [dtOptions]="dtOptions" *ngIf="!loading" class="tableRegistro">
+            <thead>
+                <tr>
+                    <th>Fecha creación</th>
+                    <th>IP dirección</th>
+                    <th>Correo</th>
+                    <th>Nombre</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listRegistro">
+                    <td>{{item.fechaHora}}</td>
+                    <td>{{item.ipAddress}}</td>
+                    <td>{{item.correo}}</td>
+                    <td>{{item.nombreCompleto}}</td>
+                    <td>{{item.detalle}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="spinner-div" style="margin-top: 5%;">
+    <app-spinner *ngIf="loading"></app-spinner>
+</div>
