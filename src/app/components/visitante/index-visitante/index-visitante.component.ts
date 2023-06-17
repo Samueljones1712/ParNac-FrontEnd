@@ -21,6 +21,7 @@ export class IndexVisitanteComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   listParks: parkNational[] = [];
+
   loading: boolean = false;
 
   parksPerPage: number = 12;
@@ -28,13 +29,18 @@ export class IndexVisitanteComponent implements OnInit {
   displayParks: parkNational[] = [];
 
   //TENGO QUE HACERLE UN BUSCAR POR NOMBRE, ACTIVO EL LOADING Y DE LA LISTA ELIMINO UNOS.
-
+  filteredParks: parkNational[] = [];
+  searchTerm: string = '';
 
   constructor(private parkService: ParkService, private router: Router, private toastr: ToastrService, private http: HttpClient) { }
 
 
   ngOnInit(): void {
+    this.listParks = [];
+    this.filteredParks = this.listParks;
     this.getParquesNacionales();
+
+
   }
 
   getParquesNacionales() {
@@ -45,6 +51,7 @@ export class IndexVisitanteComponent implements OnInit {
 
       this.loading = false
       this.listParks = res;
+      this.filteredParks = this.listParks;
       this.updateParks();
     })
   }
@@ -57,7 +64,7 @@ export class IndexVisitanteComponent implements OnInit {
   updateParks() {
     const startIndex = (this.currentPage - 1) * this.parksPerPage;
     const endIndex = startIndex + this.parksPerPage;
-    this.displayParks = this.listParks.slice(startIndex, endIndex);
+    this.displayParks = this.filteredParks.slice(startIndex, endIndex);
   }
   previousPage() {
     if (this.currentPage > 1) {
@@ -76,9 +83,19 @@ export class IndexVisitanteComponent implements OnInit {
   totalPages() {
     return Math.ceil(this.listParks.length / this.parksPerPage);
   }
-  scrollToTop(){
-    if(this.containerParks && this.containerParks.nativeElement){
-      this.containerParks.nativeElement.scrollIntoView({behavior:'smooth',block:'start'});
+  scrollToTop() {
+    if (this.containerParks && this.containerParks.nativeElement) {
+      this.containerParks.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+
+  handleSearch() {
+    this.filteredParks = this.listParks.filter(park =>
+      park.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase()));
+    console.log(this.filteredParks);
+
+    this.updateParks();
+  }
+
+
 }

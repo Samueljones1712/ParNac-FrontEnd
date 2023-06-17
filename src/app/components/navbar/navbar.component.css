@@ -2,9 +2,15 @@
     font-size: 100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif
 }
+
+ul {
+        margin-bottom: 1rem;
+
+}
+
 nav {
 
-    background-color:  #2eb872;
+    background-color: #2eb872;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -15,6 +21,7 @@ nav {
     color: white;
 
 }
+
 .logo img {
     height: 40px;
     width: auto;
@@ -24,7 +31,7 @@ nav {
     list-style: none;
     display: flex;
     justify-content: center;
-    
+
 }
 
 .menu li {
@@ -36,7 +43,8 @@ nav {
     text-decoration: none;
     color: white;
 }
-.menu li a:hover{
+
+.menu li a:hover {
     color: rgb(29, 29, 29);
 }
 

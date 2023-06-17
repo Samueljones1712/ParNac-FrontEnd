@@ -63,7 +63,7 @@
                 <label for="usuarios">Usuario</label>
 
                 <input list="listUsuario" [disabled]="isReadOnly" id="fk_idUsuario" [(ngModel)]="fk_idUsuario"
-                    (change)="selectUser($event)" [ngModelOptions]="{standalone: true}">
+                    (change)="selectUser($event)" (input)="validateID()" [ngModelOptions]="{standalone: true}">
                 <datalist id="listUsuario">
                     <option *ngFor="let c of listUsuario" [value]="c.correo">{{c.identificacion}}</option>
                 </datalist>
@@ -82,30 +82,30 @@
             <div class="container-input">
                 <label>Fecha</label>
                 <input [min]="minDate" formControlName="fechaVencimiento" type="date" name="fecha">
-                <div class="errorMessage" *ngIf="entradaForm.controls['fechaVencimiento'].errors">
+                <!-- <div class="errorMessage" *ngIf="entradaForm.controls['fechaVencimiento'].errors">
                     Fecha Incorrecta.
-                </div>
+                </div> -->
             </div>
             <label class="label-title">Número de personas</label>
             <div class="container-selects">
                 <div class="container-input">
                     <label>Nacionales</label>
                     <input type="number" min="0" max="100" (change)="cargarTotalNacional($event)"
-                        formControlName="CantNacionales" name="CantNacionales">
+                        formControlName="CantNacionales" name="CantNacionales" (input)="validateNumber($event)">
                 </div>
 
-                <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
+                <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
                     Cantidad de Nacionales Incorrecta.
-                </div>
+                </div> -->
 
                 <div class="container-input">
                     <label>Extranjeros</label>
                     <input type="number" min="0" max="100" (change)="cargarTotalExtranjero($event)"
-                        name="CantExtranjeros" formControlName="CantExtranjeros">
+                        name="CantExtranjeros" formControlName="CantExtranjeros" (input)="validateNumber($event)">
 
-                    <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
+                    <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
                         Cantidad de Extranjeros Incorrecta.
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="container-input">
