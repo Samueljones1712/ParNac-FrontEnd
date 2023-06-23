@@ -235,22 +235,14 @@ export class EntradaComponent implements OnInit {
     })
   }
 
+  formattedDate(fechaFea: string) {
+    const fecha = new Date(fechaFea);
+    const anio = fecha.getFullYear();
+    const mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
+    const dia = ('0' + fecha.getDate()).slice(-2);
+    const fechaFormateada = `${anio}-${mes}-${dia}`;
 
-  getEntrada(): Promise<void> {
-
-    return new Promise<void>((resolve, reject) => {
-      this.entradaService.getEntradas().subscribe(
-        (res: view_entrada[]) => {
-          this.listEntradas = res;
-          // console.log(this.listEntradas);
-          this.loading = false;
-          resolve();
-        },
-        (error) => {
-          this.loading = false;
-          reject(error);
-        });
-    })
+    return fechaFormateada;
   }
 
   getEntradas(): Promise<void> {
@@ -258,8 +250,14 @@ export class EntradaComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.entradaService.getEntradas().subscribe(
         (res: view_entrada[]) => {
+
+          for (let index = 0; index < res.length; index++) {
+
+            res[index].fechaVencimiento = this.formattedDate(res[index].fechaVencimiento);
+
+          }
+
           this.listEntradas = res;
-          // console.log(this.listEntradas);
 
           resolve();
         },

@@ -193,6 +193,9 @@ export class EntradaVisitanteComponent implements OnInit {
           console.log(res);
           this.createEntradaRegistro("Inserto en la tabla Entrada");
 
+          this.sendEntrada(total, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+            alert("Se envio");
+          })
           resolve();
         }, (error) => {
           reject(error);
@@ -220,6 +223,22 @@ export class EntradaVisitanteComponent implements OnInit {
         reject(error);
       });
     });
+  }
+
+  sendEntrada(cantidad: number, fechaVencimiento: string, nombreParque: string, id: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+
+      this.entradaService.sendEntradaByCorreo(cantidad, fechaVencimiento, nombreParque, id).subscribe((res: any) => {
+
+        console.log(res);
+        resolve();
+
+      }, (error) => {
+
+        reject(error);
+      });
+
+    })
   }
 
   getParkNational(): Promise<void> {
