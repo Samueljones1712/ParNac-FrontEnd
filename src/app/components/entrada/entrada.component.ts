@@ -414,7 +414,7 @@ export class EntradaComponent implements OnInit {
         this.loadEntradaWithForm();
         this.updateEntrada().then((resolve) => {
           this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
-          this.createEntradaRegistro("Actualizo en la tabla Entrada " + this.idEntrada);
+          this.createEntradaRegistro("Actualizo en la tabla Entrada ");
 
           this.idEntrada = 0;
 
@@ -495,7 +495,7 @@ export class EntradaComponent implements OnInit {
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
             this.Toastr.success("Se desactivo la entrada.", "Correcto");
 
-            this.createEntradaRegistro("Desactivo en la tabla Entrada " + Id);
+            this.createEntradaRegistro("Desactivo en la tabla Entrada ");
 
             setTimeout(() => {
               location.reload();
