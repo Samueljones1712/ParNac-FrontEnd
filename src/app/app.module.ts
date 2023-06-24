@@ -40,9 +40,11 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 /* DataTable */
 import { DataTablesModule } from "angular-datatables";
+
 import { EntradaVisitanteComponent } from './components/visitante/entrada-visitante/entrada-visitante.component';
 import { IndexVisitanteComponent } from './components/visitante/index-visitante/index-visitante.component';
 import { RegistroActividadComponent } from './components/registro-actividad/registro-actividad.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 
 @NgModule({
@@ -60,6 +62,7 @@ import { RegistroActividadComponent } from './components/registro-actividad/regi
     EntradaVisitanteComponent,
     IndexVisitanteComponent,
     RegistroActividadComponent,
+    ReportesComponent,
   ],
   imports: [
     BrowserModule,

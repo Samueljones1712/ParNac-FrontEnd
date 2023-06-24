@@ -1,7 +1,8 @@
 <app-navbar-admin></app-navbar-admin>
 <div class="container-base" *ngIf="!loading">
     <div class="container-form">
-        <form [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
+
+        <form class="entradaForm" [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
             <h2>Ingresar Entrada</h2>
             <div class="container-input">
                 <label for="usuarios">Usuario</label>
@@ -112,20 +113,20 @@
             </div>
         </div>
 
-        <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
+        <table class="table-entrada" datatable [dtOptions]="dtOptions" *ngIf="!loading">
             <thead>
                 <tr>
                     <th>Fecha creación</th>
                     <th>Correo</th>
                     <th>Parque</th>
-                    <th>Tarifa Colones</th>
-                    <th>Tarifa Dolares</th>
+                    <th>Colones</th>
+                    <th>Dolares</th>
                     <th>Estado</th>
                     <th>Reservación</th>
                     <th>Hora/Grupo</th>
                     <th>Cantidad Nacionales</th>
                     <th>Cantidad Extranjeros</th>
-                    <th>Opciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>

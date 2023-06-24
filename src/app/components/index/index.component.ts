@@ -18,7 +18,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class IndexComponent implements OnInit {
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {}
+
   dtTrigger: Subject<any> = new Subject<any>();
 
   loading: boolean = false;
@@ -76,13 +77,13 @@ export class IndexComponent implements OnInit {
   }
 
   /*
-
+  
   this.parque.Nombre = this.parkForm.value.Nombre + "";
     this.parque.Provincia = this.parkForm.value.Provincia + "";
     this.parque.Tarifa_Extranjeros_dolares = this.parkForm.value.Tarifa_Extranjeros_dolares + "";
     this.parque.Tarifa_Nacionales_colones = this.parkForm.value.Tarifa_Nacionales_colones + "";
     this.parque.Area_de_Conservacion = this.parkForm.value.Area_de_Conservacion + "";
-
+  
   */
 
   validateForm() {

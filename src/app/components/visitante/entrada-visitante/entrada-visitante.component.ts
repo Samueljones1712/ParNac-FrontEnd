@@ -29,7 +29,7 @@ export class EntradaVisitanteComponent implements OnInit {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
-  cantidadActual=0;
+  cantidadActual = 0;
 
   loading: boolean = true;
   subtotalN: number = 0;
@@ -81,12 +81,12 @@ export class EntradaVisitanteComponent implements OnInit {
     CantExtranjeros: new FormControl(0, []),
     CantNacionales: new FormControl(0, []),
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
-    fechaVencimiento: new FormControl("", [Validators.required]),
+    fechaVencimiento: new FormControl(this.minDate),
   });
 
 
   constructor(private route: ActivatedRoute, private parkService: ParkService,
-    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService, private router:Router) {
+    private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService, private router: Router) {
 
     const today = new Date();
     this.minDate = this.formatDate(today);
@@ -113,6 +113,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
   getEntrada() {
 
+    console.log(this.entradaForm.value.fechaVencimiento);
     if (this.entradaForm.value.fechaVencimiento != "") {
 
       if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
@@ -178,34 +179,37 @@ export class EntradaVisitanteComponent implements OnInit {
       var cantidadMax = this.park.maxVisitantes;
 
       this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
-         this.cantidadActual = res[0];
+        this.cantidadActual = res[0];
       })
-   
-      
-      var total=parseInt(this.entrada.CantExtranjeros+"")+parseInt(this.entrada.CantNacionales+"");
 
 
-      console.log((cantidadMax-this.cantidadActual));
+      var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+
+
+      console.log((cantidadMax - this.cantidadActual));
       console.log(total);
-      if((total)<(cantidadMax-this.cantidadActual)){
+      if ((total) < (cantidadMax - this.cantidadActual)) {
         this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
           console.log(res);
           this.createEntradaRegistro("Inserto en la tabla Entrada");
-  
+
+          this.sendEntrada(total, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+            alert("Se envio");
+          })
           resolve();
         }, (error) => {
           reject(error);
         });
-      }else{
+      } else {
         Swal.fire({
-          icon:"error",
-          title:"La cantidad de entradas excede el máximo diario",
-          text:"Cantidad de entradas disponibles: "+(cantidadMax-this.cantidadActual)
+          icon: "error",
+          title: "La cantidad de entradas excede el máximo diario",
+          text: "Cantidad de entradas disponibles: " + (cantidadMax - this.cantidadActual)
         })
       }
       this.router.navigate(['index-visitante']);
     });
-    
+
   }
 
   getUser(): Promise<void> {
@@ -219,6 +223,22 @@ export class EntradaVisitanteComponent implements OnInit {
         reject(error);
       });
     });
+  }
+
+  sendEntrada(cantidad: number, fechaVencimiento: string, nombreParque: string, id: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+
+      this.entradaService.sendEntradaByCorreo(cantidad, fechaVencimiento, nombreParque, id).subscribe((res: any) => {
+
+        console.log(res);
+        resolve();
+
+      }, (error) => {
+
+        reject(error);
+      });
+
+    })
   }
 
   getParkNational(): Promise<void> {
