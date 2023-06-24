@@ -117,7 +117,7 @@ export class EntradaVisitanteComponent implements OnInit {
     if (this.entradaForm.value.fechaVencimiento != "") {
 
       if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
-       if(this.checkEntradasParque()){
+        if (this.checkEntradasParque()) {
           Swal.fire({
             icon: 'warning',
             title: '¿Desea reservar en este Parque Nacional?',
@@ -191,7 +191,7 @@ export class EntradaVisitanteComponent implements OnInit {
         this.createEntradaRegistro("Inserto en la tabla Entrada");
 
         this.sendEntrada(total, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
-          alert("Se envio");
+
         })
         resolve();
       }, (error) => {
@@ -247,7 +247,7 @@ export class EntradaVisitanteComponent implements OnInit {
       });
     });
   }*/
-  
+
   // PARCHE
   checkEntradasParque(): boolean {
     this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
@@ -272,7 +272,7 @@ export class EntradaVisitanteComponent implements OnInit {
         icon: "error",
         title: "La cantidad de entradas excede el máximo diario",
         text: "Cantidad de entradas disponibles: " + (cantidadMax - this.cantidadActual)
-      }).then(function(){
+      }).then(function () {
         window.location.reload();
       });
       return false;
