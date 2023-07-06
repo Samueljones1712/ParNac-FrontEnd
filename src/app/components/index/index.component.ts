@@ -72,10 +72,16 @@ export class IndexComponent implements OnInit {
         url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
       }
     }
-
+    
 
   }
-
+  displayStyle="none";
+  openPopup(){
+    this.displayStyle="block";
+  }
+  closePopup(){
+    this.displayStyle="none";
+  }
   /*
   
   this.parque.Nombre = this.parkForm.value.Nombre + "";
@@ -161,6 +167,7 @@ export class IndexComponent implements OnInit {
         //    this.toastr.info("Se esta cargando el Parque Nacional", "Cargando el Parque Nacional...");
         this.toastr.info("Se cargó el Parque Nacional", "Correcto");
         this.ngOnInit();
+        this.openPopup();
       } else if (result.isDenied) {
         this.toastr.info("Se ha cancelado la acción");
       }

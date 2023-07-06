@@ -45,11 +45,9 @@ table tr:nth-child(even) {
 }
 
 .button-secondary {
+    padding: 0.7%;
+    font-size: large;
     width: 20%;
-}
-
-.button-secondary:hover {
-    background: #074e2b;
 }
 
 .container-submit {}
@@ -71,7 +69,6 @@ label {
 
 .container-base {
     display: flex;
-    margin-top: 2%;
     width: 100%;
     flex-direction: column;
     align-items: center;
@@ -82,8 +79,6 @@ label {
 .table-entrada {}
 
 .container-form {
-    display: inline-block;
-    width: 40%;
     text-align: center;
     padding: 3%;
 }
@@ -92,7 +87,13 @@ label {
     display: flex;
     justify-content: space-between;
     padding: 2%;
-
+}
+.container-button{
+    margin-top:2%;
+    margin-bottom: 0.5%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .label-title {
@@ -100,8 +101,9 @@ label {
 }
 
 .entradaForm {
-    background-color: gainsboro;
-    box-shadow: 2px 0 10px 0.5px rgba(0, 0, 0, 0.434);
     border-radius: 15px;
     padding: 10px 10px 10px 10px;
+}
+.entradaForm .button-secondary{
+    width: 100%;
 }

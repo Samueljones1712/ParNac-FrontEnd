@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Resolve } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Entrada } from 'src/app/interface/entrada';
 import { EntradaService } from 'src/app/services/entrada.service';
@@ -29,7 +29,13 @@ export class EntradaVisitanteComponent implements OnInit {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
+  //Logica de cantidad
   cantidadActual = 0;
+  cantidadMaximaParque: number = 0;
+  totalCantidad: number = 0;
+  espaciosDisponibles: number = 0;
+  //Fin logica
+
 
   loading: boolean = true;
   subtotalN: number = 0;
@@ -168,49 +174,160 @@ export class EntradaVisitanteComponent implements OnInit {
     this.entrada.tarifaNacionales = this.totalN;
   }
 
+  getCantidadDisponible(): Promise<void> {
+
+    this.Toastr.info("Se cargan los espacios segun el dia.", "Cargando los espacios ...");
+    return new Promise((resolucion, reject) => {
+
+
+      this.loadEntradaWithForm();
+
+      this.getParkNational().then((resolve) => {
+        this.getEntradaDisponible().then((resolve) => {
+          resolucion();
+        })
+      })
+
+    });
+
+  }
+
+
+  getEntradaDisponible(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.cantidadActual = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+
+      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+
+        this.totalCantidad = res[0].Cantidad;
+
+        if (this.totalCantidad == null) {
+          this.totalCantidad = 0;
+        }
+
+        this.loading = false;
+
+        console.log("Cantidad Seleccionada para la entrada:" + this.cantidadActual + "\nCantidad total del dia:" + this.totalCantidad + "\nCantidad Limite diaria:" + this.cantidadMaximaParque);
+
+        this.validateEntradaEspacio().then((resolution) => {
+          resolve();
+        });
+
+      })
+
+    })
+  }
+
+  validateEntradaEspacio(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.espaciosDisponibles = (this.cantidadMaximaParque - this.totalCantidad)
+      console.log("La cantidad maxima del parque(" + this.cantidadMaximaParque + ")  >  cantidad total del dia(" + this.totalCantidad + ")");
+      if (this.cantidadMaximaParque > this.totalCantidad) {
+        console.log(this.espaciosDisponibles);
+        if (this.cantidadActual <= this.espaciosDisponibles) {
+          resolve();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "La cantidad de entradas excede el máximo diario",
+            text: "Cantidad de entradas disponibles: " + this.espaciosDisponibles
+          }).then(function () {
+            //window.location.reload();
+          });
+          this.setData();
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "No hay entradas disponibles para el " + this.entrada.fechaVencimiento,
+          text: "Cantidad de entradas disponibles: " + this.espaciosDisponibles
+        }).then(function () {
+          window.location.reload();
+        });
+        this.setData();
+      }
+    })
+
+  }
+
+  setData() {
+    this.cantidadActual = 0;
+    this.cantidadMaximaParque = 0;
+    this.totalCantidad = 0;
+    this.espaciosDisponibles = 0;
+
+    this.loadEntradaWithForm();
+  }
+
   saveEntrada(): Promise<void> {
 
     this.loading = true;
 
+    return new Promise<void>((resolucion, reject) => {
 
-    return new Promise<void>((resolve, reject) => {
-      /*this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
-        this.park = res[0];
-      })
-      var cantidadMax = this.park.maxVisitantes;
+      this.getParkNational().then((resolve) => {
+        this.getEntradaDisponible().then((resolve) => {
 
-      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
-        this.cantidadActual = res[0];
-      })
 
-      console.log((cantidadMax - this.cantidadActual));
-      console.log(total);*/
-      var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
-      this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
-        console.log(res);
-        this.createEntradaRegistro("Inserto en la tabla Entrada");
+          this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+            console.log(res);
+            this.createEntradaRegistro("Inserto en la tabla Entrada");
 
-        this.sendEntrada(total, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+            this.sendEntrada(this.cantidadActual, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+
+              Swal.fire({
+                icon: "success",
+                title: "Se reservo correctamente",
+                text: "Revisa el correo " + sessionStorage.getItem("correo")
+              }).then(function () {
+                resolucion();
+                window.location.reload();
+              });
+
+
+            })
+            this.Toastr.info("Correo enviado");
+
+          }, (error) => {
+            reject(error);
+          });
 
         })
-        resolve();
-      }, (error) => {
-        reject(error);
       });
 
-      this.router.navigate(['index-visitante']);
     });
 
+
+    /*
+          this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+            console.log(res);
+            this.createEntradaRegistro("Inserto en la tabla Entrada");
+    
+            this.sendEntrada(this.totalCantidad, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+    
+            })
+            this.Toastr.info("Correo enviado");
+            resolve();
+          }, (error) => {
+            reject(error);
+          });
+    
+          this.router.navigate(['index-visitante']);
+        });
+        */
   }
   /*checkEntradasParque(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
         this.park = res[0];
-  
+   
         const parkPromise = Promise.resolve(this.park);
-  
+   
         const entradasPromise = this.entradaService.getEntradasTotalesParque(this.entrada).toPromise();
-  
+   
         Promise.all([parkPromise, entradasPromise])
           .then(([parkResult, entradasResult]) => {
             this.park = parkResult;
@@ -219,13 +336,13 @@ export class EntradaVisitanteComponent implements OnInit {
               this.cantidadActual = entradasResult[0];
               console.log(entradasResult[0]);
             }
-  
+   
             var cantidadMax = this.park.maxVisitantes;
             var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
-  
+   
             console.log((cantidadMax - this.cantidadActual));
             console.log(total);
-  
+   
             if (total < (cantidadMax - this.cantidadActual)) {
               resolve(true);
             } else {
@@ -265,7 +382,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
     console.log((cantidadMax - this.cantidadActual));
     console.log(total);
-    if ((total) < (cantidadMax - this.cantidadActual)) {
+    if ((total) <= (cantidadMax - this.cantidadActual)) {
       return true;
     } else {
       Swal.fire({
@@ -313,6 +430,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
       this.parkService.getParkNational(this.Id).subscribe((res: any) => {
         this.park = res[0];
+        this.cantidadMaximaParque = this.park.maxVisitantes;
         resolve();
       }, (error) => {
         reject(error);
@@ -327,10 +445,6 @@ export class EntradaVisitanteComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  agregar() {
-
-    this.getEntrada()
-  }
   cargarTotalExtranjero(e: any): void {
 
     this.entrada.CantExtranjeros = e.target.value;

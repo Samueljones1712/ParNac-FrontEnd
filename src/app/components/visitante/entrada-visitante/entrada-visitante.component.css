@@ -43,6 +43,10 @@
     width: 80%;
 }
 
+.entradasDisponibles {
+    margin-left: 0%;
+}
+
 input,
 select,
 label {
@@ -69,6 +73,7 @@ label {
     color: black;
     top: 10px;
 }
+
 .label-secondaryTitle {
     font-size: medium;
     position: absolute;

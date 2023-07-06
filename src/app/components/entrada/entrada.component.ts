@@ -133,6 +133,14 @@ export class EntradaComponent implements OnInit {
 
   }
 
+  displayStyle="none";
+  openPopup(){
+    this.displayStyle="block";
+  }
+  closePopup(){
+    this.displayStyle="none";
+  }
+
   constructor(private entradaService: EntradaService, private router: Router,
     private Toastr: ToastrService, private parkService: ParkService, private userService: UserService,
     private controlService: ControlInternoService) {
@@ -254,7 +262,7 @@ export class EntradaComponent implements OnInit {
           for (let index = 0; index < res.length; index++) {
 
             res[index].fechaVencimiento = this.formattedDate(res[index].fechaVencimiento);
-
+            res[index].fecha = this.formatDateTime(res[index].fecha);
           }
 
           this.listEntradas = res;
@@ -594,5 +602,16 @@ export class EntradaComponent implements OnInit {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
+  }
+  private formatDateTime(fechaFea: string) {
+    const fecha = new Date(fechaFea);
+    const anio = fecha.getFullYear();
+    const mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
+    const dia = ('0' + fecha.getDate()).slice(-2);
+    const hora = ('0' + fecha.getHours()).slice(-2);
+    const minutos = ('0' + fecha.getMinutes()).slice(-2);
+    const fechaFormateada = `${anio}-${mes}-${dia} ${hora}:${minutos}`;
+
+    return fechaFormateada;
   }
 }
