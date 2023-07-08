@@ -99,6 +99,20 @@ export class EntradaVisitanteComponent implements OnInit {
     this.Id = this.route.snapshot.paramMap.get('Id') ?? '';
     this.loadInformation();
 
+
+  }
+
+  loadDisponible(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+        this.cantidadActual = res[0];
+        console.log(res);
+        resolve();
+      }, (error) => {
+        reject(error);
+      })
+    })
   }
 
   loadInformation() {
@@ -178,16 +192,12 @@ export class EntradaVisitanteComponent implements OnInit {
       })
       var cantidadMax = this.park.maxVisitantes;
 
-      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
-        this.cantidadActual = res[0];
-      })
-
-
       var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
 
 
       console.log((cantidadMax - this.cantidadActual));
       console.log(total);
+      //   this.loadDisponible().then((resolve));
       if ((total) < (cantidadMax - this.cantidadActual)) {
         this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
           console.log(res);

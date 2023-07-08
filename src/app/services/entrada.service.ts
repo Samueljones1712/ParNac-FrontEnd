@@ -35,11 +35,11 @@ export class EntradaService {
   eliminarEntrada(Id: any) {
     return this.http.delete<any[]>(`${this.url}delete/${Id}`)
   }
-  getEntradasTotalesParque(entrada:Entrada){
-    const body={
-      fk_idParque:entrada.fk_idParque,
-      fechaVencimiento:entrada.fechaVencimiento,
+  getEntradasTotalesParque(entrada: Entrada) {
+    const body = {
+      fk_idParque: entrada.fk_idParque,
+      fechaVencimiento: entrada.fechaVencimiento,
     };
-    return this.http.post<any[]>(`${this.url}getEntradasParque`,body)
+    return this.http.post<any>(`${this.url}getEntradasParque`, body)
   }
 }
