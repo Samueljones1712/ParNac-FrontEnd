@@ -146,10 +146,12 @@ export class EntradaVisitanteComponent implements OnInit {
             denyButtonText: 'No'
           }).then((result) => {
             if (result.isConfirmed) {
-              this.formTarjeta=true;
+              this.formTarjeta = true;
 
+              this.saveEntrada().then((resolve) => {
 
-
+                location.reload();
+              })
 
             } else if (result.isDenied) {
               this.Toastr.info("Se ha cancelado la acción");
@@ -178,7 +180,7 @@ export class EntradaVisitanteComponent implements OnInit {
     }, (error) => {
       this.Toastr.error("No se pudo reservar la entrada.", "Error.");
     });
-    this.formTarjeta=false;
+    this.formTarjeta = false;
   }
   loadEntradaWithForm() {
     this.entrada.hora = this.entradaForm.value.grupo;
@@ -392,7 +394,6 @@ export class EntradaVisitanteComponent implements OnInit {
     this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
       this.cantidadActual = res[0];
     })
-
 
     var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
 
