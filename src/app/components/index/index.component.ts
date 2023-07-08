@@ -274,7 +274,7 @@ export class IndexComponent implements OnInit {
 
       this.parkService.sendImg(formData).subscribe(
         (response: any) => {
-          this.toastr.success("Se subio la imagen correctamente.", "Correcto");
+          this.toastr.success("Se subió la imagen correctamente.", "Correcto");
           // Realiza la lógica adicional con la URL de la imagen copiada en el servidor
         },
         (error) => {

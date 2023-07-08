@@ -49,7 +49,7 @@ export class VerifyComponent implements OnInit {
 
   errorMessage(message = "Codigo Incorrecto") {
     Swal.fire({
-      text: "Revisa el correo.", icon: 'warning', title: message + ''
+      text: "Revisa el correo", icon: 'warning', title: message + ''
     });
   }
 

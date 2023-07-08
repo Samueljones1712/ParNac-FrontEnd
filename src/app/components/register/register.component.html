@@ -19,9 +19,9 @@
         -->
 
             <div class="container-input">
-                <label for="cedula">Identificacion</label>
+                <label for="cedula">Identificación</label>
                 <div class="errorMessage container-input" *ngIf="cedulaError">
-                    Identificacion incorrecta.
+                    Identificación incorrecta.
                 </div>
                 
                 <input type="text" id="cedula" [(ngModel)]="cedula" (change)="cargarData($event)" minlength="7"

@@ -193,7 +193,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
   getCantidadDisponible(): Promise<void> {
 
-    this.Toastr.info("Se cargan los espacios segun el dia.", "Cargando los espacios ...");
+    this.Toastr.info("Se cargan los espacios segun el día.", "Cargando los espacios ...");
     return new Promise((resolucion, reject) => {
 
 
@@ -226,7 +226,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
         this.loading = false;
 
-        console.log("Cantidad Seleccionada para la entrada:" + this.cantidadActual + "\nCantidad total del dia:" + this.totalCantidad + "\nCantidad Limite diaria:" + this.cantidadMaximaParque);
+        console.log("Cantidad Seleccionada para la entrada:" + this.cantidadActual + "\nCantidad total del día:" + this.totalCantidad + "\nCantidad límite diaria:" + this.cantidadMaximaParque);
 
         this.validateEntradaEspacio().then((resolution) => {
           resolve();
@@ -241,7 +241,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
     return new Promise<void>((resolve, reject) => {
       this.espaciosDisponibles = (this.cantidadMaximaParque - this.totalCantidad)
-      console.log("La cantidad maxima del parque(" + this.cantidadMaximaParque + ")  >  cantidad total del dia(" + this.totalCantidad + ")");
+      console.log("La cantidad máxima del parque(" + this.cantidadMaximaParque + ")  >  cantidad total del día(" + this.totalCantidad + ")");
       if (this.cantidadMaximaParque > this.totalCantidad) {
         console.log(this.espaciosDisponibles);
         if (this.cantidadActual <= this.espaciosDisponibles) {
@@ -297,7 +297,7 @@ export class EntradaVisitanteComponent implements OnInit {
 
               Swal.fire({
                 icon: "success",
-                title: "Se reservo correctamente",
+                title: "Se reservó correctamente",
                 text: "Revisa el correo " + sessionStorage.getItem("correo")
               }).then(function () {
                 resolucion();

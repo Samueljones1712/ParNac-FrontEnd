@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
 
   ngOnInit(): void {
-    this.Toastr.info("La cedula no debe tener espacios, ni separadores.", "Los Nacionales.")
+    this.Toastr.info("La cédula no debe tener espacios, ni separadores.", "Los Nacionales.")
     this.Toastr.info("Deben ingresar el pasaporte.", "Los Extranjeros.")
     this.loadForm();
   }
@@ -57,11 +57,11 @@ export class RegisterComponent implements OnInit {
             this.loadForm();
 
           } else {
-            this.Toastr.error("La cedula no fue encontrada en el Padron.", "Error Persona no encontrada");
+            this.Toastr.error("La cédula no fue encontrada en el sistema.", "Error Persona no encontrada");
           }
         });
       } else {
-        this.Toastr.info("En caso de ser Correcto ignore este mensaje.", "Se detectaron caracteres de Pasaporte");
+        this.Toastr.info("En caso de ser correcto, ignore este mensaje.", "Se detectaron caracteres de Pasaporte");
       }
 
     }

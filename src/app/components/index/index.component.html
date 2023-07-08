@@ -82,9 +82,9 @@
                         <option value="Puntarenas">Puntarenas</option>
                         <option value="Limón">Limón</option>
                     </select>
-                    <label>Area de conservacion</label>
+                    <label>Area de conservación</label>
                     <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
-                    <label>Tarifa Extranjeros (Dolares)</label>
+                    <label>Tarifa Extranjeros (Dólares)</label>
                     <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
                     <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
                         Tarifa Extranjeros Necesaria.
@@ -95,11 +95,11 @@
                     </div>
                     <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
 
-                    <label>Numero maximo de visitas</label>
+                    <label>Número máximo de visitas</label>
                     <input id="maxVisitantes" type="number" formControlName="maxVisitantes" />
 
                     <div class="errorMessage" *ngIf="parkForm.controls['maxVisitantes'].errors">
-                        Numero maximo de visitas incorrecto.
+                        Número máximo de visitas incorrecto.
                     </div>
 
                     <label>Horario:</label>

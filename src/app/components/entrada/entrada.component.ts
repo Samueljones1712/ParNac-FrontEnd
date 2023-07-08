@@ -388,7 +388,7 @@ export class EntradaComponent implements OnInit {
 
         this.loadEntradaWithForm();
         this.saveEntrada().then((resolve) => {
-          this.Toastr.success("Se reservo correctamente la entrada.", "Correcto.");
+          this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
           this.createEntradaRegistro("Inserto en la tabla Entrada");
           setTimeout(() => {
             location.reload();
@@ -421,7 +421,7 @@ export class EntradaComponent implements OnInit {
 
         this.loadEntradaWithForm();
         this.updateEntrada().then((resolve) => {
-          this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
+          this.Toastr.success("Se actualizó correctamente la entrada.", "Correcto.");
           this.createEntradaRegistro("Actualizo en la tabla Entrada ");
 
           this.idEntrada = 0;
@@ -492,7 +492,7 @@ export class EntradaComponent implements OnInit {
 
       Swal.fire({
         icon: 'warning',
-        title: '¿Desea actualizar la reservacion de este Parque Nacional?',
+        title: '¿Desea actualizar la reservación de este Parque Nacional?',
         showDenyButton: true,
         confirmButtonText: 'Si',
         denyButtonText: 'No'
@@ -501,7 +501,7 @@ export class EntradaComponent implements OnInit {
         if (result.isConfirmed) {
 
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
-            this.Toastr.success("Se desactivo la entrada.", "Correcto");
+            this.Toastr.success("Se canceló la entrada.", "Correcto");
 
             this.createEntradaRegistro("Desactivo en la tabla Entrada ");
 
@@ -518,7 +518,7 @@ export class EntradaComponent implements OnInit {
       });
 
     } else {
-      this.Toastr.error("La entrada ya esta desactivada.", "Error");
+      this.Toastr.error("La entrada ya esta cancelada.", "Error");
     }
 
 
@@ -568,7 +568,7 @@ export class EntradaComponent implements OnInit {
     }
 
     this.controlService.addRegistro(this.registro).subscribe((res: any) => {
-      console.log("Se guardo el Registro.");
+      console.log("Se guardó el Registro.");
     })
 
   }
