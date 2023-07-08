@@ -248,7 +248,7 @@ export class EntradaComponent implements OnInit {
     const anio = fecha.getFullYear();
     const mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
     const dia = ('0' + fecha.getDate()).slice(-2);
-    const fechaFormateada = `${anio}-${mes}-${dia}`;
+    const fechaFormateada = `${dia}/${mes}/${anio}`;
 
     return fechaFormateada;
   }
@@ -601,7 +601,7 @@ export class EntradaComponent implements OnInit {
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
+    return `${day}/${month}/${year}`;
   }
   private formatDateTime(fechaFea: string) {
     const fecha = new Date(fechaFea);
@@ -610,7 +610,7 @@ export class EntradaComponent implements OnInit {
     const dia = ('0' + fecha.getDate()).slice(-2);
     const hora = ('0' + fecha.getHours()).slice(-2);
     const minutos = ('0' + fecha.getMinutes()).slice(-2);
-    const fechaFormateada = `${anio}-${mes}-${dia} ${hora}:${minutos}`;
+    const fechaFormateada = `${dia}/${mes}/${anio}-${hora}:${minutos}`;
 
     return fechaFormateada;
   }

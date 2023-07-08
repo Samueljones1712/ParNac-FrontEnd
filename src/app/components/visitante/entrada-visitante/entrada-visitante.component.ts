@@ -89,7 +89,7 @@ export class EntradaVisitanteComponent implements OnInit {
     grupo: new FormControl("Grupo 01: Entrada 08:00 am", [Validators.required]),
     fechaVencimiento: new FormControl(this.minDate),
   });
-
+  formTarjeta = false;
 
   constructor(private route: ActivatedRoute, private parkService: ParkService,
     private userService: UserService, private entradaService: EntradaService, private Toastr: ToastrService, private controlService: ControlInternoService, private router: Router) {
@@ -132,16 +132,8 @@ export class EntradaVisitanteComponent implements OnInit {
             denyButtonText: 'No'
           }).then((result) => {
             if (result.isConfirmed) {
+              this.formTarjeta=true;
 
-              this.loadEntradaWithForm();
-              this.saveEntrada().then((resolve) => {
-                this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
-                setTimeout(() => {
-                  location.reload();
-                }, 5000);
-              }, (error) => {
-                this.Toastr.error("No se pudo reservar la entrada.", "Error.");
-              });
 
 
 
@@ -162,7 +154,18 @@ export class EntradaVisitanteComponent implements OnInit {
     }
 
   }
-
+  submitEntrada() {
+    this.loadEntradaWithForm();
+    this.saveEntrada().then((resolve) => {
+      this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
+      setTimeout(() => {
+        location.reload();
+      }, 5000);
+    }, (error) => {
+      this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+    });
+    this.formTarjeta=false;
+  }
   loadEntradaWithForm() {
     this.entrada.hora = this.entradaForm.value.grupo;
     this.entrada.fechaVencimiento = this.entradaForm.value.fechaVencimiento + "";

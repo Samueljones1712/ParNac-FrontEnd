@@ -50,35 +50,35 @@
                 <div class="totalNacional">
                     <H6>Nacionales (Colones)</H6>
                     <div>
-                        <label for="">Subtotal:{{subtotalN}}</label>
+                        <label for="">Subtotal:₡{{subtotalN}}</label>
                     </div>
 
                     <!-- <div>
                         <label for="">IVA ({{ivaPorcentaje}}%): {{ivaN}}</label>
                     </div> -->
                     <div>
-                        <label for="">Total:{{totalN}}</label>
+                        <label for="">Total:₡{{totalN}}</label>
                     </div>
 
                 </div>
                 <div class="totalExtranjero">
-                    <H6>Extranjeros (Dolares)</H6>
+                    <H6>Extranjeros (Dólares)</H6>
                     <div>
-                        <label for="">Subtotal:{{subtotalE}}</label>
+                        <label for="">Subtotal:${{subtotalE}}</label>
                     </div>
 
                     <!-- <div>
                         <label for="">IVA ({{ivaPorcentaje}}%): {{ivaE}}</label>
                     </div> -->
                     <div>
-                        <label for="">Total:{{totalE}}</label>
+                        <label for="">Total:${{totalE}}</label>
                     </div>
 
                 </div>
             </div>
 
 
-            <div class="container-input" style="align-items: center;">
+            <div class="container-input" style="align-items: center; margin: auto;margin-top: 2%;">
                 <label class="entradasDisponibles">
                     <h6>
                         Entradas disponibles:{{espaciosDisponibles}}
@@ -90,6 +90,7 @@
 
         </form>
     </div>
+
     <div class="informationPark" *ngIf="!loading">
         <div class="container-image">
             <label class="label-primaryTitle">{{park.Nombre}}</label>
@@ -100,9 +101,9 @@
         </div>
         <div class="container-generalInfo">
             <label>Provincia: {{ park.Provincia }}</label>
-            <label>Tarifa para Nacionales: ₡{{ park.Tarifa_Nacionales_colones }}</label>
-            <label>Tarifa para Extranjeros: ${{ park.Tarifa_Extranjeros_dolares }}</label>
-            <label>Cantidad máxima de visitantes: {{ park.maxVisitantes }}</label>
+            <label>Tarifa Nacionales: ₡{{ park.Tarifa_Nacionales_colones }}</label>
+            <label>Tarifa Extranjeros: ${{ park.Tarifa_Extranjeros_dolares }}</label>
+            <label>Visitantes Max: {{ park.maxVisitantes }}</label>
             <label>Horario: {{ park.horario }}</label>
         </div>
     </div>

@@ -107,7 +107,7 @@ export class RegistroActividadComponent implements OnInit {
     const dia = ('0' + fecha.getDate()).slice(-2);
     const hora = ('0' + fecha.getHours()).slice(-2);
     const minutos = ('0' + fecha.getMinutes()).slice(-2);
-    const fechaFormateada = `${anio}-${mes}-${dia} ${hora}:${minutos}`;
+    const fechaFormateada = `${dia}/${mes}/${anio}-${hora}:${minutos}`;
 
     return fechaFormateada;
   }
