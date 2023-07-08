@@ -105,6 +105,20 @@ export class EntradaVisitanteComponent implements OnInit {
     this.Id = this.route.snapshot.paramMap.get('Id') ?? '';
     this.loadInformation();
 
+
+  }
+
+  loadDisponible(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+        this.cantidadActual = res[0];
+        console.log(res);
+        resolve();
+      }, (error) => {
+        reject(error);
+      })
+    })
   }
 
   loadInformation() {

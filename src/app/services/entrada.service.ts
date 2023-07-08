@@ -56,6 +56,8 @@ export class EntradaService {
       fk_idParque: entrada.fk_idParque,
       fechaVencimiento: entrada.fechaVencimiento,
     };
-    return this.http.post<any[]>(`${this.url}getEntradasParque`, body)
+
+    return this.http.post<any>(`${this.url}getEntradasParque`, body)
+
   }
 }
