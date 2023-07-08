@@ -16,12 +16,12 @@ export class AlertService {
     Swal.fire({
       icon: 'success',
       title: 'Correo enviado correctamente.',
-      text: 'Revisa el correo electronico!',
+      text: 'Revisa el correo electrónico',
       footer: '<a href="">' + message + '</a>'
     })
   }
 
-  errorMessage(message = "No se pudo iniciar sesion") {
+  errorMessage(message = "No se pudo iniciar sesión") {
     Swal.fire({ text: message + "", icon: 'error' });
   }
 }
