@@ -18,7 +18,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class IndexComponent implements OnInit {
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {}
+
   dtTrigger: Subject<any> = new Subject<any>();
 
   loading: boolean = false;
@@ -71,18 +72,24 @@ export class IndexComponent implements OnInit {
         url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
       }
     }
-
+    
 
   }
-
+  displayStyle="none";
+  openPopup(){
+    this.displayStyle="block";
+  }
+  closePopup(){
+    this.displayStyle="none";
+  }
   /*
-
+  
   this.parque.Nombre = this.parkForm.value.Nombre + "";
     this.parque.Provincia = this.parkForm.value.Provincia + "";
     this.parque.Tarifa_Extranjeros_dolares = this.parkForm.value.Tarifa_Extranjeros_dolares + "";
     this.parque.Tarifa_Nacionales_colones = this.parkForm.value.Tarifa_Nacionales_colones + "";
     this.parque.Area_de_Conservacion = this.parkForm.value.Area_de_Conservacion + "";
-
+  
   */
 
   validateForm() {
@@ -160,6 +167,7 @@ export class IndexComponent implements OnInit {
         //    this.toastr.info("Se esta cargando el Parque Nacional", "Cargando el Parque Nacional...");
         this.toastr.info("Se cargó el Parque Nacional", "Correcto");
         this.ngOnInit();
+        this.openPopup();
       } else if (result.isDenied) {
         this.toastr.info("Se ha cancelado la acción");
       }

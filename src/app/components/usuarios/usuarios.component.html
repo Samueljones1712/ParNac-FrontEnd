@@ -1,48 +1,12 @@
 <app-navbar-admin></app-navbar-admin>
 <div>
-    <form (ngSubmit)="editar()" *ngIf="mostrarFormNombre">
-        <div>Cambiar Nombre y Apellido</div>
-        <div>
-            <label>{{correo}}</label>
-        </div>
 
-        <div> <label for="nombre">Nombre</label>
-            <input type="text" [(ngModel)]="nombre" [ngModelOptions]="{standalone: true}" id="nombre">
-        </div>
-        <div>
-            <label for="apellido">Apellido</label>
-            <input type="text" [(ngModel)]="apellido" [ngModelOptions]="{standalone: true}" id="apellido">
-        </div>
-        <div>
-            <button type="submit">Guardar Datos</button>
-        </div>
-    </form>
 </div>
 
 <div>
-    <form (ngSubmit)="saveNewPassword()" *ngIf="mostrarFormClave">
-        <div>Cambiar Contraseña</div>
-        <div>
-            <label>{{correo}}</label>
-        </div>
-
-        <div> <label for="contrasena">Nueva Contraseña</label>
-            <input type="password" [(ngModel)]="nuevaContrasena" [ngModelOptions]="{standalone: true}"
-                id="nuevaContrasena">
-        </div>
-        <div>
-            <label for="contrasena">Confirmar nueva Contraseña</label>
-            <input type="password" [(ngModel)]="confirmarNuevaContrasena" [ngModelOptions]="{standalone: true}"
-                id="confirmarNuevaContrasena">
-        </div>
-
-        <div>
-            <button class="btn-login" type="submit">Guardar Contraseña</button>
-        </div>
-    </form>
 </div>
-<div class="container-form">
-    <div style="width: 90%;">
+<div class="container-table">
+    <div>
         <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
             <thead>
                 <tr>
@@ -50,7 +14,6 @@
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Correo</th>
-                    <th>Contrasena</th>
                     <th>Tipo</th>
                     <th>Opciones</th>
                 </tr>
@@ -61,7 +24,6 @@
                     <td>{{item.nombre}}</td>
                     <td>{{item.apellido}}</td>
                     <td>{{item.correo}}</td>
-                    <td>{{item.contrasena}}</td>
                     <td>{{item.tipo}}</td>
                     <td class="td-buttons">
                         <button class="button-edit" (click)="loadEditar(item.id!)"><img
@@ -74,6 +36,63 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!--MODAL-->
+
+<div class="modal" id="modalFormPass" role="dialog" tabindex="-1" [ngStyle]="{'display':displayStyle}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin: auto;" *ngIf="mostrarFormClave">Cambiar Contraseña</h5>
+                <h5 class="modal-title" style="margin: auto;" *ngIf="mostrarFormNombre">Editar Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="saveNewPassword()" *ngIf="mostrarFormClave" class="form">
+                    <div class="container-input" style="margin-bottom: 2%;">
+                        <h5>Usuario:</h5>
+                        <label>{{correo}}</label>
+                    </div>
+                    <div class="container-input">
+                        <label for="contrasena">Nueva Contraseña</label>
+                        <input type="password" [(ngModel)]="nuevaContrasena" [ngModelOptions]="{standalone: true}"
+                            id="nuevaContrasena">
+                    </div>
+                    <div class="container-input">
+                        <label for="contrasena">Confirmar nueva contraseña</label>
+                        <input type="password" [(ngModel)]="confirmarNuevaContrasena"
+                            [ngModelOptions]="{standalone: true}" id="confirmarNuevaContrasena">
+                    </div>
+
+                    <div class="container-button">
+                        <button class="button-secondary" type="submit">Guardar Contraseña</button>
+                        <button class="button-delete submit-form" type="button" (click)="closePopup()">Cancelar</button>
+                    </div>
+                </form>
+                <form (ngSubmit)="editar()" *ngIf="mostrarFormNombre">
+                    <div class="container-input" style="margin-bottom: 2%;">
+                        <h5>Usuario:</h5>
+                        <label>{{correo}}</label>
+                    </div>
+                    <div class="container-input"> 
+                        <label for="nombre">Nombre</label>
+                        <input type="text" [(ngModel)]="nombre" [ngModelOptions]="{standalone: true}" id="nombre">
+                    </div>
+                    <div class="container-input">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" [(ngModel)]="apellido" [ngModelOptions]="{standalone: true}" id="apellido">
+                    </div>
+                    <div class="container-button">
+                        <button class="button-secondary" type="submit">Guardar Datos</button>
+                        <button class="button-delete submit-form" type="button" (click)="closePopup()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

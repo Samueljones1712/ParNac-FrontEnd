@@ -1,102 +1,10 @@
 <app-navbar-admin></app-navbar-admin>
 <div class="container-base" *ngIf="!loading">
-    <div class="container-form">
-
-        <form class="entradaForm" [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
-            <h2>Ingresar Entrada</h2>
-            <div class="container-input">
-                <label for="usuarios">Usuario</label>
-
-                <input list="listUsuario" [disabled]="isReadOnly" id="fk_idUsuario" [(ngModel)]="fk_idUsuario"
-                    (change)="selectUser($event)" (input)="validateID()" [ngModelOptions]="{standalone: true}">
-                <datalist id="listUsuario">
-                    <option *ngFor="let c of listUsuario" [value]="c.correo">{{c.identificacion}}</option>
-                </datalist>
-            </div>
-            <div class="container-input">
-                <label for="fk_idParque">Parque</label>
-
-
-                <input list="listaParques" id="fk_idParque" [(ngModel)]="fk_idParque" (change)="selectPark($event)"
-                    [ngModelOptions]="{standalone: true}">
-                <datalist id="listaParques">
-                    <option *ngFor="let c of listParques" [value]="c.Nombre">{{c.Provincia}}</option>
-                </datalist>
-
-            </div>
-            <div class="container-input">
-                <label>Fecha</label>
-                <input [min]="minDate" formControlName="fechaVencimiento" type="date" name="fecha">
-                <!-- <div class="errorMessage" *ngIf="entradaForm.controls['fechaVencimiento'].errors">
-                    Fecha Incorrecta.
-                </div> -->
-            </div>
-            <label class="label-title">Número de personas</label>
-            <div class="container-selects">
-                <div class="container-input">
-                    <label>Nacionales</label>
-                    <input type="number" min="0" max="100" (change)="cargarTotalNacional($event)"
-                        formControlName="CantNacionales" name="CantNacionales" (input)="validateNumber($event)">
-                </div>
-
-                <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
-                    Cantidad de Nacionales Incorrecta.
-                </div> -->
-
-                <div class="container-input">
-                    <label>Extranjeros</label>
-                    <input type="number" min="0" max="100" (change)="cargarTotalExtranjero($event)"
-                        name="CantExtranjeros" formControlName="CantExtranjeros" (input)="validateNumber($event)">
-
-                    <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
-                        Cantidad de Extranjeros Incorrecta.
-                    </div> -->
-                </div>
-            </div>
-            <div class="container-input">
-                <label>Grupo/Hora</label>
-                <select formControlName="grupo" id="grupo">
-                    <option selected="true">Grupo 01: Entrada 08:00 am</option>
-                    <option>Grupo 02: Entrada 09:00 am</option>
-                    <option>Grupo 03: Entrada 10:00 am</option>
-                    <option>Grupo 04: Entrada 11:00 am</option>
-                    <option>Grupo 05: Entrada 12:00 am</option>
-                    <option>Grupo 06: Entrada 01:00 pm</option>
-                    <option>Grupo 07: Entrada 02:00 pm</option>
-                    <option>Grupo 08: Entrada 03:00 pm</option>
-                    <option>Grupo 09: Entrada 04:00 pm</option>
-                </select>
-            </div>
-
-            <div class="total">
-                <div class="totalNacional">
-                    <H6>Nacionales (Colones)</H6>
-                    <div>
-                        <label for="">Subtotal:{{subtotalN}}</label>
-                    </div>
-                    <div>
-                        <label for="">Total:{{totalN}}</label>
-                    </div>
-
-                </div>
-                <div class="totalExtranjero">
-                    <H6>Extranjeros (Dolares)</H6>
-                    <div>
-                        <label for="">Subtotal:{{subtotalE}}</label>
-                    </div>
-
-                    <div>
-                        <label for="">Total:{{totalE}}</label>
-                    </div>
-
-                </div>
-            </div>
-
-            <button class="button-secondary submit-form" type="submit">Agregar</button>
-        </form>
+    <div class="container-button">
+        <button type="button" class="button-secondary" (click)="openPopup()">Nueva Entrada</button>
     </div>
     <div class="container-table">
-        <div class="container-filter">
+        <!-- <div class="container-filter">
             <div>
                 <label for="filterStartDate">Fecha Inicial:</label>
                 <input id="filterStartDate" style="width: 160px;" type="date" class="form-control"
@@ -111,22 +19,22 @@
             <div style="margin-left: 20px;">
                 <button (onclick)="graficar()">Graficar</button>
             </div>
-        </div>
+        </div> -->
 
         <table class="table-entrada" datatable [dtOptions]="dtOptions" *ngIf="!loading">
             <thead>
                 <tr>
-                    <th>Fecha creación</th>
+                    <th>Creación</th>
                     <th>Correo</th>
                     <th>Parque</th>
-                    <th>Tarifa Colones</th>
-                    <th>Tarifa Dolares</th>
+                    <th>Colones</th>
+                    <th>Dólares</th>
                     <th>Estado</th>
                     <th>Reservación</th>
-                    <th>Hora/Grupo</th>
+                    <th>Grupo</th>
                     <th>Cantidad Nacionales</th>
                     <th>Cantidad Extranjeros</th>
-                    <th>Opciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,9 +42,9 @@
                     <td>{{item.fecha}}</td>
                     <td>{{item.correo}}</td>
                     <td>{{item.Nombre}}</td>
-                    <td>{{item.totalNacionales}}</td>
-                    <td>{{item.totalExtranjeros}}</td>
-                    <td >{{item.estado}}</td>
+                    <td>₡{{item.totalNacionales}}</td>
+                    <td>${{item.totalExtranjeros}}</td>
+                    <td>{{item.estado}}</td>
                     <td>{{item.fechaVencimiento}}</td>
                     <td>{{item.hora}}</td>
                     <td>{{item.cantidadNacionales}}</td>
@@ -159,6 +67,115 @@
     </div>
 </div>
 
+<!--MODAL-->
+<div class="modal" id="modalForm" role="dialog" tabindex="-1" [ngStyle]="{'display':displayStyle}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin: auto;">Crear Entrada</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-form">
+                    <form class="entradaForm" [formGroup]="entradaForm" (ngSubmit)="addEntrada()">
+                        <div class="container-input">
+                            <label for="usuarios">Usuario</label>
+                
+                            <input list="listUsuario" [disabled]="isReadOnly" id="fk_idUsuario" [(ngModel)]="fk_idUsuario"
+                                (change)="selectUser($event)" (input)="validateID()" [ngModelOptions]="{standalone: true}">
+                            <datalist id="listUsuario">
+                                <option *ngFor="let c of listUsuario" [value]="c.correo">{{c.identificacion}}</option>
+                            </datalist>
+                        </div>
+                        <div class="container-input">
+                            <label for="fk_idParque">Parque</label>
+                
+                
+                            <input list="listaParques" id="fk_idParque" [(ngModel)]="fk_idParque" (change)="selectPark($event)"
+                                [ngModelOptions]="{standalone: true}">
+                            <datalist id="listaParques">
+                                <option *ngFor="let c of listParques" [value]="c.Nombre">{{c.Provincia}}</option>
+                            </datalist>
+                
+                        </div>
+                        <div class="container-input">
+                            <label>Fecha</label>
+                            <input [min]="minDate" formControlName="fechaVencimiento" type="date" name="fecha">
+                            <!-- <div class="errorMessage" *ngIf="entradaForm.controls['fechaVencimiento'].errors">
+                                    Fecha Incorrecta.
+                                </div> -->
+                        </div>
+                        <label class="label-title">Número de personas</label>
+                        <div class="container-selects">
+                            <div class="container-input">
+                                <label>Nacionales</label>
+                                <input type="number" min="0" max="100" (change)="cargarTotalNacional($event)"
+                                    formControlName="CantNacionales" name="CantNacionales" (input)="validateNumber($event)">
+                            </div>
+                
+                            <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantNacionales'].errors">
+                                    Cantidad de Nacionales Incorrecta.
+                                </div> -->
+                
+                            <div class="container-input">
+                                <label>Extranjeros</label>
+                                <input type="number" min="0" max="100" (change)="cargarTotalExtranjero($event)" name="CantExtranjeros"
+                                    formControlName="CantExtranjeros" (input)="validateNumber($event)">
+                
+                                <!-- <div class="errorMessage" *ngIf="entradaForm.controls['CantExtranjeros'].errors">
+                                        Cantidad de Extranjeros Incorrecta.
+                                    </div> -->
+                            </div>
+                        </div>
+                        <div class="container-input">
+                            <label>Grupo/Hora</label>
+                            <select formControlName="grupo" id="grupo">
+                                <option selected="true">Grupo 01: Entrada 08:00 am</option>
+                                <option>Grupo 02: Entrada 09:00 am</option>
+                                <option>Grupo 03: Entrada 10:00 am</option>
+                                <option>Grupo 04: Entrada 11:00 am</option>
+                                <option>Grupo 05: Entrada 12:00 am</option>
+                                <option>Grupo 06: Entrada 01:00 pm</option>
+                                <option>Grupo 07: Entrada 02:00 pm</option>
+                                <option>Grupo 08: Entrada 03:00 pm</option>
+                                <option>Grupo 09: Entrada 04:00 pm</option>
+                            </select>
+                        </div>
+                
+                        <div class="total">
+                            <div class="totalNacional">
+                                <H6>Nacionales (Colones)</H6>
+                                <div>
+                                    <label for="">Subtotal:{{subtotalN}}</label>
+                                </div>
+                                <div>
+                                    <label for="">Total:{{totalN}}</label>
+                                </div>
+                
+                            </div>
+                            <div class="totalExtranjero">
+                                <H6>Extranjeros (Dolares)</H6>
+                                <div>
+                                    <label for="">Subtotal:{{subtotalE}}</label>
+                                </div>
+                
+                                <div>
+                                    <label for="">Total:{{totalE}}</label>
+                                </div>
+                
+                            </div>
+                        </div>
+                
+                        <button class="button-secondary submit-form" type="submit">Agregar</button>
+                        <button class="button-delete submit-form" (click)="closePopup()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="spinner-div" style="margin-top: 5%;">

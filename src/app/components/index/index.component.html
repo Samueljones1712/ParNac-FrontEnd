@@ -4,65 +4,10 @@
         <button class="button-secondary" (click)="redirectEntrada()">Ver entradas</button>
         <button class="button-secondary" (click)="redirectUsuarios()">Ver Usuarios</button>
     </div> -->
-
-    <div class="form-container">
-        <form [formGroup]="parkForm" class="form" (ngSubmit)="agregar()">
-            <div style="align-self: center;">
-                <h5>Formulario</h5>
-            </div>
-            <input type="hidden" id="Id" formControlName="Id">
-            <label>Nombre</label>
-            <input type="text" id="Nombre" formControlName="Nombre" />
-
-            <div class="errorMessage" *ngIf="parkForm.controls['Nombre'].errors">
-                Nombre necesario.
-            </div>
-
-            <label>Provincia</label>
-            <select id="Provincia" formControlName="Provincia">
-                <option value="San Jose" selected="selected">San Jose</option>
-                <option value="Alajuela">Alajuela</option>
-                <option value="Cartago">Cartago</option>
-                <option value="Heredia">Heredia</option>
-                <option value="Guanacaste">Guanacaste</option>
-                <option value="Puntarenas">Puntarenas</option>
-                <option value="Limón">Limón</option>
-            </select>
-            <label>Area de conservacion</label>
-            <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
-            <label>Tarifa Extranjeros (Dolares)</label>
-            <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
-            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
-                Tarifa Extranjeros Necesaria.
-            </div>
-            <label>Tarifa Nacionales (Colones)</label>
-            <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Nacionales_colones'].errors">
-                Precio incorrecto.
-            </div>
-            <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
-
-            <label>Numero maximo de visitas</label>
-            <input id="maxVisitantes" type="number" formControlName="maxVisitantes" />
-
-            <div class="errorMessage" *ngIf="parkForm.controls['maxVisitantes'].errors">
-                Numero maximo de visitas incorrecto.
-            </div>
-
-            <label>Horario:</label>
-            <textarea id="horario" formControlName="horario"></textarea>
-
-            <div class="errorMessage" *ngIf="parkForm.controls['horario'].errors">
-                Horario Requerido.
-            </div>
-
-            <!-- <input type="file" (change)="onFileSelected($event)">
-            <button type="button" (click)="uploadImage()">Upload</button> -->
-
-
-            <button class="button-secondary submit-form" type="submit" [disabled]="!parkForm.valid">Agregar</button>
-        </form>
-
+    <div class="container-button">
+        <button type="button" class="button-secondary" (click)="openPopup()">Registrar Parque</button>
     </div>
+
 
     <table datatable [dtOptions]="dtOptions" *ngIf="!loading">
         <thead>
@@ -70,10 +15,10 @@
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Provincia</th>
-                <th>Area de conservacion</th>
-                <th>Tarifa Extranjeros</th>
-                <th>Tarifa Nacionales</th>
-                <th>Aforo Personas</th>
+                <th>Area de Conservación</th>
+                <th>Tarifa Ext.</th>
+                <th>Tarifa Nac.</th>
+                <th>Max. Entradas</th>
                 <th>Horario</th>
                 <th>Opciones</th>
             </tr>
@@ -84,8 +29,8 @@
                 <td>{{item.Nombre}}</td>
                 <td>{{item.Provincia}}</td>
                 <td>{{item.Area_de_Conservacion}}</td>
-                <td>{{item.Tarifa_Extranjeros_dolares}}</td>
-                <td>{{item.Tarifa_Nacionales_colones}}</td>
+                <td>${{item.Tarifa_Extranjeros_dolares}}</td>
+                <td>₡{{item.Tarifa_Nacionales_colones}}</td>
                 <td>{{item.maxVisitantes}}</td>
                 <td>{{item.horario}}</td>
                 <td><!--<button class="button-edit" (click)="addImage(item.Id!)"><img src="../../../assets/img/edit.svg"
@@ -102,4 +47,78 @@
 
 <div class="spinner-div" style="margin-top: 5%;">
     <app-spinner *ngIf="loading"></app-spinner>
+</div>
+
+<!--MODAL-->
+<div class="modal" id="modalForm" role="dialog" tabindex="-1" [ngStyle]="{'display':displayStyle}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin: auto;">Registro de Parque Nacional</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="parkForm" class="form" (ngSubmit)="agregar()">
+                    <div style="align-self: center;">
+
+                    </div>
+                    <input type="hidden" id="Id" formControlName="Id">
+                    <label>Nombre</label>
+                    <input type="text" id="Nombre" formControlName="Nombre" />
+
+                    <div class="errorMessage" *ngIf="parkForm.controls['Nombre'].errors">
+                        Nombre necesario.
+                    </div>
+
+                    <label>Provincia</label>
+                    <select id="Provincia" formControlName="Provincia">
+                        <option value="San Jose" selected="selected">San Jose</option>
+                        <option value="Alajuela">Alajuela</option>
+                        <option value="Cartago">Cartago</option>
+                        <option value="Heredia">Heredia</option>
+                        <option value="Guanacaste">Guanacaste</option>
+                        <option value="Puntarenas">Puntarenas</option>
+                        <option value="Limón">Limón</option>
+                    </select>
+                    <label>Area de conservacion</label>
+                    <input id="Area_de_Conservacion" formControlName="Area_de_Conservacion" />
+                    <label>Tarifa Extranjeros (Dolares)</label>
+                    <input id="Tarifa_Extranjeros_dolares" formControlName="Tarifa_Extranjeros_dolares" />
+                    <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Extranjeros_dolares'].errors">
+                        Tarifa Extranjeros Necesaria.
+                    </div>
+                    <label>Tarifa Nacionales (Colones)</label>
+                    <div class="errorMessage" *ngIf="parkForm.controls['Tarifa_Nacionales_colones'].errors">
+                        Precio incorrecto.
+                    </div>
+                    <input id="Tarifa_Nacionales_colones" formControlName="Tarifa_Nacionales_colones" />
+
+                    <label>Numero maximo de visitas</label>
+                    <input id="maxVisitantes" type="number" formControlName="maxVisitantes" />
+
+                    <div class="errorMessage" *ngIf="parkForm.controls['maxVisitantes'].errors">
+                        Numero maximo de visitas incorrecto.
+                    </div>
+
+                    <label>Horario:</label>
+                    <textarea id="horario" formControlName="horario"></textarea>
+
+                    <div class="errorMessage" *ngIf="parkForm.controls['horario'].errors">
+                        Horario Requerido.
+                    </div>
+
+                    <!-- <input type="file" (change)="onFileSelected($event)">
+                    <button type="button" (click)="uploadImage()">Upload</button> -->
+
+                    <button class="button-secondary submit-form" type="submit"
+                        [disabled]="!parkForm.valid">Agregar</button>
+                    <button class="button-delete submit-form" type="button" (click)="closePopup()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
 </div>

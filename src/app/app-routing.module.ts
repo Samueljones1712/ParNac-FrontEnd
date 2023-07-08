@@ -9,6 +9,7 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { EntradaVisitanteComponent } from './components/visitante/entrada-visitante/entrada-visitante.component';
 import { IndexVisitanteComponent } from './components/visitante/index-visitante/index-visitante.component';
 import { RegistroActividadComponent } from './components/registro-actividad/registro-actividad.component';
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'index-visitante', component: IndexVisitanteComponent },
   { path: 'activity', component: RegistroActividadComponent },
   { path: 'usuarios', component: UsuariosComponent },
+  { path: 'reportes', component: ReportesComponent },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 
 ];

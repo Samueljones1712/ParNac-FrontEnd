@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Resolve } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Entrada } from 'src/app/interface/entrada';
 import { EntradaService } from 'src/app/services/entrada.service';
@@ -29,7 +29,13 @@ export class EntradaVisitanteComponent implements OnInit {
     detalle: "", fechaHora: "", id: 0, ipAddress: "", pk_idUsuario: 0
   }
 
+  //Logica de cantidad
   cantidadActual = 0;
+  cantidadMaximaParque: number = 0;
+  totalCantidad: number = 0;
+  espaciosDisponibles: number = 0;
+  //Fin logica
+
 
   loading: boolean = true;
   subtotalN: number = 0;
@@ -131,33 +137,34 @@ export class EntradaVisitanteComponent implements OnInit {
     if (this.entradaForm.value.fechaVencimiento != "") {
 
       if (this.entrada.CantNacionales > 0 || this.entrada.CantExtranjeros > 0) {
+        if (this.checkEntradasParque()) {
+          Swal.fire({
+            icon: 'warning',
+            title: '¿Desea reservar en este Parque Nacional?',
+            showDenyButton: true,
+            confirmButtonText: 'Sí',
+            denyButtonText: 'No'
+          }).then((result) => {
+            if (result.isConfirmed) {
 
-        Swal.fire({
-          icon: 'warning',
-          title: '¿Desea reservar en este Parque Nacional?',
-          showDenyButton: true,
-          confirmButtonText: 'Sí',
-          denyButtonText: 'No'
-        }).then((result) => {
-          if (result.isConfirmed) {
-
-            this.loadEntradaWithForm();
-            this.saveEntrada().then((resolve) => {
-              this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
-              setTimeout(() => {
-                location.reload();
-              }, 5000);
-            }, (error) => {
-              this.Toastr.error("No se pudo reservar la entrada.", "Error.");
-            });
+              this.loadEntradaWithForm();
+              this.saveEntrada().then((resolve) => {
+                this.Toastr.success("Se reservó correctamente la entrada.", "Correcto.");
+                setTimeout(() => {
+                  location.reload();
+                }, 5000);
+              }, (error) => {
+                this.Toastr.error("No se pudo reservar la entrada.", "Error.");
+              });
 
 
 
-          } else if (result.isDenied) {
-            this.Toastr.info("Se ha cancelado la acción");
-          }
-        })
-
+            } else if (result.isDenied) {
+              this.Toastr.info("Se ha cancelado la acción");
+              window.location.reload();//parche
+            }
+          })
+        }
       } else {
         this.Toastr.info("Seleccione la cantidad de Personas.");
         return;
@@ -181,44 +188,227 @@ export class EntradaVisitanteComponent implements OnInit {
     this.entrada.tarifaNacionales = this.totalN;
   }
 
-  saveEntrada(): Promise<void> {
+  getCantidadDisponible(): Promise<void> {
 
-    this.loading = true;
-
-
-    return new Promise<void>((resolve, reject) => {
-      this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
-        this.park = res[0];
-      })
-      var cantidadMax = this.park.maxVisitantes;
-
-      var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+    this.Toastr.info("Se cargan los espacios segun el dia.", "Cargando los espacios ...");
+    return new Promise((resolucion, reject) => {
 
 
-      console.log((cantidadMax - this.cantidadActual));
-      console.log(total);
-      //   this.loadDisponible().then((resolve));
-      if ((total) < (cantidadMax - this.cantidadActual)) {
-        this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
-          console.log(res);
-          this.createEntradaRegistro("Inserto en la tabla Entrada");
+      this.loadEntradaWithForm();
 
-          resolve();
-        }, (error) => {
-          reject(error);
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "La cantidad de entradas excede el máximo diario",
-          text: "Cantidad de entradas disponibles: " + (cantidadMax - this.cantidadActual)
+      this.getParkNational().then((resolve) => {
+        this.getEntradaDisponible().then((resolve) => {
+          resolucion();
         })
-      }
-      this.router.navigate(['index-visitante']);
+      })
+
     });
 
   }
 
+
+  getEntradaDisponible(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+      this.cantidadActual = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+
+      this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+
+        this.totalCantidad = res[0].Cantidad;
+
+        if (this.totalCantidad == null) {
+          this.totalCantidad = 0;
+        }
+
+        this.loading = false;
+
+        console.log("Cantidad Seleccionada para la entrada:" + this.cantidadActual + "\nCantidad total del dia:" + this.totalCantidad + "\nCantidad Limite diaria:" + this.cantidadMaximaParque);
+
+        this.validateEntradaEspacio().then((resolution) => {
+          resolve();
+        });
+
+      })
+
+    })
+  }
+
+  validateEntradaEspacio(): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+      this.espaciosDisponibles = (this.cantidadMaximaParque - this.totalCantidad)
+      console.log("La cantidad maxima del parque(" + this.cantidadMaximaParque + ")  >  cantidad total del dia(" + this.totalCantidad + ")");
+      if (this.cantidadMaximaParque > this.totalCantidad) {
+        console.log(this.espaciosDisponibles);
+        if (this.cantidadActual <= this.espaciosDisponibles) {
+          resolve();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "La cantidad de entradas excede el máximo diario",
+            text: "Cantidad de entradas disponibles: " + this.espaciosDisponibles
+          }).then(function () {
+            //window.location.reload();
+          });
+          this.setData();
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "No hay entradas disponibles para el " + this.entrada.fechaVencimiento,
+          text: "Cantidad de entradas disponibles: " + this.espaciosDisponibles
+        }).then(function () {
+          window.location.reload();
+        });
+        this.setData();
+      }
+    })
+
+  }
+
+  setData() {
+    this.cantidadActual = 0;
+    this.cantidadMaximaParque = 0;
+    this.totalCantidad = 0;
+    this.espaciosDisponibles = 0;
+
+    this.loadEntradaWithForm();
+  }
+
+  saveEntrada(): Promise<void> {
+
+    this.loading = true;
+
+    return new Promise<void>((resolucion, reject) => {
+
+      this.getParkNational().then((resolve) => {
+        this.getEntradaDisponible().then((resolve) => {
+
+
+          this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+            console.log(res);
+            this.createEntradaRegistro("Inserto en la tabla Entrada");
+
+            this.sendEntrada(this.cantidadActual, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+
+              Swal.fire({
+                icon: "success",
+                title: "Se reservo correctamente",
+                text: "Revisa el correo " + sessionStorage.getItem("correo")
+              }).then(function () {
+                resolucion();
+                window.location.reload();
+              });
+
+
+            })
+            this.Toastr.info("Correo enviado");
+
+          }, (error) => {
+            reject(error);
+          });
+
+        })
+      });
+
+    });
+
+
+    /*
+          this.entradaService.addEntrada(this.entrada).subscribe((res: any) => {
+            console.log(res);
+            this.createEntradaRegistro("Inserto en la tabla Entrada");
+    
+            this.sendEntrada(this.totalCantidad, this.entrada.fechaVencimiento, this.park.Nombre, this.entrada.fecha).then((resolve) => {
+    
+            })
+            this.Toastr.info("Correo enviado");
+            resolve();
+          }, (error) => {
+            reject(error);
+          });
+    
+          this.router.navigate(['index-visitante']);
+        });
+        */
+  }
+  /*checkEntradasParque(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
+        this.park = res[0];
+   
+        const parkPromise = Promise.resolve(this.park);
+   
+        const entradasPromise = this.entradaService.getEntradasTotalesParque(this.entrada).toPromise();
+   
+        Promise.all([parkPromise, entradasPromise])
+          .then(([parkResult, entradasResult]) => {
+            this.park = parkResult;
+            console.log(entradasResult)
+            if (entradasResult && entradasResult.length > 0) {
+              this.cantidadActual = entradasResult[0];
+              console.log(entradasResult[0]);
+            }
+   
+            var cantidadMax = this.park.maxVisitantes;
+            var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+   
+            console.log((cantidadMax - this.cantidadActual));
+            console.log(total);
+   
+            if (total < (cantidadMax - this.cantidadActual)) {
+              resolve(true);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "La cantidad de entradas excede el máximo diario",
+                text: "Cantidad de entradas disponibles: " + (cantidadMax - this.cantidadActual)
+              }).then(function () {
+                //window.location.reload();
+              });
+              resolve(false);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      }, error => {
+        reject(error);
+      });
+    });
+  }*/
+
+  // PARCHE
+  checkEntradasParque(): boolean {
+    this.parkService.getParkNational(this.entrada.fk_idParque).subscribe((res: any) => {
+      this.park = res[0];
+    })
+    var cantidadMax = this.park.maxVisitantes;
+
+    this.entradaService.getEntradasTotalesParque(this.entrada).subscribe((res: any) => {
+      this.cantidadActual = res[0];
+    })
+
+
+    var total = parseInt(this.entrada.CantExtranjeros + "") + parseInt(this.entrada.CantNacionales + "");
+
+
+    console.log((cantidadMax - this.cantidadActual));
+    console.log(total);
+    if ((total) <= (cantidadMax - this.cantidadActual)) {
+      return true;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "La cantidad de entradas excede el máximo diario",
+        text: "Cantidad de entradas disponibles: " + (cantidadMax - this.cantidadActual)
+      }).then(function () {
+        window.location.reload();
+      });
+      return false;
+    }
+  }
   getUser(): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
@@ -232,12 +422,29 @@ export class EntradaVisitanteComponent implements OnInit {
     });
   }
 
+  sendEntrada(cantidad: number, fechaVencimiento: string, nombreParque: string, id: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+
+      this.entradaService.sendEntradaByCorreo(cantidad, fechaVencimiento, nombreParque, id).subscribe((res: any) => {
+
+        console.log(res);
+        resolve();
+
+      }, (error) => {
+
+        reject(error);
+      });
+
+    })
+  }
+
   getParkNational(): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 
       this.parkService.getParkNational(this.Id).subscribe((res: any) => {
         this.park = res[0];
+        this.cantidadMaximaParque = this.park.maxVisitantes;
         resolve();
       }, (error) => {
         reject(error);
@@ -252,10 +459,6 @@ export class EntradaVisitanteComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  agregar() {
-
-    this.getEntrada()
-  }
   cargarTotalExtranjero(e: any): void {
 
     this.entrada.CantExtranjeros = e.target.value;

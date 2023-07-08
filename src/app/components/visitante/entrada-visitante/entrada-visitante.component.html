@@ -2,11 +2,12 @@
 <div class="container-base">
     <div class="container-form" *ngIf="!loading">
         <h2>Compra de Entrada</h2>
-        <form [formGroup]="entradaForm" class="formEntrada" (ngSubmit)="agregar()">
+        <form [formGroup]="entradaForm" class="formEntrada" (ngSubmit)="getEntrada()">
 
             <div class="container-input">
                 <label for="fechaVencimiento">Fecha Entrada: </label>
-                <input type="date" [min]="minDate" id="fechaVencimiento" formControlName="fechaVencimiento" />
+                <input type="date" [min]="minDate" id="fechaVencimiento" formControlName="fechaVencimiento"
+                    (change)="getCantidadDisponible()" />
             </div>
 
             <div class="container-input">
@@ -43,6 +44,8 @@
                     La cantidad de Extranjeros supera el limite.
                 </div>
             </div>
+
+
             <div class="total">
                 <div class="totalNacional">
                     <H6>Nacionales (Colones)</H6>
@@ -75,7 +78,12 @@
             </div>
 
 
-            <div class="container-input">
+            <div class="container-input" style="align-items: center;">
+                <label class="entradasDisponibles">
+                    <h6>
+                        Entradas disponibles:{{espaciosDisponibles}}
+                    </h6>
+                </label>
                 <button class="button-secondary submit-form" type="submit"
                     [disabled]="!entradaForm.valid">Comprar</button>
             </div>

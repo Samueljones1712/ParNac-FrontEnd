@@ -133,6 +133,14 @@ export class EntradaComponent implements OnInit {
 
   }
 
+  displayStyle="none";
+  openPopup(){
+    this.displayStyle="block";
+  }
+  closePopup(){
+    this.displayStyle="none";
+  }
+
   constructor(private entradaService: EntradaService, private router: Router,
     private Toastr: ToastrService, private parkService: ParkService, private userService: UserService,
     private controlService: ControlInternoService) {
@@ -235,22 +243,14 @@ export class EntradaComponent implements OnInit {
     })
   }
 
+  formattedDate(fechaFea: string) {
+    const fecha = new Date(fechaFea);
+    const anio = fecha.getFullYear();
+    const mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
+    const dia = ('0' + fecha.getDate()).slice(-2);
+    const fechaFormateada = `${anio}-${mes}-${dia}`;
 
-  getEntrada(): Promise<void> {
-
-    return new Promise<void>((resolve, reject) => {
-      this.entradaService.getEntradas().subscribe(
-        (res: view_entrada[]) => {
-          this.listEntradas = res;
-          // console.log(this.listEntradas);
-          this.loading = false;
-          resolve();
-        },
-        (error) => {
-          this.loading = false;
-          reject(error);
-        });
-    })
+    return fechaFormateada;
   }
 
   getEntradas(): Promise<void> {
@@ -258,8 +258,14 @@ export class EntradaComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.entradaService.getEntradas().subscribe(
         (res: view_entrada[]) => {
+
+          for (let index = 0; index < res.length; index++) {
+
+            res[index].fechaVencimiento = this.formattedDate(res[index].fechaVencimiento);
+            res[index].fecha = this.formatDateTime(res[index].fecha);
+          }
+
           this.listEntradas = res;
-          // console.log(this.listEntradas);
 
           resolve();
         },
@@ -416,7 +422,7 @@ export class EntradaComponent implements OnInit {
         this.loadEntradaWithForm();
         this.updateEntrada().then((resolve) => {
           this.Toastr.success("Se actualizo correctamente la entrada.", "Correcto.");
-          this.createEntradaRegistro("Actualizo en la tabla Entrada " + this.idEntrada);
+          this.createEntradaRegistro("Actualizo en la tabla Entrada ");
 
           this.idEntrada = 0;
 
@@ -497,7 +503,7 @@ export class EntradaComponent implements OnInit {
           this.entradaService.eliminarEntrada(Id).subscribe((res: any) => {
             this.Toastr.success("Se desactivo la entrada.", "Correcto");
 
-            this.createEntradaRegistro("Desactivo en la tabla Entrada " + Id);
+            this.createEntradaRegistro("Desactivo en la tabla Entrada ");
 
             setTimeout(() => {
               location.reload();
@@ -596,5 +602,16 @@ export class EntradaComponent implements OnInit {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
+  }
+  private formatDateTime(fechaFea: string) {
+    const fecha = new Date(fechaFea);
+    const anio = fecha.getFullYear();
+    const mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
+    const dia = ('0' + fecha.getDate()).slice(-2);
+    const hora = ('0' + fecha.getHours()).slice(-2);
+    const minutos = ('0' + fecha.getMinutes()).slice(-2);
+    const fechaFormateada = `${anio}-${mes}-${dia} ${hora}:${minutos}`;
+
+    return fechaFormateada;
   }
 }

@@ -56,6 +56,15 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
+  displayStyle = "none";
+  openPopup() {
+    this.displayStyle = "block";
+  }
+  closePopup() {
+    this.displayStyle = "none";
+    this.mostrarFormClave = false;
+    this.mostrarFormNombre = false;
+  }
   getUsers() {
     this.loading = true;
     this.userService.getUsers().subscribe((res: User[]) => {
@@ -68,12 +77,24 @@ export class UsuariosComponent implements OnInit {
   }
 
   loadChangePassword(id: any) {
-
-    this.usuario = this.listUsers[id - 1];
-    this.correo = this.usuario.correo;
-    this.id = this.usuario.id;
-
-    this.mostrarFormClave = true;
+    Swal.fire({
+      icon: 'question',
+      title: '¿Desea cambiar la contraseña de este usuario?',
+      showDenyButton: true,
+      confirmButtonText: 'Quiero cambiarla',
+      denyButtonText: 'No quiero cambiarla'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.toastr.info("Se cargó la informacion.", "Informacion cargada correctamente.")
+        this.mostrarFormClave = true;
+        this.getUserById(id);
+        this.id = id;
+        this.correo = this.usuario.correo;
+        this.openPopup();
+      } else if (result.isDenied) {
+        this.toastr.info("Se ha cancelado la acción");
+      }
+    });
   }
 
   getUserById(id: any) {
@@ -86,15 +107,15 @@ export class UsuariosComponent implements OnInit {
   }
 
   eliminar(id: any) {
-    
+
     Swal.fire({
-      icon:'warning',
-      title:'¿Desea eliminar este usuario?',
-      showDenyButton:true,
-      confirmButtonText:'Quiero eliminarlo',
-      denyButtonText:'No quiero eliminarlo'
-    }).then((result)=>{
-      if(result.isConfirmed){
+      icon: 'warning',
+      title: '¿Desea eliminar este usuario?',
+      showDenyButton: true,
+      confirmButtonText: 'Quiero eliminarlo',
+      denyButtonText: 'No quiero eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.loading = true;
         this.toastr.info("Eliminando el Usuario", "Eliminando...");
         this.getUserById(id)
@@ -103,7 +124,7 @@ export class UsuariosComponent implements OnInit {
           this.loading = false;
           this.ngOnInit();
         });
-      } else if(result.isDenied){
+      } else if (result.isDenied) {
         this.toastr.info("Se ha cancelado la acción");
       }
     })
@@ -113,19 +134,20 @@ export class UsuariosComponent implements OnInit {
 
   loadEditar(id: any) {
     Swal.fire({
-      icon:'warning',
-      title:'¿Desea editar este usuario?',
-      showDenyButton:true,
-      confirmButtonText:'Quiero editarlo',
-      denyButtonText:'No quiero editarlo'
-    }).then((result)=>{
-      if(result.isConfirmed){
+      icon: 'question',
+      title: '¿Desea editar este usuario?',
+      showDenyButton: true,
+      confirmButtonText: 'Quiero editarlo',
+      denyButtonText: 'No quiero editarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.toastr.info("Se cargó la informacion.", "Informacion cargada correctamente.")
         this.mostrarFormNombre = true;
         this.getUserById(id);
         this.id = id;
         this.correo = this.usuario.correo;
-      } else if(result.isDenied){
+        this.openPopup();
+      } else if (result.isDenied) {
         this.toastr.info("Se ha cancelado la acción");
       }
     })

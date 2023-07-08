@@ -4,53 +4,48 @@
     margin-left: 3%;
 }
 
+.container-button {
+    margin-top: 2%;
+    margin-bottom: 0.5%;
+    display: flex;
+    justify-content: center;
+}
+
 .imgTable {
     width: 55px;
     height: 55px;
 }
 
-
 .button-secondary {
-    border: 0;
-    margin-right: 3%;
-    padding: 0.5%;
+    padding: 0.7%;
+    font-size: large;
+    width: 20%;
+}
 
-    background: #248f59;
+.paginate_button.current {
+    background-color: #2eb872;
     color: white;
-    cursor: pointer;
-    font-family: inherit;
-    border: 0;
 }
 
-
-
-.button-edit {
-    border: 0;
-    margin-left: 4%;
-    background: #fcffb1;
-}
-
-.button-edit:hover {
-    background: #f6fa78;
-}
 
 .button-delete {
     border: 0;
     background: #fa7878;
 }
-
 .button-delete:hover {
     background: #fe5454;
 }
 
-table th {
-    background: #2eb872;
-    color: white;
-
+.form {}
+.form .button-secondary{
+    width: 100%;
 }
-
-.form {
-    margin-top: 2%;
-}
-
 .container-general {}
+
+.modal {
+    background: rgba(0, 0, 0, .5);
+}
+
+table tr:nth-child(even) {
+    background: #DFDFDF;
+}
